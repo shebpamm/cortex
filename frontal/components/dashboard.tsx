@@ -18,6 +18,7 @@ To read more about using these font, please visit the Next.js documentation:
 - Pages Directory: https://nextjs.org/docs/pages/building-your-application/optimizing/fonts
 **/
 import Link from "next/link"
+import { Loading } from "@/components/loading"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
@@ -25,6 +26,13 @@ import { CartesianGrid, XAxis, Line, LineChart } from "recharts"
 import { ChartTooltipContent, ChartTooltip, ChartContainer } from "@/components/ui/chart"
 import { useState, useEffect } from "react"
 import { ClusterInfo } from "../../parietal/bindings/ClusterInfo"
+
+function toTitleCase(str: string) : string {
+  return str.replace(
+    /\w\S*/g,
+    text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
+  );
+}
 
 export function Dashboard() {
   const [ clusterInfo, setClusterInfo ] = useState<ClusterInfo>()
@@ -40,15 +48,19 @@ export function Dashboard() {
   }, [])
 
   if (loading) {
-    return <div>Loading...</div>
+    return <Loading />
+  }
+
+  if (!clusterInfo) {
+    return <div>Error loading data</div>
   }
 
   return (
     <div className="flex flex-col min-h-screen">
       <header className="bg-primary text-primary-foreground py-4 px-6 flex items-center justify-between">
         <Link href="#" className="flex items-center gap-2" prefetch={false}>
-          <img src="/placeholder.svg" alt="Elasticsearch" width={32} height={32} />
-          <span className="text-lg font-bold">Elasticsearch</span>
+          <img src="/elasticsearch-logo.svg" alt="Elasticsearch" width={32} height={32} />
+          <span className="text-lg font-bold">{toTitleCase(clusterInfo.cluster_name)}</span>
         </Link>
         <nav className="flex items-center gap-6">
           <Link href="#" className="hover:underline" prefetch={false}>
@@ -77,63 +89,59 @@ export function Dashboard() {
             <div className="grid grid-cols-3 gap-4">
               <div className="flex flex-col items-center justify-center">
                 <div className="text-4xl font-bold">
-                  <DatabaseIcon className="w-8 h-8 text-green-500" />
+                  <DatabaseIcon className={`w-8 h-8 text-${clusterInfo.status}-500`} />
                 </div>
-                <div className="text-sm text-muted-foreground">Green</div>
+                <div className="text-sm text-muted-foreground">{toTitleCase(clusterInfo.status)}</div>
               </div>
               <div className="flex flex-col items-center justify-center">
-                <div className="text-4xl font-bold">3</div>
+                <div className="text-4xl font-bold">{clusterInfo.number_of_nodes}</div>
                 <div className="text-sm text-muted-foreground">Nodes</div>
               </div>
               <div className="flex flex-col items-center justify-center">
-                <div className="text-4xl font-bold">12</div>
-                <div className="text-sm text-muted-foreground">Indices</div>
+                <div className="text-4xl font-bold">{clusterInfo.number_of_data_nodes}</div>
+                <div className="text-sm text-muted-foreground">Data Nodes</div>
               </div>
             </div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Index Health</CardTitle>
+            <CardTitle>Shard Health</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-3 gap-4">
               <div className="flex flex-col items-center justify-center">
-                <div className="text-4xl font-bold">
-                  <DatabaseIcon className="w-8 h-8 text-green-500" />
-                </div>
-                <div className="text-sm text-muted-foreground">Green</div>
+                <div className="text-4xl font-bold">{clusterInfo.initializing_shards}</div>
+                <div className="text-sm text-muted-foreground">Initializing</div>
               </div>
               <div className="flex flex-col items-center justify-center">
-                <div className="text-4xl font-bold">2</div>
-                <div className="text-sm text-muted-foreground">Yellow</div>
+                <div className="text-4xl font-bold">{clusterInfo.relocating_shards}</div>
+                <div className="text-sm text-muted-foreground">Relocating</div>
               </div>
               <div className="flex flex-col items-center justify-center">
-                <div className="text-4xl font-bold">1</div>
-                <div className="text-sm text-muted-foreground">Red</div>
+                <div className="text-4xl font-bold">{clusterInfo.unassigned_shards}</div>
+                <div className="text-sm text-muted-foreground">Unassigned</div>
               </div>
             </div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Query Performance</CardTitle>
+            <CardTitle>Shard Stats</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-3 gap-4">
               <div className="flex flex-col items-center justify-center">
-                <div className="text-4xl font-bold">
-                  <DatabaseIcon className="w-8 h-8 text-green-500" />
-                </div>
-                <div className="text-sm text-muted-foreground">Healthy</div>
+                <div className="text-4xl font-bold">{clusterInfo.active_shards}</div>
+                <div className="text-sm text-muted-foreground">Active Shards</div>
               </div>
               <div className="flex flex-col items-center justify-center">
-                <div className="text-4xl font-bold">120ms</div>
-                <div className="text-sm text-muted-foreground">Avg. Response Time</div>
+                <div className="text-4xl font-bold">{clusterInfo.active_shards_percent_as_number}%</div>
+                <div className="text-sm text-muted-foreground">Active Shards %</div>
               </div>
               <div className="flex flex-col items-center justify-center">
-                <div className="text-4xl font-bold">98%</div>
-                <div className="text-sm text-muted-foreground">Success Rate</div>
+                <div className="text-4xl font-bold">{clusterInfo.number_of_pending_tasks}</div>
+                <div className="text-sm text-muted-foreground">Tasks</div>
               </div>
             </div>
           </CardContent>
