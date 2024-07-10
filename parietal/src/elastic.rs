@@ -31,13 +31,13 @@ pub struct IndexInfo {
     uuid: String,
     pri: String,
     rep: String,
-    #[serde(rename = "docs.count")]
+    #[serde(alias = "docs.count")]
     docs_count: String,
-    #[serde(rename = "docs.deleted")]
+    #[serde(alias = "docs.deleted")]
     docs_deleted: String,
-    #[serde(rename = "store.size")]
+    #[serde(alias = "store.size")]
     store_size: String,
-    #[serde(rename = "pri.store.size")]
+    #[serde(alias = "pri.store.size")]
     pri_store_size: String,
 }
 
