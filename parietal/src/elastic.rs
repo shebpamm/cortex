@@ -22,6 +22,25 @@ pub struct ClusterInfo {
     active_shards_percent_as_number: f64,
 }
 
+#[derive(Serialize, Deserialize, Debug, TS)]
+#[ts(export)]
+pub struct IndexInfo {
+    health: String,
+    status: String,
+    index: String,
+    uuid: String,
+    pri: String,
+    rep: String,
+    #[serde(rename = "docs.count")]
+    docs_count: String,
+    #[serde(rename = "docs.deleted")]
+    docs_deleted: String,
+    #[serde(rename = "store.size")]
+    store_size: String,
+    #[serde(rename = "pri.store.size")]
+    pri_store_size: String,
+}
+
 pub struct ElasticsearchClient {
     client: reqwest::Client,
     base_url: String,
@@ -40,5 +59,14 @@ impl ElasticsearchClient {
         let response = self.client.get(&url).send().await?;
         let info = serde_json::from_str(&response.text().await?)?;
         Ok(info)
+    }
+
+    pub async fn indices(&self) -> Result<Vec<IndexInfo>> {
+        let url = format!("{}/_cat/indices?format=json", self.base_url);
+        let response = self.client.get(&url).send().await?;
+        let indices = response.text().await?;
+        let indices: Vec<IndexInfo> = serde_json::from_str(&indices)?;
+
+        Ok(indices)
     }
 }
