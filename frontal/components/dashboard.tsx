@@ -26,6 +26,7 @@ import { CartesianGrid, XAxis, Line, LineChart } from "recharts"
 import { ChartTooltipContent, ChartTooltip, ChartContainer } from "@/components/ui/chart"
 import { useState, useEffect } from "react"
 import { ClusterInfo } from "../../parietal/bindings/ClusterInfo"
+import { IndexInfo } from "../../parietal/bindings/IndexInfo"
 
 function toTitleCase(str: string) : string {
   return str.replace(
@@ -36,15 +37,25 @@ function toTitleCase(str: string) : string {
 
 export function Dashboard() {
   const [ clusterInfo, setClusterInfo ] = useState<ClusterInfo>()
+  const [ indices, setIndices ] = useState<IndexInfo[]>([])
   const [ loading, setLoading ] = useState(true)
 
   useEffect(() => {
-    fetch("http://localhost:3030/elastic/health")
+    const health = fetch("http://localhost:3030/elastic/health")
       .then((response) => response.json())
       .then((data) => {
         setClusterInfo(data)
-        setLoading(false)
       })
+
+    const indices = fetch("http://localhost:3030/elastic/indices")
+      .then((response) => response.json())
+      .then((data) => {
+        setIndices(data)
+      })
+
+    Promise.all([health, indices]).then(() => {
+      setLoading(false)
+    });
   }, [])
 
   if (loading) {
@@ -52,8 +63,30 @@ export function Dashboard() {
   }
 
   if (!clusterInfo) {
-    return <div>Error loading data</div>
+    return <div>Error loading cluster data</div>
   }
+
+  if (!indices) {
+    return <div>Error loading indices</div>
+  }
+
+  const indexRows = indices.map((index) => (
+    <TableRow key={index.index}>
+      <TableCell>{index.index}</TableCell>
+      <TableCell>
+        <Badge variant="outline" className={`bg-${index.status}-500 text-${index.status}-50`}>
+          {toTitleCase(index.status)}
+        </Badge>
+      </TableCell>
+      <TableCell>
+        <Badge variant="outline" className="bg-green-500 text-green-50">
+          {toTitleCase(index.health)}
+        </Badge>
+      </TableCell>
+      <TableCell>{index["docs.count"]}</TableCell>
+      <TableCell>{index["store.size"]}</TableCell>
+    </TableRow>
+  ))
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -156,49 +189,13 @@ export function Dashboard() {
                 <TableRow>
                   <TableHead>Index</TableHead>
                   <TableHead>Status</TableHead>
+                  <TableHead>Health</TableHead>
                   <TableHead>Documents</TableHead>
                   <TableHead>Size</TableHead>
-                  <TableHead>Shards</TableHead>
-                  <TableHead>Replicas</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                <TableRow>
-                  <TableCell>products</TableCell>
-                  <TableCell>
-                    <Badge variant="outline" className="bg-green-500 text-green-50">
-                      Green
-                    </Badge>
-                  </TableCell>
-                  <TableCell>1,234,567</TableCell>
-                  <TableCell>12.3 GB</TableCell>
-                  <TableCell>5</TableCell>
-                  <TableCell>1</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>users</TableCell>
-                  <TableCell>
-                    <Badge variant="outline" className="bg-yellow-500 text-yellow-50">
-                      Yellow
-                    </Badge>
-                  </TableCell>
-                  <TableCell>456,789</TableCell>
-                  <TableCell>3.4 GB</TableCell>
-                  <TableCell>3</TableCell>
-                  <TableCell>1</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>logs</TableCell>
-                  <TableCell>
-                    <Badge variant="outline" className="bg-red-500 text-red-50">
-                      Red
-                    </Badge>
-                  </TableCell>
-                  <TableCell>789,012</TableCell>
-                  <TableCell>6.7 GB</TableCell>
-                  <TableCell>2</TableCell>
-                  <TableCell>0</TableCell>
-                </TableRow>
+                {indexRows}
               </TableBody>
             </Table>
           </CardContent>
