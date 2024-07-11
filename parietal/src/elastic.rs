@@ -42,8 +42,7 @@ pub struct IndexInfo {
     pri_store_size: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, TS)]
-#[ts(export)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Recovery {
     #[serde(flatten)]
     indices: HashMap<String, IndexRecovery>,
