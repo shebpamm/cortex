@@ -36,6 +36,15 @@ async fn elastic_recovery() -> Result<impl warp::Reply, warp::Rejection> {
     Ok(warp::reply::json(&recovery))
 }
 
+async fn elastic_relocating() -> Result<impl warp::Reply, warp::Rejection> {
+    let warehouse = WAREHOUSE.get().unwrap().read().await;
+    let shards = warehouse.shards.read().await;
+    let unassigned = shards.iter().filter(|s| s.state != "STARTED").collect::<Vec<_>>();
+    let shards = serde_json::to_value(&unassigned).unwrap();
+
+    Ok(warp::reply::json(&shards))
+}
+
 #[tokio::main]
 async fn main() {
     env_logger::init();
@@ -48,12 +57,14 @@ async fn main() {
     let health = warp::path!("elastic" / "health").and_then(elastic_health);
     let indices = warp::path!("elastic" / "indices").and_then(elastic_indices);
     let recovery = warp::path!("elastic" / "recovery").and_then(elastic_recovery);
+    let relocating = warp::path!("elastic" / "shards").and_then(elastic_relocating);
     let hello = warp::path!("hello").and_then(hello);
     
     let routes = health
         .or(indices)
         .or(hello)
         .or(recovery)
+        .or(relocating)
         .with(cors);
 
     debug!("Building initial ES state...");

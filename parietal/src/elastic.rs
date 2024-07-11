@@ -128,6 +128,19 @@ struct VerifyIndexInfo {
     total_time_in_millis: u64,
 }
 
+#[derive(Serialize, Deserialize, Debug, TS)]
+#[ts(export)]
+pub struct ShallowShard {
+    index: String,
+    shard: String,
+    prirep: String,
+    pub state: String,
+    docs: Option<String>,
+    store: Option<String>,
+    ip: String,
+    node: String,
+}
+
 #[derive(Debug)]
 pub struct ElasticsearchClient {
     client: reqwest::Client,
@@ -165,5 +178,14 @@ impl ElasticsearchClient {
         let recovery: Recovery = serde_json::from_str(&recovery)?;
 
         Ok(recovery)
+    }
+
+    pub async fn shards(&self) -> Result<Vec<ShallowShard>> {
+        let url = format!("{}/_cat/shards?format=json", self.base_url);
+        let response = self.client.get(&url).send().await?;
+        let shards = response.text().await?;
+        let shards: Vec<ShallowShard> = serde_json::from_str(&shards)?;
+
+        Ok(shards)
     }
 }
