@@ -3,12 +3,12 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 interface StatCardProps {
   title: string;
+  onclick?: () => void;
   elements: {
     value: string | React.ReactNode;
     label: string | React.ReactNode;
   }[];
 }
-
 
 export function StatCard(props: StatCardProps) {
   const elements = props.elements.map((element, index) => (
@@ -19,15 +19,23 @@ export function StatCard(props: StatCardProps) {
   ));
 
   return (
-    <Card>
+    <Card className="hover:shadow-xl transition-all ease-in-out">
       <CardHeader>
         <CardTitle>{props.title}</CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-3 gap-4">
-          {elements}
-        </div>
-      </CardContent>
+      <a
+        href="#"
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={e => {
+          e.preventDefault();
+          if (props.onclick) props.onclick();
+        }}
+      >
+        <CardContent>
+          <div className="grid grid-cols-3 gap-4">{elements}</div>
+        </CardContent>
+      </a>
     </Card>
   );
 }
