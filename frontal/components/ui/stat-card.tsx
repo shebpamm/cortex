@@ -3,7 +3,6 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 interface StatCardProps {
   title: string;
-  onclick?: () => void;
   elements: {
     value: string | React.ReactNode;
     label: string | React.ReactNode;
@@ -23,19 +22,9 @@ export function StatCard(props: StatCardProps) {
       <CardHeader>
         <CardTitle>{props.title}</CardTitle>
       </CardHeader>
-      <a
-        href="#"
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={e => {
-          e.preventDefault();
-          if (props.onclick) props.onclick();
-        }}
-      >
         <CardContent>
           <div className="grid grid-cols-3 gap-4">{elements}</div>
         </CardContent>
-      </a>
     </Card>
   );
 }

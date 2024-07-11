@@ -46,6 +46,14 @@ import {
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { DataTable } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 function DatabaseIcon(props: any) {
   return (
@@ -192,23 +200,34 @@ export function Dashboard() {
             },
           ]}
         />
-        <StatCard
-          title="Shard Health"
-          elements={[
-            {
-              value: clusterInfo.initializing_shards.toString(),
-              label: "Initializing",
-            },
-            {
-              value: clusterInfo.relocating_shards.toString(),
-              label: "Relocating",
-            },
-            {
-              value: clusterInfo.unassigned_shards.toString(),
-              label: "Unassigned",
-            },
-          ]}
-        />
+        <Dialog>
+          <DialogTrigger>
+            <StatCard
+              title="Shard Health"
+              elements={[
+                {
+                  value: clusterInfo.initializing_shards.toString(),
+                  label: "Initializing",
+                },
+                {
+                  value: clusterInfo.relocating_shards.toString(),
+                  label: "Relocating",
+                },
+                {
+                  value: clusterInfo.unassigned_shards.toString(),
+                  label: "Unassigned",
+                },
+              ]}
+            />
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Shard Health</DialogTitle>
+            </DialogHeader>
+            <DialogDescription>
+            </DialogDescription>
+          </DialogContent>
+        </Dialog>
         <StatCard
           title="Shard Stats"
           elements={[
@@ -218,7 +237,12 @@ export function Dashboard() {
             },
             {
               value: clusterInfo.number_of_pending_tasks.toString(),
-              label: (<><br/>Tasks</>),
+              label: (
+                <>
+                  <br />
+                  Tasks
+                </>
+              ),
             },
             {
               value:
