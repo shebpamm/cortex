@@ -1,4 +1,5 @@
 use crate::elastic::{ClusterInfo, ElasticsearchClient, IndexInfo, Recovery};
+use log::debug;
 use tokio::sync::RwLock;
 use std::sync::Arc;
 
@@ -41,11 +42,15 @@ impl Warehouse {
     }
 
     pub fn start_refresh(warehouse: Arc<RwLock<Warehouse>>) {
+        debug!("Spawning refresh loop...");
         tokio::spawn(async move {
             loop {
+                debug!("Sleeping for 5 seconds...");
                 tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+                debug!("Refreshing data...");
                 let warehouse = warehouse.read().await;
                 warehouse.refresh().await;
+                debug!("Data refreshed!");
             }
         });
     }
