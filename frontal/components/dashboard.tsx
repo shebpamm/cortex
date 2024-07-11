@@ -77,8 +77,6 @@ function DatabaseIcon(props: any) {
   );
 }
 
-
-
 export function Dashboard() {
   const [clusterInfo, setClusterInfo] = useState<ClusterInfo>();
   const [indices, setIndices] = useState<IndexInfo[]>([]);
@@ -181,37 +179,27 @@ export function Dashboard() {
             },
           ]}
         />
-        <Dialog>
-          <DialogTrigger>
-            <StatCard
-              title="Shard Health"
-              elements={[
-                {
-                  value: clusterInfo.initializing_shards.toString(),
-                  label: "Initializing",
-                },
-                {
-                  value: clusterInfo.relocating_shards.toString(),
-                  label: "Relocating",
-                },
-                {
-                  value: clusterInfo.unassigned_shards.toString(),
-                  label: "Unassigned",
-                },
-              ]}
-            />
-          </DialogTrigger>
-          <DialogContent
-            className={"lg:max-w-screen-lg overflow-y-hide max-h-screen"}
-          >
-            <DialogHeader>
-              <DialogTitle>Shard Health</DialogTitle>
-            </DialogHeader>
-            <DialogDescription>
-              <RecoveryTable />
-            </DialogDescription>
-          </DialogContent>
-        </Dialog>
+        <StatCard
+          title="Shard Health"
+          elements={[
+            {
+              value: clusterInfo.initializing_shards.toString(),
+              label: "Initializing",
+            },
+            {
+              value: clusterInfo.relocating_shards.toString(),
+              label: "Relocating",
+              dialog: {
+                title: "Relocating Shards",
+                content: <RecoveryTable />,
+              },
+            },
+            {
+              value: clusterInfo.unassigned_shards.toString(),
+              label: "Unassigned",
+            },
+          ]}
+        />
         <StatCard
           title="Shard Stats"
           elements={[
