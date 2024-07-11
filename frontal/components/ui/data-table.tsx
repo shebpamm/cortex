@@ -20,11 +20,25 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
+import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button"
  
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+}
+
+export function wrapSortable(cell: React.ReactNode | string, { column }: any) {
+  return (
+    <Button
+      variant="ghost"
+      className="text-left"
+      onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    >
+      {cell}
+      <ArrowUpDown className="ml-2 h-4 w-4" />
+    </Button>
+  );
 }
  
 export function DataTable<TData, TValue>({

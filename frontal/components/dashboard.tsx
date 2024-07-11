@@ -45,7 +45,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ArrowUpDown } from "lucide-react";
-import { DataTable } from "@/components/ui/data-table";
+import { DataTable, wrapSortable } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -76,6 +76,8 @@ function DatabaseIcon(props: any) {
     </svg>
   );
 }
+
+
 
 export function Dashboard() {
   const [clusterInfo, setClusterInfo] = useState<ClusterInfo>();
@@ -115,27 +117,16 @@ export function Dashboard() {
   const columns: ColumnDef<IndexInfo>[] = [
     {
       accessorKey: "index",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="text-left"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Index
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
+      header: wrapSortable.bind(null, "Index"),
     },
     {
       accessorKey: "status",
-      header: "Status",
+      header: wrapSortable.bind(null, "Status"),
       cell: ({ row }) => <Badge variant="outline">{row.original.status}</Badge>,
     },
     {
       accessorKey: "health",
-      header: "Health",
+      header: wrapSortable.bind(null, "Health"),
       cell: ({ row }) => (
         <Badge
           variant="outline"
@@ -147,22 +138,11 @@ export function Dashboard() {
     },
     {
       accessorKey: "docs_count",
-      header: "Documents",
+      header: wrapSortable.bind(null, "Docs Count"),
     },
     {
       accessorKey: "store_size",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="text-left"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Store Size
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
+      header: wrapSortable.bind(null, "Store Size"),
       sortingFn: (a, b, direction) => {
         const sizeA = parseSize(a.original.store_size);
         const sizeB = parseSize(b.original.store_size);
@@ -221,7 +201,9 @@ export function Dashboard() {
               ]}
             />
           </DialogTrigger>
-          <DialogContent className={"lg:max-w-screen-lg overflow-y-hide max-h-screen"}>
+          <DialogContent
+            className={"lg:max-w-screen-lg overflow-y-hide max-h-screen"}
+          >
             <DialogHeader>
               <DialogTitle>Shard Health</DialogTitle>
             </DialogHeader>
