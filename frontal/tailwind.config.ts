@@ -7,6 +7,11 @@ const config: Config = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+      safelist: [
+        "text-yellow-500",
+        "text-red-500",
+        "text-green-500",
+      ],
   theme: {
     extend: {
       backgroundImage: {
@@ -76,7 +81,7 @@ const config: Config = {
                 "height": "0"
               }
             }
-          }
+          },
 },
   plugins: [require("tailwindcss-animate")],
 };

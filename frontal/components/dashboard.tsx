@@ -302,17 +302,17 @@ export function Dashboard() {
               </div>
               <div className="flex flex-col items-center justify-center">
                 <div className="text-4xl font-bold">
-                  {clusterInfo.active_shards_percent_as_number}%
+                  {clusterInfo.number_of_pending_tasks}
+                </div>
+                <div className="text-sm text-muted-foreground"><br/>Tasks</div>
+              </div>
+              <div className="flex flex-col items-center justify-center">
+                <div className="text-4xl font-bold">
+                  {clusterInfo.active_shards_percent_as_number.toFixed(0)}%
                 </div>
                 <div className="text-sm text-muted-foreground">
                   Active Shards %
                 </div>
-              </div>
-              <div className="flex flex-col items-center justify-center">
-                <div className="text-4xl font-bold">
-                  {clusterInfo.number_of_pending_tasks}
-                </div>
-                <div className="text-sm text-muted-foreground">Tasks</div>
               </div>
             </div>
           </CardContent>
