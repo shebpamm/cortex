@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 use anyhow::Result;
 use ts_rs::TS;
@@ -41,6 +42,92 @@ pub struct IndexInfo {
     pri_store_size: String,
 }
 
+#[derive(Serialize, Deserialize, Debug, TS)]
+#[ts(export)]
+pub struct Recovery {
+    #[serde(flatten)]
+    indices: HashMap<String, IndexRecovery>,
+}
+
+#[derive(Serialize, Deserialize, Debug, TS)]
+#[ts(export)]
+pub struct IndexRecovery {
+    shards: Vec<RecoveryShard>,
+}
+
+#[derive(Serialize, Deserialize, Debug, TS)]
+#[ts(export)]
+pub struct RecoveryShard {
+    id: u32,
+    #[serde(alias = "type")]
+    shard_type: String,
+    stage: String,
+    primary: bool,
+    start_time_in_millis: u64,
+    total_time_in_millis: u64,
+    source: NodeInfo,
+    target: NodeInfo,
+    index: TransportIndexInfo,
+    translog: TranslogInfo,
+    verify_index: VerifyIndexInfo,
+}
+
+#[derive(Serialize, Deserialize, Debug, TS)]
+#[ts(export)]
+struct NodeInfo {
+    id: String,
+    host: String,
+    transport_address: String,
+    ip: String,
+    name: String,
+}
+
+#[derive(Serialize, Deserialize, Debug, TS)]
+#[ts(export)]
+struct TransportIndexInfo {
+    size: SizeInfo,
+    files: FilesInfo,
+    total_time_in_millis: u64,
+    source_throttle_time_in_millis: u64,
+    target_throttle_time_in_millis: u64,
+}
+
+#[derive(Serialize, Deserialize, Debug, TS)]
+#[ts(export)]
+struct SizeInfo {
+    total_in_bytes: u64,
+    reused_in_bytes: u64,
+    recovered_in_bytes: u64,
+    recovered_from_snapshot_in_bytes: u64,
+    percent: String, // This can sometimes be a string like "18.2%"
+}
+
+#[derive(Serialize, Deserialize, Debug, TS)]
+#[ts(export)]
+struct FilesInfo {
+    total: u32,
+    reused: u32,
+    recovered: u32,
+    percent: String, // This can sometimes be a string like "91.6%"
+}
+
+#[derive(Serialize, Deserialize, Debug, TS)]
+#[ts(export)]
+struct TranslogInfo {
+    recovered: u32,
+    total: u32,
+    percent: String, // This can sometimes be a string like "100.0%"
+    total_on_start: u32,
+    total_time_in_millis: u64,
+}
+
+#[derive(Serialize, Deserialize, Debug, TS)]
+#[ts(export)]
+struct VerifyIndexInfo {
+    check_index_time_in_millis: u64,
+    total_time_in_millis: u64,
+}
+
 #[derive(Debug)]
 pub struct ElasticsearchClient {
     client: reqwest::Client,
@@ -69,5 +156,14 @@ impl ElasticsearchClient {
         let indices: Vec<IndexInfo> = serde_json::from_str(&indices)?;
 
         Ok(indices)
+    }
+
+    pub async fn recovery(&self) -> Result<Recovery> {
+        let url = format!("{}/_recovery?format=json&active_only=true", self.base_url);
+        let response = self.client.get(&url).send().await?;
+        let recovery = response.text().await?;
+        let recovery: Recovery = serde_json::from_str(&recovery)?;
+
+        Ok(recovery)
     }
 }
