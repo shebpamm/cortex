@@ -55,6 +55,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { RelocatingTable } from "./relocating-table";
 
 function DatabaseIcon(props: any) {
   return (
@@ -191,7 +192,7 @@ export function Dashboard() {
               label: "Relocating",
               dialog: {
                 title: "Relocating Shards",
-                content: <RecoveryTable />,
+                content: <RelocatingTable />
               },
             },
             {
@@ -230,6 +231,14 @@ export function Dashboard() {
           </CardHeader>
           <CardContent>
             <DataTable columns={columns} data={indices} />
+          </CardContent>
+        </Card>
+        <Card className="col-span-1 md:col-span-2 lg:col-span-3">
+          <CardHeader>
+            <CardTitle>Recovery</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <RecoveryTable />
           </CardContent>
         </Card>
         <Card className="col-span-1 md:col-span-2 lg:col-span-3">
