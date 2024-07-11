@@ -17,6 +17,7 @@ To read more about using these font, please visit the Next.js documentation:
 - App Directory: https://nextjs.org/docs/app/building-your-application/optimizing/fonts
 - Pages Directory: https://nextjs.org/docs/pages/building-your-application/optimizing/fonts
 **/
+import { toTitleCase, parseSize } from "@/lib/utils";
 import Link from "next/link";
 import { Loading } from "@/components/loading";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -31,12 +32,7 @@ import { useState, useEffect } from "react";
 import { ClusterInfo } from "../../parietal/bindings/ClusterInfo";
 import { IndexInfo } from "../../parietal/bindings/IndexInfo";
 
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+import { ColumnDef } from "@tanstack/react-table";
 
 import {
   Table,
@@ -46,50 +42,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react"
+import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { DataTable } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
-
-function toTitleCase(str: string): string {
-  return str.replace(
-    /\w\S*/g,
-    (text) => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase(),
-  );
-}
-
-function parseSize(size: string): number {
-    // Regular expression to extract the number and the unit
-    const regex = /^(\d+(?:\.\d+)?)([a-zA-Z]+)$/;
-    const match = size.match(regex);
-    
-    if (!match) {
-        throw new Error(`Invalid size format: ${size}`);
-    }
-
-    const value = parseFloat(match[1]);
-    const unit = match[2].toLowerCase();
-
-    // Convert the unit to bytes
-    const unitConversion: { [key: string]: number } = {
-        b: 1,
-        kb: 1024,
-        kib: 1024,
-        mb: 1024 * 1024,
-        mib: 1024 * 1024,
-        gb: 1024 * 1024 * 1024,
-        gib: 1024 * 1024 * 1024,
-        tb: 1024 * 1024 * 1024 * 1024,
-        tib: 1024 * 1024 * 1024 * 1024,
-    };
-
-    const unitFactor = unitConversion[unit];
-
-    if (unitFactor === undefined) {
-        throw new Error(`Unknown unit: ${unit}`);
-    }
-
-    return value * unitFactor;
-}
 
 export function Dashboard() {
   const [clusterInfo, setClusterInfo] = useState<ClusterInfo>();
@@ -138,24 +93,21 @@ export function Dashboard() {
           >
             Index
             <ArrowUpDown className="ml-2 h-4 w-4" />
-            </Button>
+          </Button>
         );
       },
     },
     {
       accessorKey: "status",
       header: "Status",
-      cell: ({ row }) => (
-        <Badge variant="outline">
-          {row.original.status}
-        </Badge>
-      ),
+      cell: ({ row }) => <Badge variant="outline">{row.original.status}</Badge>,
     },
     {
       accessorKey: "health",
       header: "Health",
       cell: ({ row }) => (
-        <Badge variant="outline"
+        <Badge
+          variant="outline"
           className={`bg-${row.original.health}-500 text-${row.original.health}-50`}
         >
           {row.original.health}
@@ -189,7 +141,7 @@ export function Dashboard() {
         } else {
           return sizeB - sizeA;
         }
-      }
+      },
     },
   ];
 
@@ -304,7 +256,10 @@ export function Dashboard() {
                 <div className="text-4xl font-bold">
                   {clusterInfo.number_of_pending_tasks}
                 </div>
-                <div className="text-sm text-muted-foreground"><br/>Tasks</div>
+                <div className="text-sm text-muted-foreground">
+                  <br />
+                  Tasks
+                </div>
               </div>
               <div className="flex flex-col items-center justify-center">
                 <div className="text-4xl font-bold">
