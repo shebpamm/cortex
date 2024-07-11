@@ -46,13 +46,49 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ArrowUpDown, MoreHorizontal } from "lucide-react"
 import { DataTable } from "@/components/ui/data-table";
+import { Button } from "@/components/ui/button";
 
 function toTitleCase(str: string): string {
   return str.replace(
     /\w\S*/g,
     (text) => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase(),
   );
+}
+
+function parseSize(size: string): number {
+    // Regular expression to extract the number and the unit
+    const regex = /^(\d+(?:\.\d+)?)([a-zA-Z]+)$/;
+    const match = size.match(regex);
+    
+    if (!match) {
+        throw new Error(`Invalid size format: ${size}`);
+    }
+
+    const value = parseFloat(match[1]);
+    const unit = match[2].toLowerCase();
+
+    // Convert the unit to bytes
+    const unitConversion: { [key: string]: number } = {
+        b: 1,
+        kb: 1024,
+        kib: 1024,
+        mb: 1024 * 1024,
+        mib: 1024 * 1024,
+        gb: 1024 * 1024 * 1024,
+        gib: 1024 * 1024 * 1024,
+        tb: 1024 * 1024 * 1024 * 1024,
+        tib: 1024 * 1024 * 1024 * 1024,
+    };
+
+    const unitFactor = unitConversion[unit];
+
+    if (unitFactor === undefined) {
+        throw new Error(`Unknown unit: ${unit}`);
+    }
+
+    return value * unitFactor;
 }
 
 export function Dashboard() {
@@ -93,7 +129,18 @@ export function Dashboard() {
   const columns: ColumnDef<IndexInfo>[] = [
     {
       accessorKey: "index",
-      header: "Index",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="text-left"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Index
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+            </Button>
+        );
+      },
     },
     {
       accessorKey: "status",
@@ -121,7 +168,28 @@ export function Dashboard() {
     },
     {
       accessorKey: "store_size",
-      header: "Size",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="text-left"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Store Size
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      sortingFn: (a, b, direction) => {
+        const sizeA = parseSize(a.original.store_size);
+        const sizeB = parseSize(b.original.store_size);
+
+        if (direction === "asc") {
+          return sizeA - sizeB;
+        } else {
+          return sizeB - sizeA;
+        }
+      }
     },
   ];
 
