@@ -21,7 +21,9 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@
 import { Progress } from "@/components/ui/progress"
 import { useState, useEffect } from "react"
 import { ColumnDef } from "@tanstack/react-table"
-import { DataTable } from "./ui/data-table"
+import { DataTable, wrapSortable } from "./ui/data-table"
+
+import prettyBytes from 'pretty-bytes';
 
 export function RecoveryTable() {
   const [ recoveries, setRecoveries ] = useState([])
@@ -38,23 +40,30 @@ export function RecoveryTable() {
   const columns: ColumnDef<any>[] = [
     {
       accessorKey: "index",
-      header: "Index",
+      header: wrapSortable.bind(null, "Index"),
     },
     {
       accessorKey: "shard",
-      header: "Shard",
+      header: wrapSortable.bind(null, "Shard"),
     },
     {
       accessorKey: "stage",
-      header: "Stage",
+      header: wrapSortable.bind(null, "Stage"),
     },
     {
       accessorKey: "type",
-      header: "Type",
+      header: wrapSortable.bind(null, "Type"),
+    },
+    {
+      accessorKey: "size",
+      header: wrapSortable.bind(null, "Size"),
+      cell: ({ row }) => {
+        return prettyBytes(row.original.size)
+      }
     },
     {
       accessorKey: "progress",
-      header: "Progress",
+      header: wrapSortable.bind(null, "Progress"),
       cell: ({ row }) => {
         return <Progress value={row.original.progress} />
       }
@@ -73,6 +82,7 @@ export function RecoveryTable() {
         index: indexName,
         type: shardInfo.shard_type,
         stage: shardInfo.stage,
+        size: shardInfo.index.size.total_in_bytes,
         progress: parseInt(shardInfo.index.files.percent.replace("%", "").trim())
       })
     }
