@@ -41,6 +41,7 @@ pub struct IndexInfo {
     pri_store_size: String,
 }
 
+#[derive(Debug)]
 pub struct ElasticsearchClient {
     client: reqwest::Client,
     base_url: String,
