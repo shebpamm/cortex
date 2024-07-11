@@ -24,6 +24,7 @@ import { Navbar } from "@/components/ui/navbar";
 import { StatCard } from "@/components/ui/stat-card";
 import { Badge } from "@/components/ui/badge";
 import { CartesianGrid, XAxis, Line, LineChart } from "recharts";
+import { RecoveryTable } from "@/components/recovery-table";
 import {
   ChartTooltipContent,
   ChartTooltip,
@@ -43,7 +44,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import { DataTable } from "@/components/ui/data-table";
 import { Button } from "@/components/ui/button";
 import {
@@ -220,11 +221,12 @@ export function Dashboard() {
               ]}
             />
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className={"lg:max-w-screen-lg overflow-y-hide max-h-screen"}>
             <DialogHeader>
               <DialogTitle>Shard Health</DialogTitle>
             </DialogHeader>
             <DialogDescription>
+              <RecoveryTable />
             </DialogDescription>
           </DialogContent>
         </Dialog>
