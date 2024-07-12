@@ -1,4 +1,4 @@
-use crate::elastic::{ClusterInfo, ElasticsearchClient, IndexInfo, NodeInfo, NodeOutput, Recovery, ShallowShard};
+use crate::elastic::{ClusterInfo, ElasticsearchClient, IndexInfo, NodeOutput, Recovery, ShallowShard};
 use log::debug;
 use tokio::sync::RwLock;
 use std::sync::Arc;

@@ -1,5 +1,5 @@
 use juniper::{
-    graphql_object, EmptyMutation, EmptySubscription, FieldResult, GraphQLEnum, GraphQLInputObject, GraphQLObject, ScalarValue,
+    graphql_object, EmptyMutation, EmptySubscription, FieldResult,
 };
 
 use std::sync::Arc;
