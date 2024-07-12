@@ -1,29 +1,35 @@
 use std::collections::HashMap;
-use serde::{Deserialize, Serialize};
+use bigdecimal::BigDecimal;
+use serde::{Deserialize, Deserializer, Serialize};
 use anyhow::Result;
 use ts_rs::TS;
+use std::fmt;
+use juniper::{
+    GraphQLObject,
+};
 
-#[derive(Serialize, Deserialize, Debug, TS)]
+#[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
+#[graphql(description = "Basic cluster information, such as health and status")]
 #[ts(export)]
 pub struct ClusterInfo {
     cluster_name: String,
     status: String,
     timed_out: bool,
-    number_of_nodes: u32,
-    number_of_data_nodes: u32,
-    active_primary_shards: u32,
-    active_shards: u32,
-    relocating_shards: u32,
-    initializing_shards: u32,
-    unassigned_shards: u32,
-    delayed_unassigned_shards: u32,
-    number_of_pending_tasks: u32,
-    number_of_in_flight_fetch: u32,
-    task_max_waiting_in_queue_millis: u64,
+    number_of_nodes: i32,
+    number_of_data_nodes: i32,
+    active_primary_shards: i32,
+    active_shards: i32,
+    relocating_shards: i32,
+    initializing_shards: i32,
+    unassigned_shards: i32,
+    delayed_unassigned_shards: i32,
+    number_of_pending_tasks: i32,
+    number_of_in_flight_fetch: i32,
+    task_max_waiting_in_queue_millis: i32,
     active_shards_percent_as_number: f64,
 }
 
-#[derive(Serialize, Deserialize, Debug, TS)]
+#[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
 #[ts(export)]
 pub struct IndexInfo {
     health: String,
@@ -42,28 +48,61 @@ pub struct IndexInfo {
     pri_store_size: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(GraphQLObject, Serialize, Debug, Clone)]
 pub struct Recovery {
-    #[serde(flatten)]
-    indices: HashMap<String, IndexRecovery>,
+    indices: Vec<IndexRecovery>
 }
 
-#[derive(Serialize, Deserialize, Debug, TS)]
+impl<'de> Deserialize<'de> for Recovery {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        struct RecoveryVisitor;
+
+        impl<'de> serde::de::Visitor<'de> for RecoveryVisitor {
+            type Value = Recovery;
+
+            fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+                formatter.write_str("a map of index recoveries")
+            }
+
+            fn visit_map<M>(self, mut access: M) -> Result<Self::Value, M::Error>
+            where
+                M: serde::de::MapAccess<'de>,
+            {
+                let mut indices = Vec::new();
+
+                while let Some((key, mut value)) = access.next_entry::<String, IndexRecovery>()? {
+                    value.id = key;
+                    indices.push(value);
+                }
+
+                Ok(Recovery { indices })
+            }
+        }
+
+        deserializer.deserialize_map(RecoveryVisitor)
+    }
+}
+
+#[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
 #[ts(export)]
 pub struct IndexRecovery {
+    id: String,
     shards: Vec<RecoveryShard>,
 }
 
-#[derive(Serialize, Deserialize, Debug, TS)]
+#[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
 #[ts(export)]
 pub struct RecoveryShard {
-    id: u32,
+    id: i32,
     #[serde(alias = "type")]
     shard_type: String,
     stage: String,
     primary: bool,
-    start_time_in_millis: u64,
-    total_time_in_millis: u64,
+    start_time_in_millis: BigDecimal,
+    total_time_in_millis: BigDecimal,
     source: NodeInfo,
     target: NodeInfo,
     index: TransportIndexInfo,
@@ -71,7 +110,7 @@ pub struct RecoveryShard {
     verify_index: VerifyIndexInfo,
 }
 
-#[derive(Serialize, Deserialize, Debug, TS)]
+#[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
 #[ts(export)]
 struct NodeInfo {
     id: String,
@@ -81,53 +120,53 @@ struct NodeInfo {
     name: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, TS)]
+#[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
 #[ts(export)]
 struct TransportIndexInfo {
     size: SizeInfo,
     files: FilesInfo,
-    total_time_in_millis: u64,
-    source_throttle_time_in_millis: u64,
-    target_throttle_time_in_millis: u64,
+    total_time_in_millis: i32,
+    source_throttle_time_in_millis: i32,
+    target_throttle_time_in_millis: i32,
 }
 
-#[derive(Serialize, Deserialize, Debug, TS)]
+#[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
 #[ts(export)]
 struct SizeInfo {
-    total_in_bytes: u64,
-    reused_in_bytes: u64,
-    recovered_in_bytes: u64,
-    recovered_from_snapshot_in_bytes: u64,
+    total_in_bytes: i32,
+    reused_in_bytes: i32,
+    recovered_in_bytes: i32,
+    recovered_from_snapshot_in_bytes: i32,
     percent: String, // This can sometimes be a string like "18.2%"
 }
 
-#[derive(Serialize, Deserialize, Debug, TS)]
+#[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
 #[ts(export)]
 struct FilesInfo {
-    total: u32,
-    reused: u32,
-    recovered: u32,
+    total: i32,
+    reused: i32,
+    recovered: i32,
     percent: String, // This can sometimes be a string like "91.6%"
 }
 
-#[derive(Serialize, Deserialize, Debug, TS)]
+#[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
 #[ts(export)]
 struct TranslogInfo {
-    recovered: u32,
-    total: u32,
+    recovered: i32,
+    total: i32,
     percent: String, // This can sometimes be a string like "100.0%"
-    total_on_start: u32,
-    total_time_in_millis: u64,
+    total_on_start: i32,
+    total_time_in_millis: i32,
 }
 
-#[derive(Serialize, Deserialize, Debug, TS)]
+#[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
 #[ts(export)]
 struct VerifyIndexInfo {
-    check_index_time_in_millis: u64,
-    total_time_in_millis: u64,
+    check_index_time_in_millis: i32,
+    total_time_in_millis: i32,
 }
 
-#[derive(Serialize, Deserialize, Debug, TS)]
+#[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
 #[ts(export)]
 pub struct ShallowShard {
     index: String,
