@@ -1,4 +1,4 @@
-use crate::elastic::{ClusterInfo, ElasticsearchClient, IndexInfo, Recovery, ShallowShard};
+use crate::elastic::{ClusterInfo, ElasticsearchClient, IndexInfo, NodeInfo, NodeOutput, Recovery, ShallowShard};
 use log::debug;
 use tokio::sync::RwLock;
 use std::sync::Arc;
@@ -13,11 +13,13 @@ pub struct Warehouse {
     pub indices: Arc<RwLock<Vec<IndexInfo>>>,
     pub recovery: Arc<RwLock<Recovery>>,
     pub shards: Arc<RwLock<Vec<ShallowShard>>>,
+    pub nodes: Arc<RwLock<NodeOutput>>,
 }
 
 impl Warehouse {
     pub async fn new(base_url: &str) -> Self {
         let client = ElasticsearchClient::new(base_url);
+        let nodes = client.nodes().await.unwrap();
         let cluster = client.health().await.unwrap();
         let recovery = client.recovery().await.unwrap();
         let shards = client.shards().await.unwrap();
@@ -29,6 +31,7 @@ impl Warehouse {
             indices: Arc::new(RwLock::new(indices)),
             recovery: Arc::new(RwLock::new(recovery)),
             shards: Arc::new(RwLock::new(shards)),
+            nodes: Arc::new(RwLock::new(nodes)),
         }
     }
 
@@ -55,6 +58,12 @@ impl Warehouse {
             let shards_data = self.client.shards().await.unwrap();
             let mut shards = self.shards.write().await;
             *shards = shards_data;
+        }
+
+        {
+            let nodes_data = self.client.nodes().await.unwrap();
+            let mut nodes = self.nodes.write().await;
+            *nodes = nodes_data;
         }
     }
 

@@ -1,7 +1,9 @@
 use std::collections::HashMap;
 use bigdecimal::BigDecimal;
+use log::{debug, trace};
 use serde::{Deserialize, Deserializer, Serialize};
 use anyhow::Result;
+use serde_json::Value;
 use ts_rs::TS;
 use std::fmt;
 use juniper::{
@@ -77,9 +79,10 @@ impl<'de> Deserialize<'de> for Recovery {
                     value.id = key;
                     indices.push(value);
                 }
-
                 Ok(Recovery { indices })
             }
+
+            
         }
 
         deserializer.deserialize_map(RecoveryVisitor)
@@ -103,8 +106,8 @@ pub struct RecoveryShard {
     primary: bool,
     start_time_in_millis: BigDecimal,
     total_time_in_millis: BigDecimal,
-    source: NodeInfo,
-    target: NodeInfo,
+    source: NodeTargetInfo,
+    target: NodeTargetInfo,
     index: TransportIndexInfo,
     translog: TranslogInfo,
     verify_index: VerifyIndexInfo,
@@ -112,7 +115,7 @@ pub struct RecoveryShard {
 
 #[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
 #[ts(export)]
-struct NodeInfo {
+struct NodeTargetInfo {
     id: String,
     host: String,
     transport_address: String,
@@ -179,6 +182,70 @@ pub struct ShallowShard {
     node: String,
 }
 
+#[derive(GraphQLObject, Serialize, Debug, Clone, TS)]
+#[ts(export)]
+pub struct NodeOutput {
+    pub nodes: Vec<NodeInfo>,
+}
+
+impl <'de> Deserialize<'de> for NodeOutput {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        struct NodeOutputVisitor;
+
+        impl<'de> serde::de::Visitor<'de> for NodeOutputVisitor {
+            type Value = NodeOutput;
+
+            fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+                formatter.write_str("a map of nodes")
+            }
+
+            fn visit_map<M>(self, mut access: M) -> Result<Self::Value, M::Error>
+            where
+                M: serde::de::MapAccess<'de>,
+            {
+                let mut nodes = Vec::new();
+
+                while let Some((key, mut value)) = access.next_entry::<String, Value>()? {
+                        if key != "nodes" { continue };
+
+                        let nodes_map = serde_json::from_value::<HashMap<String, NodeInfo>>(value);
+                        debug!("Key: {:?}", key);
+                        debug!("Nodes map: {:?}", nodes_map);
+                        if let Ok(nodes_map) = nodes_map {
+                            for (_, node_info) in nodes_map {
+                                nodes.push(node_info);
+                            }
+                    }
+                }
+
+                debug!("Nodes: {:?}", nodes);
+
+                Ok(NodeOutput { nodes })
+            }
+        }
+
+        deserializer.deserialize_map(NodeOutputVisitor)
+    }
+}
+
+#[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
+#[ts(export)]
+pub struct NodeInfo {
+    name: String,
+    transport_address: String,
+    host: String,
+    ip: String,
+    version: String,
+    build_flavor: String,
+    build_type: String,
+    build_hash: String,
+    total_indexing_buffer: BigDecimal,
+    roles: Vec<String>,
+}
+
 #[derive(Debug)]
 pub struct ElasticsearchClient {
     client: reqwest::Client,
@@ -225,5 +292,14 @@ impl ElasticsearchClient {
         let shards: Vec<ShallowShard> = serde_json::from_str(&shards)?;
 
         Ok(shards)
+    }
+
+    pub async fn nodes(&self) -> Result<NodeOutput> {
+        let url = format!("{}/_nodes?format=json", self.base_url);
+        let response = self.client.get(&url).send().await?;
+        let nodes = response.text().await?;
+        let nodes: NodeOutput = serde_json::from_str(&nodes)?;
+
+        Ok(nodes)
     }
 }

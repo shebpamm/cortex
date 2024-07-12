@@ -50,6 +50,12 @@ impl Query {
         let unassigned = shards.into_iter().filter(|s| s.state != "STARTED").collect();
         Ok(unassigned)
     }
+
+    async fn nodes(
+        context: &Context,
+    ) -> FieldResult<crate::elastic::NodeOutput> {
+        Ok(context.warehouse.read().await.nodes.read().await.clone())
+    }
 }
 
 type Schema = juniper::RootNode<'static, Query, EmptyMutation<Context>, EmptySubscription<Context>>;
