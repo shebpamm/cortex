@@ -45,8 +45,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { DataTable, wrapSortable } from "@/components/ui/data-table";
 import { RelocatingTable } from "./relocating-table";
+import { IndicesTable } from "./indices-table.tsx";
 
 function DatabaseIcon(props: any) {
   return (
@@ -173,7 +173,7 @@ export function Dashboard() {
             <CardTitle>Indices</CardTitle>
           </CardHeader>
           <CardContent>
-            <DataTable />
+            <IndicesTable />
           </CardContent>
         </Card>
         <Card className="col-span-1 md:col-span-2 lg:col-span-3">
