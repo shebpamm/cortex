@@ -188,48 +188,25 @@ pub struct NodeOutput {
     pub nodes: Vec<NodeInfo>,
 }
 
-impl <'de> Deserialize<'de> for NodeOutput {
+impl<'de> Deserialize<'de> for NodeOutput {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: Deserializer<'de>,
     {
-        struct NodeOutputVisitor;
-
-        impl<'de> serde::de::Visitor<'de> for NodeOutputVisitor {
-            type Value = NodeOutput;
-
-            fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-                formatter.write_str("a map of nodes")
-            }
-
-            fn visit_map<M>(self, mut access: M) -> Result<Self::Value, M::Error>
-            where
-                M: serde::de::MapAccess<'de>,
-            {
-                let mut nodes = Vec::new();
-
-                while let Some((key, mut value)) = access.next_entry::<String, Value>()? {
-                        if key != "nodes" { continue };
-
-                        let nodes_map = serde_json::from_value::<HashMap<String, NodeInfo>>(value);
-                        debug!("Key: {:?}", key);
-                        debug!("Nodes map: {:?}", nodes_map);
-                        if let Ok(nodes_map) = nodes_map {
-                            for (_, node_info) in nodes_map {
-                                nodes.push(node_info);
-                            }
-                    }
-                }
-
-                debug!("Nodes: {:?}", nodes);
-
-                Ok(NodeOutput { nodes })
-            }
+        #[derive(Debug, Deserialize)]
+        struct RawNodeOutput {
+            nodes: HashMap<String, NodeInfo>,
         }
 
-        deserializer.deserialize_map(NodeOutputVisitor)
+        let raw_node_output = RawNodeOutput::deserialize(deserializer)?;
+
+        // Convert HashMap<String, NodeInfo> to Vec<NodeInfo>
+        let nodes: Vec<NodeInfo> = raw_node_output.nodes.into_iter().map(|(_, v)| v).collect();
+
+        Ok(NodeOutput { nodes })
     }
 }
+
 
 #[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
 #[ts(export)]
@@ -244,6 +221,13 @@ pub struct NodeInfo {
     build_hash: String,
     total_indexing_buffer: BigDecimal,
     roles: Vec<String>,
+    // attributes: NodeAttributes,
+}
+
+#[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
+#[ts(export)]
+pub struct NodeAttributes {
+    storage_type: String,
 }
 
 #[derive(Debug)]

@@ -1,0 +1,31 @@
+   Compiling parietal v0.1.0 (/home/shebpamm/stuff/cortex/parietal)
+warning: unused import: `std::collections::HashMap`
+ --> src/elastic.rs:1:5
+  |
+1 | use std::collections::HashMap;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` on by default
+
+warning: unused import: `NodeInfo`
+ --> src/data.rs:1:67
+  |
+1 | use crate::elastic::{ClusterInfo, ElasticsearchClient, IndexInfo, NodeInfo, NodeOutput, Recovery, ShallowShard};
+  |                                                                   ^^^^^^^^
+
+warning: unused imports: `GraphQLEnum`, `GraphQLInputObject`, `GraphQLObject`, `ScalarValue`
+ --> src/graphql.rs:2:68
+  |
+2 |     graphql_object, EmptyMutation, EmptySubscription, FieldResult, GraphQLEnum, GraphQLInputObject, GraphQLObject, ScalarValue,
+  |                                                                    ^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^^^^
+
+warning: variable does not need to be mutable
+   --> src/elastic.rs:211:38
+    |
+211 |                 while let Some((key, mut value)) = access.next_entry::<String, Value>()? {
+    |                                      ----^^^^^
+    |                                      |
+    |                                      help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` on by default
+
