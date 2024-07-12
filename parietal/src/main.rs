@@ -45,8 +45,16 @@ async fn main() {
     Warehouse::start_refresh(warehouse.clone());
     WAREHOUSE.set(warehouse).unwrap();
 
+
     debug!("Starting server...");
-    warp::serve(routes.or(graphql))
+
+    let cors = warp::cors()
+        .allow_any_origin()
+        .allow_methods(vec!["GET", "POST", "DELETE", "PUT", "OPTIONS"])
+        .allow_headers(vec!["content-type", "authorization"])
+        .max_age(3600);
+
+    warp::serve(routes.or(graphql).with(cors))
         .run(([127, 0, 0, 1], 3030))
         .await;
 }
