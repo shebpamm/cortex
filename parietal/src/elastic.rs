@@ -89,6 +89,7 @@ impl<'de> Deserialize<'de> for Recovery {
 #[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
 #[ts(export)]
 pub struct IndexRecovery {
+    #[serde(skip)]
     id: String,
     shards: Vec<RecoveryShard>,
 }
@@ -96,7 +97,6 @@ pub struct IndexRecovery {
 #[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
 #[ts(export)]
 pub struct RecoveryShard {
-    id: i32,
     #[serde(alias = "type")]
     shard_type: String,
     stage: String,
@@ -133,10 +133,10 @@ struct TransportIndexInfo {
 #[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
 #[ts(export)]
 struct SizeInfo {
-    total_in_bytes: i32,
-    reused_in_bytes: i32,
-    recovered_in_bytes: i32,
-    recovered_from_snapshot_in_bytes: i32,
+    total_in_bytes: BigDecimal,
+    reused_in_bytes: BigDecimal,
+    recovered_in_bytes: BigDecimal,
+    recovered_from_snapshot_in_bytes: BigDecimal,
     percent: String, // This can sometimes be a string like "18.2%"
 }
 
