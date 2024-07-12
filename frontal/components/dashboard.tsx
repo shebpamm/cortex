@@ -30,22 +30,10 @@ import {
   ChartTooltip,
   ChartContainer,
 } from "@/components/ui/chart";
-import { useState, useEffect } from "react";
-import { ClusterInfo } from "../../parietal/bindings/ClusterInfo";
-import { IndexInfo } from "../../parietal/bindings/IndexInfo";
 
-import { ColumnDef } from "@tanstack/react-table";
-
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { RelocatingTable } from "./relocating-table";
-import { IndicesTable } from "./indices-table.tsx";
+import { IndicesTable } from "./indices-table";
+import { NodesTable } from "./nodes-table";
 
 function DatabaseIcon(props: any) {
   return (
@@ -187,73 +175,7 @@ export function Dashboard() {
             <CardTitle>Node Status</CardTitle>
           </CardHeader>
           <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Node</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>CPU</TableHead>
-                  <TableHead>Memory</TableHead>
-                  <TableHead>Disk</TableHead>
-                  <TableHead>Uptime</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                <TableRow>
-                  <TableCell>es-node-1</TableCell>
-                  <TableCell>
-                    <Badge
-                      variant="outline"
-                      className="bg-green-500 text-green-50"
-                    >
-                      Online
-                    </Badge>
-                  </TableCell>
-                  <TableCell>60%</TableCell>
-                  <TableCell>32 GB</TableCell>
-                  <TableCell>500 GB</TableCell>
-                  <TableCell>12h 34m</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>es-node-2</TableCell>
-                  <TableCell>
-                    <Badge
-                      variant="outline"
-                      className="bg-green-500 text-green-50"
-                    >
-                      Online
-                    </Badge>
-                  </TableCell>
-                  <TableCell>70%</TableCell>
-                  <TableCell>32 GB</TableCell>
-                  <TableCell>500 GB</TableCell>
-                  <TableCell>11h 22m</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>es-node-3</TableCell>
-                  <TableCell>
-                    <Badge
-                      variant="outline"
-                      className="bg-yellow-500 text-yellow-50"
-                    >
-                      Offline
-                    </Badge>
-                  </TableCell>
-                  <TableCell>80%</TableCell>
-                  <TableCell>32 GB</TableCell>
-                  <TableCell>500 GB</TableCell>
-                  <TableCell>9h 45m</TableCell>
-                </TableRow>
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-        <Card className="col-span-1 md:col-span-2 lg:col-span-3">
-          <CardHeader>
-            <CardTitle>Query Performance</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <LinechartChart className="aspect-[9/4]" />
+            <NodesTable />     
           </CardContent>
         </Card>
       </main>
