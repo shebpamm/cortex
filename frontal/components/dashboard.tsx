@@ -17,6 +17,7 @@ To read more about using these font, please visit the Next.js documentation:
 - App Directory: https://nextjs.org/docs/app/building-your-application/optimizing/fonts
 - Pages Directory: https://nextjs.org/docs/pages/building-your-application/optimizing/fonts
 **/
+import { useQuery, gql } from "@apollo/client";
 import { toTitleCase, parseSize } from "@/lib/utils";
 import { Loading } from "@/components/loading";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -44,17 +45,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ArrowUpDown } from "lucide-react";
 import { DataTable, wrapSortable } from "@/components/ui/data-table";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { RelocatingTable } from "./relocating-table";
 
 function DatabaseIcon(props: any) {
@@ -78,86 +69,38 @@ function DatabaseIcon(props: any) {
   );
 }
 
+
+const GET_CLUSTERINFO = gql`
+    query GetClusterInfo {
+      health {
+        clusterName
+        status
+        numberOfNodes
+        numberOfDataNodes
+        activeShards
+        relocatingShards
+        initializingShards
+        unassignedShards
+        activeShardsPercentAsNumber
+        numberOfPendingTasks
+      }
+    }
+`
 export function Dashboard() {
-  const [clusterInfo, setClusterInfo] = useState<ClusterInfo>();
-  const [indices, setIndices] = useState<IndexInfo[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const health = fetch("http://localhost:3030/elastic/health")
-      .then((response) => response.json())
-      .then((data) => {
-        setClusterInfo(data);
-      });
-
-    const indices = fetch("http://localhost:3030/elastic/indices")
-      .then((response) => response.json())
-      .then((data) => {
-        setIndices(data);
-      });
-
-    Promise.all([health, indices]).then(() => {
-      setLoading(false);
-    });
-  }, []);
+  const { loading, error, data: clusterInfo } = useQuery(GET_CLUSTERINFO);
 
   if (loading) {
     return <Loading />;
   }
 
-  if (!clusterInfo) {
+  if (error) {
     return <div>Error loading cluster data</div>;
   }
 
-  if (!indices) {
-    return <div>Error loading indices</div>;
-  }
-
-  const columns: ColumnDef<IndexInfo>[] = [
-    {
-      accessorKey: "index",
-      header: wrapSortable.bind(null, "Index"),
-    },
-    {
-      accessorKey: "status",
-      header: wrapSortable.bind(null, "Status"),
-      cell: ({ row }) => <Badge variant="outline">{row.original.status}</Badge>,
-    },
-    {
-      accessorKey: "health",
-      header: wrapSortable.bind(null, "Health"),
-      cell: ({ row }) => (
-        <Badge
-          variant="outline"
-          className={`bg-${row.original.health}-500 text-${row.original.health}-50`}
-        >
-          {row.original.health}
-        </Badge>
-      ),
-    },
-    {
-      accessorKey: "docs_count",
-      header: wrapSortable.bind(null, "Docs Count"),
-    },
-    {
-      accessorKey: "store_size",
-      header: wrapSortable.bind(null, "Store Size"),
-      sortingFn: (a, b, direction) => {
-        const sizeA = parseSize(a.original.store_size);
-        const sizeB = parseSize(b.original.store_size);
-
-        if (direction === "asc") {
-          return sizeA - sizeB;
-        } else {
-          return sizeB - sizeA;
-        }
-      },
-    },
-  ];
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar title={toTitleCase(clusterInfo.cluster_name)} />
+      <Navbar title={toTitleCase(clusterInfo.health.cluster_name)} />
       <main className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
         <StatCard
           title="Cluster Health"
@@ -168,14 +111,14 @@ export function Dashboard() {
                   className={`w-8 h-8 text-${clusterInfo.status}-500`}
                 />
               ),
-              label: toTitleCase(clusterInfo.status),
+              label: toTitleCase(clusterInfo.health.status),
             },
             {
-              value: clusterInfo.number_of_nodes.toString(),
+              value: clusterInfo.health.numberOfNodes.toString(),
               label: "Nodes",
             },
             {
-              value: clusterInfo.number_of_data_nodes.toString(),
+              value: clusterInfo.health.numberOfDataNodes.toString(),
               label: "Data Nodes",
             },
           ]}
@@ -184,19 +127,19 @@ export function Dashboard() {
           title="Shard Health"
           elements={[
             {
-              value: clusterInfo.initializing_shards.toString(),
+              value: clusterInfo.health.initializingShards.toString(),
               label: "Initializing",
             },
             {
-              value: clusterInfo.relocating_shards.toString(),
+              value: clusterInfo.health.relocatingShards.toString(),
               label: "Relocating",
               dialog: {
                 title: "Relocating Shards",
-                content: <RelocatingTable />
+                content: <RelocatingTable />,
               },
             },
             {
-              value: clusterInfo.unassigned_shards.toString(),
+              value: clusterInfo.health.unassignedShards.toString(),
               label: "Unassigned",
             },
           ]}
@@ -205,11 +148,11 @@ export function Dashboard() {
           title="Shard Stats"
           elements={[
             {
-              value: clusterInfo.active_shards.toString(),
+              value: clusterInfo.health.activeShards.toString(),
               label: "Active Shards",
             },
             {
-              value: clusterInfo.number_of_pending_tasks.toString(),
+              value: clusterInfo.health.numberOfPendingTasks.toString(),
               label: (
                 <>
                   <br />
@@ -219,7 +162,7 @@ export function Dashboard() {
             },
             {
               value:
-                clusterInfo.active_shards_percent_as_number.toFixed(0) + "%",
+                clusterInfo.health.activeShardsPercentAsNumber.toFixed(0) + "%",
               label: "Active Shards %",
             },
           ]}
@@ -230,7 +173,7 @@ export function Dashboard() {
             <CardTitle>Indices</CardTitle>
           </CardHeader>
           <CardContent>
-            <DataTable columns={columns} data={indices} />
+            <DataTable />
           </CardContent>
         </Card>
         <Card className="col-span-1 md:col-span-2 lg:col-span-3">
