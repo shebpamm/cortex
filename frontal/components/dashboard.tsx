@@ -21,7 +21,6 @@ import { useQuery, gql } from "@apollo/client";
 import { toTitleCase, parseSize } from "@/lib/utils";
 import { Loading } from "@/components/loading";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Navbar } from "@/components/ui/navbar";
 import { StatCard } from "@/components/ui/stat-card";
 import { Badge } from "@/components/ui/badge";
 import { CartesianGrid, XAxis, Line, LineChart } from "recharts";
@@ -100,7 +99,6 @@ export function Dashboard() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar title={toTitleCase(clusterInfo.health.cluster_name)} />
       <main className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
         <StatCard
           title="Cluster Health"
