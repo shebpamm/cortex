@@ -219,13 +219,16 @@ pub struct NodeInfo {
     build_hash: String,
     total_indexing_buffer: BigDecimal,
     roles: Vec<String>,
-    // attributes: NodeAttributes,
+    attributes: NodeAttributes,
 }
 
 #[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
 #[ts(export)]
 pub struct NodeAttributes {
-    storage_type: String,
+    storage_type: Option<String>,
+    #[serde(alias = "ml.machine_memory")]
+    machine_memory: String,
+    datacenter: String,
 }
 
 #[derive(Debug)]
