@@ -17,6 +17,14 @@ import {
 } from "@xyflow/react";
 import dagre from "dagre";
 
+const colorPreset = [
+  "#9B59F6",
+  "#9E81F6",
+  "#A2AAF6",
+  "#A5D2F5",
+  "#A8FAF5",
+]
+
 const GET_RELOCATING = gql`
   query relocating {
     relocating {
@@ -26,18 +34,55 @@ const GET_RELOCATING = gql`
   }
 `;
 
-function transformData(data) {
+const GET_NODES = gql`
+  query nodes {
+    nodes {
+      nodes {
+        name
+        attributes {
+          storageType
+        }
+      }
+    }
+  }
+`;
+
+function generateColors(nodesData) {
+  const storageTypes = new Set();
+  nodesData.nodes.nodes.forEach((node) => {
+    storageTypes.add(node.attributes?.storageType);
+  });
+
+  const colors = new Map();
+  let i = 0;
+  storageTypes.forEach((type) => {
+    colors.set(type, colorPreset[i % colorPreset.length]);
+    i++;
+  });
+
+  return colors;
+}
+
+function transformData(relocationData, nodesData) {
   const nodes = [];
   const edges = [];
 
+
+  const colors = generateColors(nodesData);
   // Create a map to keep track of node IDs and their labels
   const nodeMap = new Map();
 
   // Iterate through the data to create nodes and edges
-  data.relocating.forEach((item, index) => {
+  relocationData.relocating.forEach((item, index) => {
     const [source, target] = item.node.split(" -> ");
     const sourceId = source.trim();
     const targetId = target.split(" ").reverse()[0].trim();
+    const sourceStorageType = nodesData.nodes.nodes.find(
+      (node) => node.name === sourceId,
+    )?.attributes.storageType;
+    const targetStorageType = nodesData.nodes.nodes.find(
+      (node) => node.name === targetId,
+    )?.attributes.storageType;
 
     // Add source node if it doesn't exist
     if (!nodeMap.has(sourceId)) {
@@ -46,6 +91,9 @@ function transformData(data) {
         id: sourceId,
         position: { x: 0, y: nodes.length * 100 },
         data: { label: sourceId },
+        style: {
+          backgroundColor: colors.get(sourceStorageType),
+        },
       });
     }
 
@@ -56,6 +104,9 @@ function transformData(data) {
         id: targetId,
         position: { x: 100, y: nodes.length * 100 },
         data: { label: targetId },
+        style: {
+          backgroundColor: colors.get(targetStorageType),
+        },
       });
     }
 
@@ -129,15 +180,15 @@ const FlowChart: React.FC<FlowChartProps> = ({
 };
 
 export function RelocationFlow() {
-  const { data, loading } = useQuery(GET_RELOCATING);
+  const { data: relocationData, loading: relocationLoading } =
+    useQuery(GET_RELOCATING);
+  const { data: nodesData, loading: nodesLoading } = useQuery(GET_NODES);
 
-  if (loading) {
+  if (relocationLoading || nodesLoading) {
     return <>Loading...</>;
   }
 
-  console.log(data);
-
-  const { nodes, edges } = transformData(data);
+  const { nodes, edges } = transformData(relocationData, nodesData);
 
   return (
     <div className="w-full h-full aspect-square">
