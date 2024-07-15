@@ -2,6 +2,8 @@ use data::Warehouse;
 use graphql::Context;
 use log::debug;
 use warp::Filter;
+#[cfg(not(debug_assertions))]
+use rust_embed::RustEmbed;
 use data::WAREHOUSE;
 
 
@@ -13,6 +15,19 @@ mod rest;
 #[tokio::main]
 async fn main() {
     env_logger::init();
+
+
+    #[cfg(not(debug_assertions))]
+    {
+        #[derive(RustEmbed)]
+        #[folder = "../frontal/out"]
+        struct App;
+    }
+
+    #[cfg(debug_assertions)]
+    {
+        struct App;
+    }
 
     debug!("Building REST routes...");
 
@@ -59,7 +74,19 @@ async fn main() {
         .allow_headers(vec!["content-type", "authorization"])
         .max_age(3600);
 
-    warp::serve(routes.or(graphql).with(cors))
-        .run(([127, 0, 0, 1], 3030))
-        .await;
+    #[cfg(not(debug_assertions))]
+    {
+        warp::serve(routes.or(graphql).or(
+            warp_embed::embed(&App)
+        ).with(cors))
+            .run(([127, 0, 0, 1], 3030))
+            .await;
+    }
+
+    #[cfg(debug_assertions)]
+    {
+        warp::serve(routes.or(graphql).with(cors))
+            .run(([127, 0, 0, 1], 3030))
+            .await;
+    }
 }
