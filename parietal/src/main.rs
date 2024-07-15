@@ -17,6 +17,8 @@ async fn main() {
     env_logger::init();
 
 
+    let port = std::env::var("PORT").unwrap_or("3030".to_string());
+
     #[cfg(not(debug_assertions))]
     {
         #[derive(RustEmbed)]
@@ -58,7 +60,8 @@ async fn main() {
 
     debug!("Building initial ES state...");
 
-    let warehouse = Warehouse::new("http://localhost:9200").await;
+    let es_url = std::env::var("ES_URL").unwrap_or("http://localhost:9200".to_string());
+    let warehouse = Warehouse::new(&es_url).await;
 
     debug!("Starting refresh loop...");
     let warehouse = std::sync::Arc::new(tokio::sync::RwLock::new(warehouse));
