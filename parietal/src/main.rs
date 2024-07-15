@@ -20,11 +20,9 @@ async fn main() {
     let port = std::env::var("PORT").unwrap_or("3030".to_string());
 
     #[cfg(not(debug_assertions))]
-    {
-        #[derive(RustEmbed)]
-        #[folder = "../frontal/out"]
-        struct App;
-    }
+    #[derive(RustEmbed)]
+    #[folder = "../frontal/out"]
+    struct App;
 
     #[cfg(debug_assertions)]
     {
