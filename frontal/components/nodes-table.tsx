@@ -32,12 +32,15 @@ import { DataTable, wrapSortable } from "./ui/data-table";
 import prettyBytes from "pretty-bytes";
 import { gql, useQuery } from "@apollo/client";
 
-function calculateDiskProgress(availableInBytes: number, totalInBytes: number ) : number {
-    if (totalInBytes === 0) {
-        return availableInBytes === 0 ? 100 : 0;
-    }
-    const progress = (1 - availableInBytes / totalInBytes) * 100;
-    return progress;
+function calculateDiskProgress(
+  availableInBytes: number,
+  totalInBytes: number,
+): number {
+  if (totalInBytes === 0) {
+    return availableInBytes === 0 ? 100 : 0;
+  }
+  const progress = (1 - availableInBytes / totalInBytes) * 100;
+  return progress;
 }
 
 const columns: ColumnDef<any>[] = [
@@ -71,18 +74,40 @@ const columns: ColumnDef<any>[] = [
     accessorKey: "fs.total.availableInBytes",
     header: "Disk Usage",
     cell: ({ row }) => {
-        return <Progress value={calculateDiskProgress(row.original.fs.total.availableInBytes, row.original.fs.total.totalInBytes)} />;
+      return (
+        <Progress
+          value={calculateDiskProgress(
+            row.original.fs.total.availableInBytes,
+            row.original.fs.total.totalInBytes,
+          )}
+        />
+      );
+    },
+  },
+  {
+    accessorKey: "process.cpu.percent",
+    header: wrapSortable.bind(null, "CPU"),
+    cell: ({ row }) => {
+      return <Progress value={row.original.process.cpu.percent} />;
+    },
+  },
+  {
+    accessorKey: "os.mem.usedPercent",
+    header: wrapSortable.bind(null, "Memory"),
+    cell: ({ row }) => {
+      return <Progress value={row.original.os.mem.usedPercent} />;
     },
   },
 ];
 
 const GET_NODES = gql`
-  query GetNodes {
+  query nodes {
     nodes {
       nodes {
         name
         ip
         attributes {
+          machineMemory
           storageType
         }
         fs {
@@ -91,12 +116,18 @@ const GET_NODES = gql`
             freeInBytes
             availableInBytes
           }
-          stats {
-            total {
-              operations
-              readKilobytes
-              writeKilobytes
-            }
+        }
+        process {
+          cpu {
+            percent
+          }
+        }
+        os {
+          mem {
+            totalInBytes
+            freeInBytes
+            usedInBytes
+            usedPercent
           }
         }
       }

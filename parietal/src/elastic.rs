@@ -217,6 +217,15 @@ pub struct NodeInfo {
     attributes: NodeAttributes,
     process: NodeProcess,
     fs: NodeFileSystem,
+    os: NodeOS,
+}
+
+#[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
+#[ts(export)]
+pub struct NodeOS {
+    mem: NodeOSMemory,
+    swap: NodeOSMemory,
+    cpu: NodeCpu,
 }
 
 #[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
@@ -224,7 +233,7 @@ pub struct NodeInfo {
 pub struct NodeProcess {
     timestamp: BigDecimal,
     cpu: NodeCpu,
-    mem: NodeMemory,
+    mem: NodeProcessMemory,
 }
 
 #[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
@@ -267,8 +276,18 @@ pub struct NodeFSStatsTotal {
 
 #[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
 #[ts(export)]
-pub struct NodeMemory {
+pub struct NodeProcessMemory {
     total_virtual_in_bytes: BigDecimal,
+}
+
+#[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
+#[ts(export)]
+pub struct NodeOSMemory {
+    total_in_bytes: BigDecimal,
+    free_in_bytes: BigDecimal,
+    used_in_bytes: BigDecimal,
+    free_percent: Option<i32>,
+    used_percent: Option<i32>,
 }
 
 #[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
@@ -329,7 +348,7 @@ impl ElasticsearchClient {
     }
 
     pub async fn nodes(&self) -> Result<NodeOutput> {
-        let url = format!("{}/_nodes/stats/fs,process?format=json", self.base_url);
+        let url = format!("{}/_nodes/stats/fs,process,os?format=json", self.base_url);
         let response = self.client.get(&url).send().await?;
         let nodes = response.text().await?;
         let nodes: NodeOutput = serde_json::from_str(&nodes)?;
