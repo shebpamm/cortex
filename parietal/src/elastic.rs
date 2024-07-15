@@ -296,7 +296,7 @@ pub struct NodeAttributes {
     storage_type: Option<String>,
     #[serde(alias = "ml.machine_memory")]
     machine_memory: String,
-    datacenter: String,
+    datacenter: Option<String>,
 }
 
 #[derive(Debug)]
