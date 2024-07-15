@@ -94,7 +94,7 @@ export function Dashboard() {
             {
               value: (
                 <DatabaseIcon
-                  className={`w-8 h-8 text-${clusterInfo.status}-500`}
+                  className={`w-8 h-8 text-${clusterInfo.health.status}-500`}
                 />
               ),
               label: toTitleCase(clusterInfo.health.status),
