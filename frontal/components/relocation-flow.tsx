@@ -8,8 +8,6 @@ import {
   Background,
   useEdgesState,
   useNodesState,
-  applyEdgeChanges,
-  applyNodeChanges,
   Edge,
   Node,
   BackgroundVariant,
@@ -17,13 +15,38 @@ import {
 } from "@xyflow/react";
 import dagre from "dagre";
 
+// Define types for the data structures
+interface NodeAttributes {
+  storageType?: string;
+}
+
+interface NodeData {
+  name: string;
+  attributes: NodeAttributes;
+}
+
+interface NodesQueryData {
+  nodes: {
+    nodes: NodeData[];
+  };
+}
+
+interface RelocatingItem {
+  index: number;
+  node: string;
+}
+
+interface RelocatingQueryData {
+  relocating: RelocatingItem[];
+}
+
 const colorPreset = [
   "#9B59F6",
   "#9E81F6",
   "#A2AAF6",
   "#A5D2F5",
   "#A8FAF5",
-]
+];
 
 const GET_RELOCATING = gql`
   query relocating {
@@ -47,13 +70,13 @@ const GET_NODES = gql`
   }
 `;
 
-function generateColors(nodesData) {
-  const storageTypes = new Set();
+function generateColors(nodesData: NodesQueryData) {
+  const storageTypes = new Set<string>();
   nodesData.nodes.nodes.forEach((node) => {
-    storageTypes.add(node.attributes?.storageType);
+    storageTypes.add(node.attributes?.storageType || "");
   });
 
-  const colors = new Map();
+  const colors = new Map<string, string>();
   let i = 0;
   storageTypes.forEach((type) => {
     colors.set(type, colorPreset[i % colorPreset.length]);
@@ -63,17 +86,17 @@ function generateColors(nodesData) {
   return colors;
 }
 
-function transformData(relocationData, nodesData) {
-  const nodes = [];
-  const edges = [];
-
+function transformData(
+  relocationData: RelocatingQueryData,
+  nodesData: NodesQueryData,
+) {
+  const nodes: Node[] = [];
+  const edges: Edge[] = [];
 
   const colors = generateColors(nodesData);
-  // Create a map to keep track of node IDs and their labels
-  const nodeMap = new Map();
+  const nodeMap = new Map<string, string>();
 
-  // Iterate through the data to create nodes and edges
-  relocationData.relocating.forEach((item, index) => {
+  relocationData.relocating.forEach((item) => {
     const [source, target] = item.node.split(" -> ");
     const sourceId = source.trim();
     const targetId = target.split(" ").reverse()[0].trim();
@@ -84,7 +107,6 @@ function transformData(relocationData, nodesData) {
       (node) => node.name === targetId,
     )?.attributes.storageType;
 
-    // Add source node if it doesn't exist
     if (!nodeMap.has(sourceId)) {
       nodeMap.set(sourceId, `Node ${sourceId}`);
       nodes.push({
@@ -92,12 +114,11 @@ function transformData(relocationData, nodesData) {
         position: { x: 0, y: nodes.length * 100 },
         data: { label: sourceId },
         style: {
-          backgroundColor: colors.get(sourceStorageType),
+          backgroundColor: colors.get(sourceStorageType || ""),
         },
       });
     }
 
-    // Add target node if it doesn't exist
     if (!nodeMap.has(targetId)) {
       nodeMap.set(targetId, `Node ${targetId}`);
       nodes.push({
@@ -105,12 +126,11 @@ function transformData(relocationData, nodesData) {
         position: { x: 100, y: nodes.length * 100 },
         data: { label: targetId },
         style: {
-          backgroundColor: colors.get(targetStorageType),
+          backgroundColor: colors.get(targetStorageType || ""),
         },
       });
     }
 
-    // Add edge between source and target
     edges.push({
       id: `${sourceId}-${targetId}`,
       source: sourceId,
@@ -125,26 +145,23 @@ function transformData(relocationData, nodesData) {
   return { nodes, edges };
 }
 
-const layoutGraph = (nodes: Node<CustomNodeData>[], edges: Edge[]) => {
+const layoutGraph = (nodes: any, edges: Edge[]) => {
   const g = new dagre.graphlib.Graph();
 
   g.setGraph({ rankdir: "LR" });
   g.setDefaultEdgeLabel(() => ({}));
 
-  // Add nodes
-  nodes.forEach((node) => {
+  nodes.forEach((node: any) => {
     g.setNode(node.id, { width: 150, height: 50 });
   });
 
-  // Add edges
   edges.forEach((edge) => {
     g.setEdge(edge.source, edge.target);
   });
 
   dagre.layout(g);
 
-  // Update node positions
-  nodes.forEach((node) => {
+  nodes.forEach((node : any) => {
     const { x, y } = g.node(node.id);
     node.position = { x: x || 0, y: y || 0 };
   });
@@ -152,11 +169,16 @@ const layoutGraph = (nodes: Node<CustomNodeData>[], edges: Edge[]) => {
   return nodes;
 };
 
+interface FlowChartProps {
+  nodes: Node[];
+  edges: Edge[];
+}
+
 const FlowChart: React.FC<FlowChartProps> = ({
   nodes: initialNodes,
   edges: initialEdges,
 }) => {
-  const [nodes, setNodes, onNodesChange] = useNodesState(
+  const [nodes, _, onNodesChange] = useNodesState(
     layoutGraph(initialNodes, initialEdges),
   );
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
@@ -181,14 +203,18 @@ const FlowChart: React.FC<FlowChartProps> = ({
 
 export function RelocationFlow() {
   const { data: relocationData, loading: relocationLoading } =
-    useQuery(GET_RELOCATING);
-  const { data: nodesData, loading: nodesLoading } = useQuery(GET_NODES);
+    useQuery<RelocatingQueryData>(GET_RELOCATING);
+  const { data: nodesData, loading: nodesLoading } =
+    useQuery<NodesQueryData>(GET_NODES);
 
   if (relocationLoading || nodesLoading) {
     return <>Loading...</>;
   }
 
-  const { nodes, edges } = transformData(relocationData, nodesData);
+  const { nodes, edges } = transformData(
+    relocationData as RelocatingQueryData,
+    nodesData as NodesQueryData,
+  );
 
   return (
     <div className="w-full h-full aspect-square">
