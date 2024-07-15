@@ -17,7 +17,7 @@ async fn main() {
     env_logger::init();
 
 
-    let port = std::env::var("PORT").unwrap_or("3030".to_string());
+    let port: u16 = std::env::var("PORT").unwrap_or("3030".to_string()).parse().unwrap();
 
     #[cfg(not(debug_assertions))]
     #[derive(RustEmbed)]
@@ -80,14 +80,14 @@ async fn main() {
         warp::serve(routes.or(graphql).or(
             warp_embed::embed(&App)
         ).with(cors))
-            .run(([127, 0, 0, 1], 3030))
+            .run(([0, 0, 0, 0], port))
             .await;
     }
 
     #[cfg(debug_assertions)]
     {
         warp::serve(routes.or(graphql).with(cors))
-            .run(([127, 0, 0, 1], 3030))
+            .run(([0, 0, 0, 0], port))
             .await;
     }
 }
