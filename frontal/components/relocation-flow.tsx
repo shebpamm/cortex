@@ -98,6 +98,9 @@ function transformData(
 
   relocationData.relocating.forEach((item) => {
     const [source, target] = item.node.split(" -> ");
+    if (!source || !target) {
+      return;
+    }
     const sourceId = source.trim();
     const targetId = target.split(" ").reverse()[0].trim();
     const sourceStorageType = nodesData.nodes.nodes.find(
