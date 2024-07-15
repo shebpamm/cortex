@@ -88,6 +88,12 @@ export function RelocatingTable() {
     {
       accessorKey: "store",
       header: wrapSortable.bind(null, "Store"),
+      cell: ({ row }) => {
+        if (!row.original.store) {
+          return "N/A";
+        }
+        return prettyBytes(parseSize(row.original.store));
+      },
       sortingFn: (a, b, direction) => {
         if (!a.original.store || !b.original.store) {
           return 0;
