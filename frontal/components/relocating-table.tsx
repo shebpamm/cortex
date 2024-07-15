@@ -108,7 +108,9 @@ export function RelocatingTable() {
     {
       accessorKey: "node",
       header: wrapSortable.bind(null, "Source"),
-      cell: ({ row }) => { return (row.original.node.split("->")[0] || "").trim(); },
+      cell: ({ row }) => {
+        return (row.original.node.split("->")[0] || "").trim();
+      },
       sortingFn: (a, b, direction) => {
         const nodeA = a.original.node.split("->")[0].trim();
         const nodeB = b.original.node.split("->")[0].trim();
@@ -118,12 +120,14 @@ export function RelocatingTable() {
         } else {
           return nodeB.localeCompare(nodeA);
         }
-      }
+      },
     },
     {
       accessorKey: "node",
       header: wrapSortable.bind(null, "Destination"),
-      cell: ({ row }) => { return row.original.node.split(" ").reverse()[0] },
+      cell: ({ row }) => {
+        return row.original.node.split(" ").reverse()[0];
+      },
       sortingFn: (a, b, direction) => {
         const nodeA = a.original.node.split(" ").reverse()[0];
         const nodeB = b.original.node.split(" ").reverse()[0];
@@ -133,8 +137,8 @@ export function RelocatingTable() {
         } else {
           return nodeB.localeCompare(nodeA);
         }
-      }
-    }
+      },
+    },
   ];
 
   return (

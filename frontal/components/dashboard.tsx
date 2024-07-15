@@ -18,11 +18,10 @@ To read more about using these font, please visit the Next.js documentation:
 - Pages Directory: https://nextjs.org/docs/pages/building-your-application/optimizing/fonts
 **/
 import { useQuery, gql } from "@apollo/client";
-import { toTitleCase, parseSize } from "@/lib/utils";
+import { toTitleCase } from "@/lib/utils";
 import { Loading } from "@/components/loading";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { StatCard } from "@/components/ui/stat-card";
-import { Badge } from "@/components/ui/badge";
 import { CartesianGrid, XAxis, Line, LineChart } from "recharts";
 import { RecoveryTable } from "@/components/recovery-table";
 import {
@@ -34,6 +33,8 @@ import {
 import { RelocatingTable } from "./relocating-table";
 import { IndicesTable } from "./indices-table";
 import { NodesTable } from "./nodes-table";
+
+import { RelocationFlow } from "./relocation-flow";
 
 function DatabaseIcon(props: any) {
   return (
@@ -178,58 +179,15 @@ export function Dashboard() {
             <NodesTable />     
           </CardContent>
         </Card>
+        <Card className="col-span-1 md:col-span-2 lg:col-span-3">
+          <CardHeader>
+            <CardTitle>Relocation Flow</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <RelocationFlow />
+          </CardContent>
+        </Card>
       </main>
-    </div>
-  );
-}
-
-function LinechartChart(props) {
-  return (
-    <div {...props}>
-      <ChartContainer
-        config={{
-          desktop: {
-            label: "Desktop",
-            color: "hsl(var(--chart-1))",
-          },
-        }}
-      >
-        <LineChart
-          accessibilityLayer
-          data={[
-            { month: "January", desktop: 186 },
-            { month: "February", desktop: 305 },
-            { month: "March", desktop: 237 },
-            { month: "April", desktop: 73 },
-            { month: "May", desktop: 209 },
-            { month: "June", desktop: 214 },
-          ]}
-          margin={{
-            left: 12,
-            right: 12,
-          }}
-        >
-          <CartesianGrid vertical={false} />
-          <XAxis
-            dataKey="month"
-            tickLine={false}
-            axisLine={false}
-            tickMargin={8}
-            tickFormatter={(value) => value.slice(0, 3)}
-          />
-          <ChartTooltip
-            cursor={false}
-            content={<ChartTooltipContent hideLabel />}
-          />
-          <Line
-            dataKey="desktop"
-            type="natural"
-            stroke="var(--color-desktop)"
-            strokeWidth={2}
-            dot={false}
-          />
-        </LineChart>
-      </ChartContainer>
     </div>
   );
 }
