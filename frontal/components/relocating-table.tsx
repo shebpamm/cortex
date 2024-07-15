@@ -33,6 +33,20 @@ import { DataTable, wrapSortable } from "./ui/data-table";
 import prettyBytes from "pretty-bytes";
 import { parseSize } from "@/lib/utils";
 import { gql, useQuery } from "@apollo/client";
+import { Button } from "./ui/button";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "./ui/context-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTrigger,
+} from "./ui/dialog";
+import { RelocatingHistogram } from "./relocating-histogram";
 
 const GET_RELOCATING = gql`
   query relocating {
@@ -48,6 +62,7 @@ const GET_RELOCATING = gql`
 
 export function RelocatingTable() {
   const { data, loading } = useQuery(GET_RELOCATING);
+  const [histogramOpen, setHistogramOpen] = useState(false);
 
   if (loading) {
     return <Progress />;
@@ -90,8 +105,28 @@ export function RelocatingTable() {
   ];
 
   return (
-    <div className="overflow-auto border rounded-lg">
-      <DataTable columns={columns} data={data.relocating} />
-    </div>
+    <>
+      <Dialog open={histogramOpen} onOpenChange={() => setHistogramOpen(false)}>
+        <DialogTrigger></DialogTrigger>
+        <DialogContent
+          className={"lg:max-w-screen-lg overflow-y-hide max-h-screen"}
+        >
+          <DialogHeader>Size distribution</DialogHeader>
+          <RelocatingHistogram />
+        </DialogContent>
+      </Dialog>
+      <ContextMenu>
+        <ContextMenuTrigger>
+          <div className="overflow-auto border rounded-lg">
+            <DataTable columns={columns} data={data.relocating} />
+          </div>
+        </ContextMenuTrigger>
+        <ContextMenuContent className="w-64">
+          <ContextMenuItem inset onSelect={() => setHistogramOpen(true)}>
+            Size Distribution
+          </ContextMenuItem>
+        </ContextMenuContent>
+      </ContextMenu>
+    </>
   );
 }
