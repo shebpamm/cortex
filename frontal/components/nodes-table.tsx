@@ -72,7 +72,18 @@ const columns: ColumnDef<any>[] = [
   },
   {
     accessorKey: "fs.total.availableInBytes",
-    header: "Disk Usage",
+    header: wrapSortable.bind(null, "Disk"),
+    sortingFn: (a, b) => {
+      const aProgress = calculateDiskProgress(
+        a.original.fs.total.availableInBytes,
+        a.original.fs.total.totalInBytes,
+      );
+      const bProgress = calculateDiskProgress(
+        b.original.fs.total.availableInBytes,
+        b.original.fs.total.totalInBytes,
+      );
+      return aProgress - bProgress;
+    },
     cell: ({ row }) => {
       return (
         <Progress
