@@ -213,13 +213,62 @@ pub struct NodeInfo {
     transport_address: String,
     host: String,
     ip: String,
-    version: String,
-    build_flavor: String,
-    build_type: String,
-    build_hash: String,
-    total_indexing_buffer: BigDecimal,
     roles: Vec<String>,
     attributes: NodeAttributes,
+    process: NodeProcess,
+    fs: NodeFileSystem,
+}
+
+#[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
+#[ts(export)]
+pub struct NodeProcess {
+    timestamp: BigDecimal,
+    cpu: NodeCpu,
+    mem: NodeMemory,
+}
+
+#[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
+#[ts(export)]
+pub struct NodeCpu {
+    pub percent: i32,
+}
+
+#[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
+#[ts(export)]
+pub struct NodeFileSystem {
+    pub total: NodeFSTotal,
+    #[serde(alias = "io_stats")]
+    pub stats: NodeFSStats,
+}
+
+#[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
+#[ts(export)]
+pub struct NodeFSTotal {
+    pub total_in_bytes: BigDecimal,
+    free_in_bytes: BigDecimal,
+    available_in_bytes: BigDecimal,
+}
+
+#[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
+#[ts(export)]
+pub struct NodeFSStats {
+    total: NodeFSStatsTotal,
+}
+
+#[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
+#[ts(export)]
+pub struct NodeFSStatsTotal {
+    pub operations: BigDecimal,
+    pub read_operations: BigDecimal,
+    pub write_operations: BigDecimal,
+    pub read_kilobytes: BigDecimal,
+    pub write_kilobytes: BigDecimal,
+}
+
+#[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
+#[ts(export)]
+pub struct NodeMemory {
+    total_virtual_in_bytes: BigDecimal,
 }
 
 #[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
@@ -280,7 +329,7 @@ impl ElasticsearchClient {
     }
 
     pub async fn nodes(&self) -> Result<NodeOutput> {
-        let url = format!("{}/_nodes?format=json", self.base_url);
+        let url = format!("{}/_nodes/stats/fs,process?format=json", self.base_url);
         let response = self.client.get(&url).send().await?;
         let nodes = response.text().await?;
         let nodes: NodeOutput = serde_json::from_str(&nodes)?;
