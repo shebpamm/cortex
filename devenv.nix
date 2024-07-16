@@ -2,5 +2,5 @@
 
 {
   packages = with pkgs; [];
-  env.NEXT_PUBLIC_APP_MODE = "production";
+  env.NEXT_PUBLIC_APP_MODE = "dev";
 }
