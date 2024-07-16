@@ -97,6 +97,9 @@ function transformData(
   const nodeMap = new Map<string, string>();
 
   relocationData.relocating.forEach((item) => {
+    if (!item.node) {
+      return;
+    }
     const [source, target] = item.node.split(" -> ");
     if (!source || !target) {
       return;
