@@ -176,8 +176,8 @@ pub struct ShallowShard {
     pub state: String,
     docs: Option<String>,
     store: Option<String>,
-    ip: String,
-    node: String,
+    ip: Option<String>,
+    node: Option<String>,
 }
 
 #[derive(GraphQLObject, Serialize, Debug, Clone, TS)]
