@@ -1,4 +1,5 @@
 use crate::elastic::{ClusterInfo, ElasticsearchClient, IndexInfo, NodeOutput, Recovery, ShallowShard};
+use anyhow::Result;
 use log::debug;
 use tokio::sync::RwLock;
 use std::sync::Arc;
@@ -35,49 +36,53 @@ impl Warehouse {
         }
     }
 
-    pub async fn refresh(&self) {
+    pub async fn refresh(&self) -> Result<()> {
         {
-            let cluster_data = self.client.health().await.unwrap();
+            let cluster_data = self.client.health().await?;
             let mut cluster = self.cluster.write().await;
             *cluster = cluster_data;
         }
 
         {
-            let indices_data = self.client.indices().await.unwrap();
+            let indices_data = self.client.indices().await?;
             let mut indices = self.indices.write().await;
             *indices = indices_data;
         }
 
         {
-            let recovery_data = self.client.recovery().await.unwrap();
+            let recovery_data = self.client.recovery().await?;
             let mut recovery = self.recovery.write().await;
             *recovery = recovery_data;
         }
 
         {
-            let shards_data = self.client.shards().await.unwrap();
+            let shards_data = self.client.shards().await?;
             let mut shards = self.shards.write().await;
             *shards = shards_data;
         }
 
         {
-            let nodes_data = self.client.nodes().await.unwrap();
+            let nodes_data = self.client.nodes().await?;
             let mut nodes = self.nodes.write().await;
             *nodes = nodes_data;
         }
+
+        Ok(())
     }
 
-    pub fn start_refresh(warehouse: Arc<RwLock<Warehouse>>) {
-        debug!("Spawning refresh loop...");
-        tokio::spawn(async move {
-            loop {
-                debug!("Sleeping for 5 seconds...");
-                tokio::time::sleep(std::time::Duration::from_secs(5)).await;
-                debug!("Refreshing data...");
-                let warehouse = warehouse.read().await;
-                warehouse.refresh().await;
-                debug!("Data refreshed!");
+    pub async fn start_refresh(warehouse: Arc<RwLock<Warehouse>>) {
+    debug!("Spawning refresh loop...");
+    tokio::spawn(async move {
+        loop {
+            debug!("Sleeping for 5 seconds...");
+            tokio::time::sleep(std::time::Duration::from_secs(5)).await;
+            debug!("Refreshing data...");
+            let warehouse = warehouse.read().await;
+            if let Err(e) = warehouse.refresh().await {
+                panic!("Failed to refresh data: {:?}", e);
             }
-        });
-    }
+            debug!("Data refreshed!");
+        }
+    });
+}
 }
