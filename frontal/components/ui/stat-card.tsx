@@ -28,7 +28,7 @@ export function StatCard(props: StatCardProps) {
             </div>
           </DialogTrigger>
           <DialogContent
-            className={"lg:max-w-screen-lg overflow-y-hide max-h-screen"}
+            className={"lg:max-w-screen-lg overflow-y-scroll max-h-screen-80"}
           >
             <DialogHeader>{element.dialog.title}</DialogHeader>
             {element.dialog.content}

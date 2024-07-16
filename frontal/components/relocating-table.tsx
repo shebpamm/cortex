@@ -146,7 +146,7 @@ export function RelocatingTable() {
       <Dialog open={histogramOpen} onOpenChange={() => setHistogramOpen(false)}>
         <DialogTrigger></DialogTrigger>
         <DialogContent
-          className={"lg:max-w-screen-lg overflow-y-hide max-h-screen"}
+          className={"lg:max-w-screen-lg overflow-y-hide max-h-screen-80"}
         >
           <DialogHeader>Size distribution</DialogHeader>
           <RelocatingHistogram />
