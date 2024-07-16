@@ -1,6 +1,6 @@
 import { gql, useQuery } from "@apollo/client";
 import "@xyflow/react/dist/style.css";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   ReactFlow,
   MiniMap,
@@ -13,7 +13,7 @@ import {
   BackgroundVariant,
   MarkerType,
 } from "@xyflow/react";
-import dagre from "dagre";
+import ELK from 'elkjs';
 
 // Define types for the data structures
 interface NodeAttributes {
@@ -151,25 +151,34 @@ function transformData(
   return { nodes, edges };
 }
 
-const layoutGraph = (nodes: any, edges: Edge[]) => {
-  const g = new dagre.graphlib.Graph();
+const layoutGraph = async (nodes: any, edges: Edge[]) => {
+  const elk = new ELK();
 
-  g.setGraph({ rankdir: "LR" });
-  g.setDefaultEdgeLabel(() => ({}));
+  const graph = {
+    id: "root",
+    layoutOptions: {
+      "elk.algorithm": "layered",
+      "elk.direction": "DOWN"
+    },
+    children: nodes.map((node: any) => ({
+      id: node.id,
+      width: 150,
+      height: 50
+    })),
+    edges: edges.map((edge: Edge) => ({
+      id: `${edge.source}-${edge.target}`,
+      sources: [edge.source],
+      targets: [edge.target]
+    }))
+  };
+
+  const layout = await elk.layout(graph);
 
   nodes.forEach((node: any) => {
-    g.setNode(node.id, { width: 150, height: 50 });
-  });
-
-  edges.forEach((edge) => {
-    g.setEdge(edge.source, edge.target);
-  });
-
-  dagre.layout(g);
-
-  nodes.forEach((node : any) => {
-    const { x, y } = g.node(node.id);
-    node.position = { x: x || 0, y: y || 0 };
+    const layoutNode = layout.children?.find((n) => n.id === node.id);
+    if (layoutNode) {
+      node.position = { x: layoutNode.x || 0, y: layoutNode.y || 0 };
+    }
   });
 
   return nodes;
@@ -184,10 +193,16 @@ const FlowChart: React.FC<FlowChartProps> = ({
   nodes: initialNodes,
   edges: initialEdges,
 }) => {
-  const [nodes, _, onNodesChange] = useNodesState(
-    layoutGraph(initialNodes, initialEdges),
-  );
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+
+  useEffect(() => {
+    const layout = async () => {
+      const laidOutNodes = await layoutGraph(initialNodes, initialEdges);
+      setNodes(laidOutNodes);
+    };
+    layout();
+  }, [initialNodes, initialEdges]);
 
   const onConnect = (params: any) => setEdges((eds) => [...eds, params]);
 
