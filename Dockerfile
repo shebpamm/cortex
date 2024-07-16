@@ -39,4 +39,4 @@ WORKDIR /app
 
 COPY --from=parietal-builder /app/parietal/target/release/parietal /app/parietal
 
-CMD ["/app/parietal"]
+ENTRYPOINT ["/app/parietal"]
