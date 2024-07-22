@@ -63,7 +63,7 @@ async fn main() {
 
     debug!("Starting refresh loop...");
     let warehouse = std::sync::Arc::new(tokio::sync::RwLock::new(warehouse));
-    let _ = Warehouse::start_refresh(warehouse.clone());
+    Warehouse::start_refresh(warehouse.clone()).await;
     WAREHOUSE.set(warehouse).unwrap();
 
 
