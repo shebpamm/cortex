@@ -5,3 +5,4 @@ url = "http://localhost:9200"
 
 [ui]
 colorscheme = "neon"
+node_color_attribute = "storage_class"

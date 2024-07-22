@@ -20,6 +20,7 @@ pub struct ElasticConfig {
 #[derive(GraphQLObject, Clone, Debug, Deserialize, Serialize)]
 pub struct UiConfig {
     pub colorscheme: String,
+    pub node_color_attribute: String,
 }
 
 pub fn read_config() -> Result<Config> {
