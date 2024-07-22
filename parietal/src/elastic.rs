@@ -206,7 +206,7 @@ impl<'de> Deserialize<'de> for NodeOutput {
 }
 
 
-#[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
+#[derive(GraphQLObject, Serialize, Debug, Clone, TS)]
 #[ts(export)]
 pub struct NodeInfo {
     name: String,
@@ -214,10 +214,48 @@ pub struct NodeInfo {
     host: String,
     ip: String,
     roles: Vec<String>,
-    attributes: NodeAttributes,
+    #[serde(skip)]
+    attributes: Vec<NodeAttribute>,
     process: NodeProcess,
     fs: NodeFileSystem,
     os: NodeOS,
+}
+
+impl<'de> Deserialize<'de> for NodeInfo {
+
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+        where
+            D: Deserializer<'de> 
+    {
+        #[derive(Debug, Deserialize)]
+        struct RawNodeInfo {
+            name: String,
+            transport_address: String,
+            host: String,
+            ip: String,
+            roles: Vec<String>,
+            attributes: std::collections::HashMap<String, String>,
+            process: NodeProcess,
+            fs: NodeFileSystem,
+            os: NodeOS,
+        }
+
+        let raw = RawNodeInfo::deserialize(deserializer)?;
+
+        let attributes = raw.attributes.into_iter().map(|(k, v)| NodeAttribute { key: k, value: v }).collect();
+
+        Ok(NodeInfo {
+            name: raw.name,
+            transport_address: raw.transport_address,
+            host: raw.host,
+            ip: raw.ip,
+            roles: raw.roles,
+            attributes,
+            process: raw.process,
+            fs: raw.fs,
+            os: raw.os,
+        })
+    }
 }
 
 #[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
@@ -291,12 +329,9 @@ pub struct NodeOSMemory {
 }
 
 #[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
-#[ts(export)]
-pub struct NodeAttributes {
-    storage_type: Option<String>,
-    #[serde(alias = "ml.machine_memory")]
-    machine_memory: String,
-    datacenter: Option<String>,
+pub struct NodeAttribute {
+    key: String,
+    value: String,
 }
 
 #[derive(Debug)]
