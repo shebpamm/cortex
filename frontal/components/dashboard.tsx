@@ -35,6 +35,7 @@ import { IndicesTable } from "./indices-table";
 import { NodesTable } from "./nodes-table";
 
 import { RelocationFlow } from "./relocation-flow";
+import { ShardTable } from "./shard-table";
 
 function DatabaseIcon(props: any) {
   return (
