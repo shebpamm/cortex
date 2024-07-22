@@ -1,4 +1,4 @@
-use crate::elastic::{ClusterInfo, ElasticsearchClient, IndexInfo, NodeOutput, Recovery, ShallowShard};
+use crate::{config, elastic::{ClusterInfo, ElasticsearchClient, IndexInfo, NodeOutput, Recovery, ShallowShard}};
 use anyhow::Result;
 use log::debug;
 use tokio::sync::RwLock;
@@ -6,6 +6,7 @@ use std::sync::Arc;
 use once_cell::sync::OnceCell;
 
 pub static WAREHOUSE: OnceCell<std::sync::Arc<tokio::sync::RwLock<Warehouse>>> = OnceCell::new();
+pub static CONFIG: OnceCell<config::Config> = OnceCell::new();
 
 #[derive(Debug)]
 pub struct Warehouse {

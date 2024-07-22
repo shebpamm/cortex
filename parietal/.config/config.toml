@@ -1,0 +1,7 @@
+port = 3030
+
+[elastic]
+url = "http://localhost:9200"
+
+[ui]
+colorscheme = "neon"

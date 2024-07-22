@@ -5,12 +5,16 @@ use juniper::{
 use std::sync::Arc;
 use tokio::sync::RwLock;
 
+use crate::config;
+
 pub struct Context {
     warehouse: Arc<RwLock<crate::data::Warehouse>>,
 }
 impl Context {
     pub(crate) fn new() -> Self {
-        Self { warehouse: crate::data::WAREHOUSE.get().unwrap().clone() }
+        Self { 
+            warehouse: crate::data::WAREHOUSE.get().unwrap().clone(),
+        }
     }
 }
 
@@ -23,6 +27,10 @@ pub struct Query;
 impl Query {
     fn api_version() -> &'static str {
         "1.0"
+    }
+
+    fn config() -> &'static config::UiConfig {
+        &crate::data::CONFIG.get().unwrap().ui
     }
 
     async fn health(

@@ -4,20 +4,19 @@ use log::debug;
 use warp::Filter;
 #[cfg(not(debug_assertions))]
 use rust_embed::RustEmbed;
-use data::WAREHOUSE;
+use data::{WAREHOUSE, CONFIG};
 
 
 mod elastic;
 mod data;
 mod graphql;
 mod rest;
+mod config;
 
 #[tokio::main]
 async fn main() {
     env_logger::init();
 
-
-    let port: u16 = std::env::var("PORT").unwrap_or("3030".to_string()).parse().unwrap();
 
     #[cfg(not(debug_assertions))]
     #[derive(RustEmbed)]
@@ -28,6 +27,12 @@ async fn main() {
     {
         struct App;
     }
+
+    debug!("Loading config...");
+
+    let config = config::read_config().unwrap();
+
+    CONFIG.set(config.clone()).unwrap();
 
     debug!("Building REST routes...");
 
@@ -58,8 +63,7 @@ async fn main() {
 
     debug!("Building initial ES state...");
 
-    let es_url = std::env::var("ES_URL").unwrap_or("http://localhost:9200".to_string());
-    let warehouse = Warehouse::new(&es_url).await;
+    let warehouse = Warehouse::new(&config.elastic.url).await;
 
     debug!("Starting refresh loop...");
     let warehouse = std::sync::Arc::new(tokio::sync::RwLock::new(warehouse));
@@ -80,14 +84,14 @@ async fn main() {
         warp::serve(routes.or(graphql).or(
             warp_embed::embed(&App)
         ).with(cors))
-            .run(([0, 0, 0, 0], port))
+            .run(([0, 0, 0, 0], config.port))
             .await;
     }
 
     #[cfg(debug_assertions)]
     {
         warp::serve(routes.or(graphql).with(cors))
-            .run(([0, 0, 0, 0], port))
+            .run(([0, 0, 0, 0], config.port))
             .await;
     }
 }

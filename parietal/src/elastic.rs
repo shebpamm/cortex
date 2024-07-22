@@ -4,9 +4,7 @@ use serde::{Deserialize, Deserializer, Serialize};
 use anyhow::Result;
 use ts_rs::TS;
 use std::fmt;
-use juniper::{
-    GraphQLObject,
-};
+use juniper::GraphQLObject;
 
 #[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
 #[graphql(description = "Basic cluster information, such as health and status")]
