@@ -170,14 +170,14 @@ struct VerifyIndexInfo {
 #[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
 #[ts(export)]
 pub struct ShallowShard {
-    index: String,
-    shard: String,
-    prirep: String,
+    pub index: String,
+    pub shard: String,
+    pub prirep: String,
     pub state: String,
-    docs: Option<String>,
-    store: Option<String>,
-    ip: Option<String>,
-    node: Option<String>,
+    pub docs: Option<String>,
+    pub store: Option<String>,
+    pub ip: Option<String>,
+    pub node: Option<String>,
 }
 
 #[derive(GraphQLObject, Serialize, Debug, Clone, TS)]

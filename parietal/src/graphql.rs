@@ -56,6 +56,26 @@ impl Query {
     ) -> FieldResult<crate::elastic::NodeOutput> {
         Ok(context.warehouse.read().await.nodes.read().await.clone())
     }
+
+    async fn shards(
+        index: Option<String>,
+        context: &Context,
+    ) -> FieldResult<Vec<crate::elastic::ShallowShard>> {
+        let collected: Vec<crate::elastic::ShallowShard>;
+
+        match index {
+            Some(index) => {
+                let shards = context.warehouse.read().await.shards.read().await.clone();
+                collected = shards.into_iter().filter(|s| s.index == index).collect();
+            }
+            None => {
+                let shards = context.warehouse.read().await.shards.read().await.clone();
+                collected = shards.into_iter().collect();
+            }
+        }
+
+        Ok(collected)
+    }
 }
 
 type Schema = juniper::RootNode<'static, Query, EmptyMutation<Context>, EmptySubscription<Context>>;
