@@ -315,44 +315,66 @@ impl ElasticsearchClient {
 
     pub async fn health(&self) -> Result<ClusterInfo> {
         let url = format!("{}/_cluster/health", self.base_url);
-        let response = self.client.get(&url).send().await?;
-        let info = serde_json::from_str(&response.text().await?)?;
-        Ok(info)
+        let response = self.client.get(&url).send().await?.text().await?;
+        let jd = &mut serde_json::Deserializer::from_str(&response);
+
+        let result: Result<ClusterInfo, _> = serde_path_to_error::deserialize(jd);
+
+        match result {
+            Ok(cluster_info) => Ok(cluster_info),
+            Err(e) => Err(anyhow::anyhow!(e)),
+        }
     }
 
     pub async fn indices(&self) -> Result<Vec<IndexInfo>> {
         let url = format!("{}/_cat/indices?format=json", self.base_url);
-        let response = self.client.get(&url).send().await?;
-        let indices = response.text().await?;
-        let indices: Vec<IndexInfo> = serde_json::from_str(&indices)?;
+        let response = self.client.get(&url).send().await?.text().await?;
+        let jd = &mut serde_json::Deserializer::from_str(&response);
 
-        Ok(indices)
+        let result: Result<Vec<IndexInfo>, _> = serde_path_to_error::deserialize(jd);
+
+        match result {
+            Ok(indices) => Ok(indices),
+            Err(e) => Err(anyhow::anyhow!(e)),
+        }
     }
 
     pub async fn recovery(&self) -> Result<Recovery> {
         let url = format!("{}/_recovery?format=json&active_only=true", self.base_url);
-        let response = self.client.get(&url).send().await?;
-        let recovery = response.text().await?;
-        let recovery: Recovery = serde_json::from_str(&recovery)?;
+        let response = self.client.get(&url).send().await?.text().await?;
+        let jd = &mut serde_json::Deserializer::from_str(&response);
 
-        Ok(recovery)
+        let result: Result<Recovery, _> = serde_path_to_error::deserialize(jd);
+
+        match result {
+            Ok(recovery) => Ok(recovery),
+            Err(e) => Err(anyhow::anyhow!(e)),
+        }
     }
 
     pub async fn shards(&self) -> Result<Vec<ShallowShard>> {
         let url = format!("{}/_cat/shards?format=json", self.base_url);
-        let response = self.client.get(&url).send().await?;
-        let shards = response.text().await?;
-        let shards: Vec<ShallowShard> = serde_json::from_str(&shards)?;
+        let response = self.client.get(&url).send().await?.text().await?;
+        let jd = &mut serde_json::Deserializer::from_str(&response);
 
-        Ok(shards)
+        let result: Result<Vec<ShallowShard>, _> = serde_path_to_error::deserialize(jd);
+
+        match result {
+            Ok(shards) => Ok(shards),
+            Err(e) => Err(anyhow::anyhow!(e)),
+        }
     }
 
     pub async fn nodes(&self) -> Result<NodeOutput> {
         let url = format!("{}/_nodes/stats/fs,process,os?format=json", self.base_url);
-        let response = self.client.get(&url).send().await?;
-        let nodes = response.text().await?;
-        let nodes: NodeOutput = serde_json::from_str(&nodes)?;
+        let response = self.client.get(&url).send().await?.text().await?;
+        let jd = &mut serde_json::Deserializer::from_str(&response);
 
-        Ok(nodes)
+        let result: Result<NodeOutput, _> = serde_path_to_error::deserialize(jd);
+        
+        match result {
+            Ok(nodes) => Ok(nodes),
+            Err(e) => Err(anyhow::anyhow!(e)),
+        }
     }
 }
