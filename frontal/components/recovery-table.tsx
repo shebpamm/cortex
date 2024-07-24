@@ -100,8 +100,6 @@ export function RecoveryTable() {
 
   const recoveries = data.recovery;
 
-  console.log(recoveries)
-
   const tableData = [];
 
   for (const index of recoveries.indices) {

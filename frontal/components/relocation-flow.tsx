@@ -13,12 +13,12 @@ import {
   BackgroundVariant,
   MarkerType,
 } from "@xyflow/react";
-import ELK from 'elkjs';
+import ELK from "elkjs";
 
 // Define types for the data structures
 interface NodeAttribute {
-  key: String,
-  value: String
+  key: string;
+  value: string;
 }
 
 interface NodeData {
@@ -41,13 +41,11 @@ interface RelocatingQueryData {
   relocating: RelocatingItem[];
 }
 
-const colorPreset = [
-  "#9B59F6",
-  "#9E81F6",
-  "#A2AAF6",
-  "#A5D2F5",
-  "#A8FAF5",
-];
+const colorScheme = {
+  neon: [ "#FFFF80", "#FFAA80", "#FF5580", "#FF0080" ],
+  pastel: [ "#FFB6C1", "#FFD700", "#FFA07A", "#FF69B4", "#FF6347", "#FF4500" ],
+  dark: [ "#8B0000", "#006400", "#00008B", "#8B008B", "#008B8B", "#8B8B00" ],
+}
 
 const GET_RELOCATING = gql`
   query relocating {
@@ -72,16 +70,35 @@ const GET_NODES = gql`
   }
 `;
 
-function generateColors(nodesData: NodesQueryData) {
-  const storageTypes = new Set<string>();
+const GET_CONFIG = gql`
+  query config {
+    config {
+      nodeColorAttribute
+      colorscheme
+    }
+  }
+`;
+
+function generateColors(nodesData: NodesQueryData, attrName: string, colorSchemeName: keyof typeof colorScheme) {
+  const attributeTypes = new Set<string>();
   nodesData.nodes.nodes.forEach((node) => {
-    storageTypes.add(node.attributes?.storageType || "");
+    const attribute : NodeAttribute | undefined = node.attributes.find(
+      (attr) => { 
+        return attr.key === attrName;
+      },
+    );
+    attributeTypes.add(attribute?.value || "");
   });
 
   const colors = new Map<string, string>();
+  const palette: string[] = colorScheme[colorSchemeName];
+  if (!palette) {
+    throw new Error(`Unknown color scheme: ${colorSchemeName}`);
+  }
+
   let i = 0;
-  storageTypes.forEach((type) => {
-    colors.set(type, colorPreset[i % colorPreset.length]);
+  attributeTypes.forEach((type) => {
+    colors.set(type, palette[i % palette.length]);
     i++;
   });
 
@@ -91,11 +108,13 @@ function generateColors(nodesData: NodesQueryData) {
 function transformData(
   relocationData: RelocatingQueryData,
   nodesData: NodesQueryData,
+  attribute: string,
+  colorSchemeName: keyof typeof colorScheme,
 ) {
   const nodes: Node[] = [];
   const edges: Edge[] = [];
 
-  const colors = generateColors(nodesData);
+  const colors = generateColors(nodesData, attribute, colorSchemeName);
   const nodeMap = new Map<string, string>();
 
   relocationData.relocating.forEach((item) => {
@@ -108,12 +127,12 @@ function transformData(
     }
     const sourceId = source.trim();
     const targetId = target.split(" ").reverse()[0].trim();
-    const sourceStorageType = nodesData.nodes.nodes.find(
+    const sourceAttributeType = nodesData.nodes.nodes.find(
       (node) => node.name === sourceId,
-    )?.attributes.storageType;
-    const targetStorageType = nodesData.nodes.nodes.find(
+    )?.attributes.find((attr) => attr.key === attribute)?.value;
+    const targetAttributeType = nodesData.nodes.nodes.find(
       (node) => node.name === targetId,
-    )?.attributes.storageType;
+    )?.attributes.find((attr) => attr.key === attribute)?.value;
 
     if (!nodeMap.has(sourceId)) {
       nodeMap.set(sourceId, `Node ${sourceId}`);
@@ -122,7 +141,7 @@ function transformData(
         position: { x: 0, y: nodes.length * 100 },
         data: { label: sourceId },
         style: {
-          backgroundColor: colors.get(sourceStorageType || ""),
+          backgroundColor: colors.get(sourceAttributeType || ""),
         },
       });
     }
@@ -134,7 +153,7 @@ function transformData(
         position: { x: 100, y: nodes.length * 100 },
         data: { label: targetId },
         style: {
-          backgroundColor: colors.get(targetStorageType || ""),
+          backgroundColor: colors.get(targetAttributeType || ""),
         },
       });
     }
@@ -160,18 +179,18 @@ const layoutGraph = async (nodes: any, edges: Edge[]) => {
     id: "root",
     layoutOptions: {
       "elk.algorithm": "layered",
-      "elk.direction": "DOWN"
+      "elk.direction": "DOWN",
     },
     children: nodes.map((node: any) => ({
       id: node.id,
       width: 150,
-      height: 50
+      height: 50,
     })),
     edges: edges.map((edge: Edge) => ({
       id: `${edge.source}-${edge.target}`,
       sources: [edge.source],
-      targets: [edge.target]
-    }))
+      targets: [edge.target],
+    })),
   };
 
   const layout = await elk.layout(graph);
@@ -229,14 +248,18 @@ export function RelocationFlow() {
     useQuery<RelocatingQueryData>(GET_RELOCATING);
   const { data: nodesData, loading: nodesLoading } =
     useQuery<NodesQueryData>(GET_NODES);
+  const { data: config, loading: configLoading } = 
+    useQuery(GET_CONFIG);
 
-  if (relocationLoading || nodesLoading) {
+  if (relocationLoading || nodesLoading || configLoading) {
     return <>Loading...</>;
   }
 
   const { nodes, edges } = transformData(
     relocationData as RelocatingQueryData,
     nodesData as NodesQueryData,
+    config.config.nodeColorAttribute,
+    config.config.colorscheme,
   );
 
   return (
