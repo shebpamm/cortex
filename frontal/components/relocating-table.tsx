@@ -134,9 +134,9 @@ export function RelocatingTable(props: { filter?: string }) {
   ];
 
   let relocating;
-  if (props.filter) {
+  if (props?.filter) {
     relocating = data.relocating.filter((r: any) =>
-      JSON.stringify(r).includes(props.filter)
+      r.index.includes(props.filter)
     );
   } else {
     relocating = data.relocating;
