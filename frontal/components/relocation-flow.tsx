@@ -17,6 +17,8 @@ import {
 } from "@xyflow/react";
 import ELK from "elkjs";
 import { Dialog } from "./ui/dialog";
+import mix from "mix-color";
+import { contrastColor } from "contrast-color";
 
 // Define types for the data structures
 interface NodeAttribute {
@@ -46,12 +48,19 @@ interface RelocatingQueryData {
 
 interface Config {
   colorscheme: keyof typeof colorScheme;
-  colorAttribute: string,
-  attributes: string[];
+  flow: {
+    node: {
+      colorAttribute: string;
+      attributes: string[];
+    };
+    edge: {
+      attributes: string[];
+    };
+  };
 }
 
 const colorScheme = {
-  neon: ["#FFFF80", "#FFAA80", "#FF5580", "#FF0080"],
+  neon: ["#071952", "#0B666A", "#35A29F", "#97FEED"],
   pastel: ["#FFB6C1", "#FFD700", "#FFA07A", "#FF69B4", "#FF6347", "#FF4500"],
   dark: ["#8B0000", "#006400", "#00008B", "#8B008B", "#008B8B", "#8B8B00"],
 };
@@ -84,25 +93,34 @@ const GET_CONFIG = gql`
     config {
       colorscheme
       flow {
-        colorAttribute
-        attributes
+        node {
+          colorAttribute
+          attributes
+        }
+        edge {
+          attributes
+        }
       }
     }
   }
 `;
 
-function generateColors(
-  nodesData: NodesQueryData,
-  config: Config,
-) {
+function generateColors(nodesData: NodesQueryData, config: Config) {
   const attributeTypes = new Set<string>();
   nodesData.nodes.nodes.forEach((node) => {
     const attribute: NodeAttribute | undefined = node.attributes.find(
       (attr) => {
-        return attr.key === config.colorAttribute;
+        return attr.key === config.flow.node.colorAttribute;
       },
     );
     attributeTypes.add(attribute?.value || "");
+
+    const edgeAttributes = node.attributes.filter((attr) =>
+      config.flow.edge.attributes.includes(attr.key),
+    );
+    edgeAttributes.forEach((attr) => {
+      attributeTypes.add(attr.key);
+    });
   });
 
   const colors = new Map<string, string>();
@@ -141,20 +159,45 @@ function transformData(
     }
     const sourceId = source.trim();
     const targetId = target.split(" ").reverse()[0].trim();
-    const sourceAttributeType = nodesData.nodes.nodes
-      .find((node) => node.name === sourceId)
-      ?.attributes.find((attr) => attr.key === config.colorAttribute)?.value;
-    const targetAttributeType = nodesData.nodes.nodes
-      .find((node) => node.name === targetId)
-      ?.attributes.find((attr) => attr.key === config.colorAttribute)?.value;
 
-    const sourceAttributes = nodesData.nodes.nodes
-      .find((node) => node.name === sourceId)
-      ?.attributes.filter((attr) => config.attributes.includes(attr.key));
+    const sourceNode = nodesData.nodes.nodes.find(
+      (node) => node.name === sourceId,
+    );
+    const targetNode = nodesData.nodes.nodes.find(
+      (node) => node.name === targetId,
+    );
 
-    const targetAttributes = nodesData.nodes.nodes
-      .find((node) => node.name === targetId)
-      ?.attributes.filter((attr) => config.attributes.includes(attr.key));
+    if (!targetNode || !sourceNode) {
+      return;
+    }
+    const sourceAttributeType = sourceNode.attributes.find(
+      (attr) => attr.key === config.flow.node.colorAttribute,
+    )?.value;
+    const targetAttributeType = targetNode.attributes.find(
+      (attr) => attr.key === config.flow.node.colorAttribute,
+    )?.value;
+
+    const sourceAttributes = sourceNode.attributes.filter((attr) =>
+      config.flow.node.attributes.includes(attr.key),
+    );
+    const targetAttributes = targetNode.attributes.filter((attr) =>
+      config.flow.node.attributes.includes(attr.key),
+    );
+
+    const sourceEdgeAttributes = sourceNode.attributes.filter((attr) =>
+      config.flow.edge.attributes.includes(attr.key),
+    );
+    const targetEdgeAttributes = targetNode.attributes.filter((attr) =>
+      config.flow.edge.attributes.includes(attr.key),
+    );
+
+    // Diff the edge attributes and see if they're different
+    const edgeAttributes = sourceEdgeAttributes.filter((attr) => {
+      const targetAttr = targetEdgeAttributes.find(
+        (tAttr) => tAttr.key === attr.key,
+      );
+      return targetAttr && targetAttr.value !== attr.value;
+    });
 
     if (!nodeMap.has(sourceId)) {
       nodeMap.set(sourceId, `Node ${sourceId}`);
@@ -162,8 +205,9 @@ function transformData(
         id: sourceId,
         type: "machine",
         position: { x: 0, y: nodes.length * 100 },
-        data: { label: sourceId, attributes: sourceAttributes},
+        data: { label: sourceId, attributes: sourceAttributes },
         style: {
+          color: contrastColor({ bgColor: colors.get(sourceAttributeType || "") }),
           backgroundColor: colors.get(sourceAttributeType || ""),
         },
       });
@@ -177,9 +221,28 @@ function transformData(
         position: { x: 100, y: nodes.length * 100 },
         data: { label: targetId, attributes: targetAttributes },
         style: {
+          color: contrastColor({ bgColor: colors.get(targetAttributeType || "") }),
           backgroundColor: colors.get(targetAttributeType || ""),
         },
       });
+    }
+
+    // Set color of edge based on whether the edge attributes are different
+    let edgeColor;
+    if (edgeAttributes.length == 1) {
+      edgeColor = colors.get(edgeAttributes[0].value);
+    } else if (edgeAttributes.length > 1) {
+      // blend colors
+      edgeColor = edgeAttributes
+        .map((attr) => colors.get(attr.key))
+        .reduce((acc, color) => {
+          if (!acc) {
+            return color;
+          }
+          return mix(acc, color, 0.5);
+        });
+    } else {
+      edgeColor = "black";
     }
 
     edges.push({
@@ -187,6 +250,10 @@ function transformData(
       source: sourceId,
       target: targetId,
       animated: true,
+      style: {
+        stroke: edgeColor,
+        strokeWidth: 1,
+      },
       markerEnd: {
         type: MarkerType.ArrowClosed,
       },
@@ -208,7 +275,7 @@ const layoutGraph = async (nodes: any, edges: Edge[], config: Config) => {
     children: nodes.map((node: any) => ({
       id: node.id,
       width: 200,
-      height: 50 + 50 * config.attributes.length,
+      height: 50 + 50 * config.flow.node.attributes.length,
     })),
     edges: edges.map((edge: Edge) => ({
       id: `${edge.source}-${edge.target}`,
@@ -231,25 +298,15 @@ const layoutGraph = async (nodes: any, edges: Edge[], config: Config) => {
 
 const MachineNode: React.FC<{ data: any }> = ({ data }) => {
   return (
-    <div
-      className="flex flex-col items-center justify-center p-2 shadow-md"
-    >
+    <div className="flex flex-col items-center justify-center p-2 shadow-md">
       {data.label}
       {data.attributes.map((attr: NodeAttribute) => (
         <div key={attr.key} className="text-xs text-gray-500">
           {attr.key}: {attr.value}
         </div>
       ))}
-      <Handle
-        style={{ opacity: 0 }}
-        type="source"
-        position={Position.Bottom}
-      />
-      <Handle
-        style={{ opacity: 0 }}
-        type="target"
-        position={Position.Top}
-      />
+      <Handle style={{ opacity: 0 }} type="source" position={Position.Bottom} />
+      <Handle style={{ opacity: 0 }} type="target" position={Position.Top} />
     </div>
   );
 };
@@ -270,7 +327,11 @@ const FlowChart: React.FC<FlowChartProps> = ({
 
   useEffect(() => {
     const layout = async () => {
-      const laidOutNodes = await layoutGraph(initialNodes, initialEdges, config);
+      const laidOutNodes = await layoutGraph(
+        initialNodes,
+        initialEdges,
+        config,
+      );
       setNodes(laidOutNodes);
     };
     layout();
@@ -313,21 +374,15 @@ export function RelocationFlow() {
     return <>Loading...</>;
   }
 
-  const flattenedConfig = {
-    colorscheme: config.config.colorscheme,
-    colorAttribute: config.config.flow.colorAttribute,
-    attributes: config.config.flow.attributes,
-  };
-
   const { nodes, edges } = transformData(
     relocationData as RelocatingQueryData,
     nodesData as NodesQueryData,
-    flattenedConfig,
+    config.config,
   );
 
   return (
     <div className="w-full h-full aspect-square">
-      <FlowChart nodes={nodes} edges={edges} config={flattenedConfig} />
+      <FlowChart nodes={nodes} edges={edges} config={config.config} />
     </div>
   );
 }

@@ -25,6 +25,17 @@ pub struct UiConfig {
 
 #[derive(GraphQLObject, Clone, Debug, Deserialize, Serialize)]
 pub struct FlowConfig {
+    pub node: NodeConfig,
+    pub edge: EdgeConfig,
+}
+
+#[derive(GraphQLObject, Clone, Debug, Deserialize, Serialize)]
+pub struct EdgeConfig {
+    pub attributes: Vec<String>,
+}
+
+#[derive(GraphQLObject, Clone, Debug, Deserialize, Serialize)]
+pub struct NodeConfig {
     pub attributes: Vec<String>,
     pub color_attribute: String,
 }

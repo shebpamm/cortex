@@ -5,6 +5,8 @@ url = "http://localhost:9200"
 
 [ui]
 colorscheme = "neon"
-[ui.flow]
+[ui.flow.node]
 color_attribute = "storage_type"
 attributes = ["availability_zone"]
+[ui.flow.edge]
+attributes = ["storage_type", "availability_zone"]
