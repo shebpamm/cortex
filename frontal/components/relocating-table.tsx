@@ -17,14 +17,6 @@ To read more about using these font, please visit the Next.js documentation:
 - App Directory: https://nextjs.org/docs/app/building-your-application/optimizing/fonts
 - Pages Directory: https://nextjs.org/docs/pages/building-your-application/optimizing/fonts
 **/
-import {
-  Table,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
-} from "@/components/ui/table";
 import { Progress } from "@/components/ui/progress";
 import { useState, useEffect } from "react";
 import { ColumnDef } from "@tanstack/react-table";
@@ -33,7 +25,6 @@ import { DataTable, wrapSortable } from "./ui/data-table";
 import prettyBytes from "pretty-bytes";
 import { parseSize } from "@/lib/utils";
 import { gql, useQuery } from "@apollo/client";
-import { Button } from "./ui/button";
 import {
   ContextMenu,
   ContextMenuContent,
