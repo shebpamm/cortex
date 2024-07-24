@@ -27,6 +27,7 @@ import { contrastColor } from "contrast-color";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { ShardTable } from "./shard-table";
 import { RelocatingTable } from "./relocating-table";
+import { NodeInfo } from "./node-info";
 
 // Define types for the data structures
 interface NodeAttribute {
@@ -350,7 +351,9 @@ const MachineNode: React.FC<{ data: any }> = ({ data }) => {
             <TabsTrigger value="node">Node</TabsTrigger>
             <TabsTrigger value="shard">Shard</TabsTrigger>
           </TabsList>
-          <TabsContent value="node"></TabsContent>
+          <TabsContent value="node">
+            <NodeInfo node={data.node.name} />
+          </TabsContent>
           <TabsContent value="shard">
             <RelocatingTable filter={data.relocation.index} />
           </TabsContent>

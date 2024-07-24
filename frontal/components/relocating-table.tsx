@@ -109,6 +109,7 @@ export function RelocatingTable(props: { filter: string }) {
       accessorKey: "node",
       header: wrapSortable.bind(null, "Source"),
       cell: ({ row }) => {
+        console.log(row.original);
         return (row.original.node.split("->")[0] || "").trim();
       },
       sortingFn: (a, b, direction) => {
