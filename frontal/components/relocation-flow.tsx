@@ -208,7 +208,7 @@ const layoutGraph = async (nodes: any, edges: Edge[], config: Config) => {
     children: nodes.map((node: any) => ({
       id: node.id,
       width: 200,
-      height: 50 * config.attributes.length,
+      height: 50 + 50 * config.attributes.length,
     })),
     edges: edges.map((edge: Edge) => ({
       id: `${edge.source}-${edge.target}`,

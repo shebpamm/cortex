@@ -143,7 +143,6 @@ export function Dashboard() {
               value: clusterInfo.health.numberOfPendingTasks.toString(),
               label: (
                 <>
-                  <br />
                   Tasks
                 </>
               ),
