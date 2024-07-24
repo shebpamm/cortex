@@ -44,6 +44,12 @@ interface RelocatingQueryData {
   relocating: RelocatingItem[];
 }
 
+interface Config {
+  colorscheme: keyof typeof colorScheme;
+  colorAttribute: string,
+  attributes: string[];
+}
+
 const colorScheme = {
   neon: ["#FFFF80", "#FFAA80", "#FF5580", "#FF0080"],
   pastel: ["#FFB6C1", "#FFD700", "#FFA07A", "#FF69B4", "#FF6347", "#FF4500"],
@@ -76,31 +82,33 @@ const GET_NODES = gql`
 const GET_CONFIG = gql`
   query config {
     config {
-      nodeColorAttribute
       colorscheme
+      flow {
+        colorAttribute
+        attributes
+      }
     }
   }
 `;
 
 function generateColors(
   nodesData: NodesQueryData,
-  attrName: string,
-  colorSchemeName: keyof typeof colorScheme,
+  config: Config,
 ) {
   const attributeTypes = new Set<string>();
   nodesData.nodes.nodes.forEach((node) => {
     const attribute: NodeAttribute | undefined = node.attributes.find(
       (attr) => {
-        return attr.key === attrName;
+        return attr.key === config.colorAttribute;
       },
     );
     attributeTypes.add(attribute?.value || "");
   });
 
   const colors = new Map<string, string>();
-  const palette: string[] = colorScheme[colorSchemeName];
+  const palette: string[] = colorScheme[config.colorscheme];
   if (!palette) {
-    throw new Error(`Unknown color scheme: ${colorSchemeName}`);
+    throw new Error(`Unknown color scheme: ${config.colorscheme}`);
   }
 
   let i = 0;
@@ -115,13 +123,12 @@ function generateColors(
 function transformData(
   relocationData: RelocatingQueryData,
   nodesData: NodesQueryData,
-  attribute: string,
-  colorSchemeName: keyof typeof colorScheme,
+  config: Config,
 ) {
   const nodes: Node[] = [];
   const edges: Edge[] = [];
 
-  const colors = generateColors(nodesData, attribute, colorSchemeName);
+  const colors = generateColors(nodesData, config);
   const nodeMap = new Map<string, string>();
 
   relocationData.relocating.forEach((item) => {
@@ -136,10 +143,10 @@ function transformData(
     const targetId = target.split(" ").reverse()[0].trim();
     const sourceAttributeType = nodesData.nodes.nodes
       .find((node) => node.name === sourceId)
-      ?.attributes.find((attr) => attr.key === attribute)?.value;
+      ?.attributes.find((attr) => attr.key === config.colorAttribute)?.value;
     const targetAttributeType = nodesData.nodes.nodes
       .find((node) => node.name === targetId)
-      ?.attributes.find((attr) => attr.key === attribute)?.value;
+      ?.attributes.find((attr) => attr.key === config.colorAttribute)?.value;
 
     if (!nodeMap.has(sourceId)) {
       nodeMap.set(sourceId, `Node ${sourceId}`);
@@ -294,8 +301,11 @@ export function RelocationFlow() {
   const { nodes, edges } = transformData(
     relocationData as RelocatingQueryData,
     nodesData as NodesQueryData,
-    config.config.nodeColorAttribute,
-    config.config.colorscheme,
+    {
+      colorscheme: config.config.colorscheme,
+      colorAttribute: config.config.flow.colorAttribute,
+      attributes: config.config.flow.attributes,
+    },
   );
 
   return (
