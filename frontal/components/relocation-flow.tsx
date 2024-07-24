@@ -148,13 +148,21 @@ function transformData(
       .find((node) => node.name === targetId)
       ?.attributes.find((attr) => attr.key === config.colorAttribute)?.value;
 
+    const sourceAttributes = nodesData.nodes.nodes
+      .find((node) => node.name === sourceId)
+      ?.attributes.filter((attr) => config.attributes.includes(attr.key));
+
+    const targetAttributes = nodesData.nodes.nodes
+      .find((node) => node.name === targetId)
+      ?.attributes.filter((attr) => config.attributes.includes(attr.key));
+
     if (!nodeMap.has(sourceId)) {
       nodeMap.set(sourceId, `Node ${sourceId}`);
       nodes.push({
         id: sourceId,
         type: "machine",
         position: { x: 0, y: nodes.length * 100 },
-        data: { label: sourceId },
+        data: { label: sourceId, attributes: sourceAttributes},
         style: {
           backgroundColor: colors.get(sourceAttributeType || ""),
         },
@@ -167,7 +175,7 @@ function transformData(
         id: targetId,
         type: "machine",
         position: { x: 100, y: nodes.length * 100 },
-        data: { label: targetId },
+        data: { label: targetId, attributes: targetAttributes },
         style: {
           backgroundColor: colors.get(targetAttributeType || ""),
         },
@@ -199,8 +207,8 @@ const layoutGraph = async (nodes: any, edges: Edge[]) => {
     },
     children: nodes.map((node: any) => ({
       id: node.id,
-      width: 150,
-      height: 50,
+      width: 200,
+      height: 150,
     })),
     edges: edges.map((edge: Edge) => ({
       id: `${edge.source}-${edge.target}`,
@@ -227,6 +235,11 @@ const MachineNode: React.FC<{ data: any }> = ({ data }) => {
       className="flex flex-col items-center justify-center p-2 shadow-md"
     >
       {data.label}
+      {data.attributes.map((attr: NodeAttribute) => (
+        <div key={attr.key} className="text-xs text-gray-500">
+          {attr.key}: {attr.value}
+        </div>
+      ))}
       <Handle
         style={{ opacity: 0 }}
         type="source"
