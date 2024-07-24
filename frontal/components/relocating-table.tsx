@@ -52,7 +52,7 @@ const GET_RELOCATING = gql`
   }
 `;
 
-export function RelocatingTable(props: { filter: string }) {
+export function RelocatingTable(props: { filter?: string }) {
   const { data, loading } = useQuery(GET_RELOCATING);
   const [histogramOpen, setHistogramOpen] = useState(false);
 
