@@ -196,7 +196,7 @@ function transformData(
   return { nodes, edges };
 }
 
-const layoutGraph = async (nodes: any, edges: Edge[]) => {
+const layoutGraph = async (nodes: any, edges: Edge[], config: Config) => {
   const elk = new ELK();
 
   const graph = {
@@ -208,7 +208,7 @@ const layoutGraph = async (nodes: any, edges: Edge[]) => {
     children: nodes.map((node: any) => ({
       id: node.id,
       width: 200,
-      height: 150,
+      height: 50 * config.attributes.length,
     })),
     edges: edges.map((edge: Edge) => ({
       id: `${edge.source}-${edge.target}`,
@@ -257,18 +257,20 @@ const MachineNode: React.FC<{ data: any }> = ({ data }) => {
 interface FlowChartProps {
   nodes: Node[];
   edges: Edge[];
+  config: Config;
 }
 
 const FlowChart: React.FC<FlowChartProps> = ({
   nodes: initialNodes,
   edges: initialEdges,
+  config: config,
 }) => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
   useEffect(() => {
     const layout = async () => {
-      const laidOutNodes = await layoutGraph(initialNodes, initialEdges);
+      const laidOutNodes = await layoutGraph(initialNodes, initialEdges, config);
       setNodes(laidOutNodes);
     };
     layout();
@@ -311,19 +313,21 @@ export function RelocationFlow() {
     return <>Loading...</>;
   }
 
+  const flattenedConfig = {
+    colorscheme: config.config.colorscheme,
+    colorAttribute: config.config.flow.colorAttribute,
+    attributes: config.config.flow.attributes,
+  };
+
   const { nodes, edges } = transformData(
     relocationData as RelocatingQueryData,
     nodesData as NodesQueryData,
-    {
-      colorscheme: config.config.colorscheme,
-      colorAttribute: config.config.flow.colorAttribute,
-      attributes: config.config.flow.attributes,
-    },
+    flattenedConfig,
   );
 
   return (
     <div className="w-full h-full aspect-square">
-      <FlowChart nodes={nodes} edges={edges} />
+      <FlowChart nodes={nodes} edges={edges} config={flattenedConfig} />
     </div>
   );
 }
