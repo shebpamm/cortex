@@ -16,9 +16,17 @@ import {
   Position,
 } from "@xyflow/react";
 import ELK from "elkjs";
-import { Dialog } from "./ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTrigger,
+} from "./ui/dialog";
 import mix from "mix-color";
 import { contrastColor } from "contrast-color";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { ShardTable } from "./shard-table";
+import { RelocatingTable } from "./relocating-table";
 
 // Define types for the data structures
 interface NodeAttribute {
@@ -205,9 +213,16 @@ function transformData(
         id: sourceId,
         type: "machine",
         position: { x: 0, y: nodes.length * 100 },
-        data: { label: sourceId, attributes: sourceAttributes },
+        data: {
+          label: sourceId,
+          attributes: sourceAttributes,
+          node: sourceNode,
+          relocation: item
+        },
         style: {
-          color: contrastColor({ bgColor: colors.get(sourceAttributeType || "") }),
+          color: contrastColor({
+            bgColor: colors.get(sourceAttributeType || ""),
+          }),
           backgroundColor: colors.get(sourceAttributeType || ""),
         },
       });
@@ -219,9 +234,16 @@ function transformData(
         id: targetId,
         type: "machine",
         position: { x: 100, y: nodes.length * 100 },
-        data: { label: targetId, attributes: targetAttributes },
+        data: {
+          label: targetId,
+          attributes: targetAttributes,
+          node: targetNode,
+          relocation: item
+        },
         style: {
-          color: contrastColor({ bgColor: colors.get(targetAttributeType || "") }),
+          color: contrastColor({
+            bgColor: colors.get(targetAttributeType || ""),
+          }),
           backgroundColor: colors.get(targetAttributeType || ""),
         },
       });
@@ -298,16 +320,43 @@ const layoutGraph = async (nodes: any, edges: Edge[], config: Config) => {
 
 const MachineNode: React.FC<{ data: any }> = ({ data }) => {
   return (
-    <div className="flex flex-col items-center justify-center p-2 shadow-md">
-      {data.label}
-      {data.attributes.map((attr: NodeAttribute) => (
-        <div key={attr.key} className="text-xs text-gray-500">
-          {attr.key}: {attr.value}
+    <Dialog>
+      <DialogTrigger>
+        <div className="flex flex-col items-center justify-center p-2 shadow-md">
+          {data.label}
+          {data.attributes.map((attr: NodeAttribute) => (
+            <div key={attr.key} className="text-xs text-gray-500">
+              {attr.key}: {attr.value}
+            </div>
+          ))}
+          <Handle
+            style={{ opacity: 0 }}
+            type="source"
+            position={Position.Bottom}
+          />
+          <Handle
+            style={{ opacity: 0 }}
+            type="target"
+            position={Position.Top}
+          />
         </div>
-      ))}
-      <Handle style={{ opacity: 0 }} type="source" position={Position.Bottom} />
-      <Handle style={{ opacity: 0 }} type="target" position={Position.Top} />
-    </div>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          {data.label}
+        </DialogHeader>
+        <Tabs defaultValue="node">
+          <TabsList>
+            <TabsTrigger value="node">Node</TabsTrigger>
+            <TabsTrigger value="shard">Shard</TabsTrigger>
+          </TabsList>
+          <TabsContent value="node"></TabsContent>
+          <TabsContent value="shard">
+            <RelocatingTable filter={data.relocation.index} />
+          </TabsContent>
+        </Tabs>
+      </DialogContent>
+    </Dialog>
   );
 };
 
