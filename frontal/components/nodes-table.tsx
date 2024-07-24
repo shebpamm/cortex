@@ -118,8 +118,8 @@ const GET_NODES = gql`
         name
         ip
         attributes {
-          machineMemory
-          storageType
+          key
+          value
         }
         fs {
           total {

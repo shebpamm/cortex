@@ -16,13 +16,14 @@ import {
 import ELK from 'elkjs';
 
 // Define types for the data structures
-interface NodeAttributes {
-  storageType?: string;
+interface NodeAttribute {
+  key: String,
+  value: String
 }
 
 interface NodeData {
   name: string;
-  attributes: NodeAttributes;
+  attributes: [NodeAttribute];
 }
 
 interface NodesQueryData {
@@ -63,7 +64,8 @@ const GET_NODES = gql`
       nodes {
         name
         attributes {
-          storageType
+          key
+          value
         }
       }
     }
