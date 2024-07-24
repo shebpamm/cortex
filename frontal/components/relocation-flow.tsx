@@ -344,7 +344,7 @@ const MachineNode: React.FC<{ data: any }> = ({ data }) => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          {data.label}
+          <span className="text-lg font-bold">{data.label}</span>
         </DialogHeader>
         <Tabs defaultValue="node">
           <TabsList>

@@ -31,6 +31,9 @@ import { DataTable, wrapSortable } from "./ui/data-table";
 
 import prettyBytes from "pretty-bytes";
 import { gql, useQuery } from "@apollo/client";
+import { useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "./ui/dialog";
+import { NodeInfo } from "./node-info";
 
 function calculateDiskProgress(
   availableInBytes: number,
@@ -148,6 +151,13 @@ const GET_NODES = gql`
 
 export function NodesTable() {
   const { loading, error, data } = useQuery(GET_NODES);
+  const [ selectedNode, setSelectedNode ] = useState("");
+  const [ nodeViewOpen, setNodeViewOpen ] = useState(false);
+
+  const onRowClick = (row : any) => {
+    setSelectedNode(row.original.name);
+    setNodeViewOpen(true);
+  }
 
   if (loading) {
     return <Progress />;
@@ -159,7 +169,16 @@ export function NodesTable() {
 
   return (
     <div className="overflow-auto border rounded-lg">
-      <DataTable columns={columns} data={data.nodes.nodes} />
+      <Dialog open={nodeViewOpen} onOpenChange={() => setNodeViewOpen(false)}>
+      <DialogTrigger></DialogTrigger>
+      <DialogContent
+        className={"lg:max-w-screen-lg overflow-y-hide max-h-screen-80"}
+      >
+        <DialogHeader><span className="font-bold">{selectedNode}</span></DialogHeader>
+        <NodeInfo node={selectedNode} />
+      </DialogContent>
+      </Dialog>
+      <DataTable columns={columns} data={data.nodes.nodes} onRowClick={onRowClick}/>
     </div>
   );
 }
