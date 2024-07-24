@@ -1,6 +1,6 @@
 import { gql, useQuery } from "@apollo/client";
 import "@xyflow/react/dist/style.css";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import {
   ReactFlow,
   MiniMap,
@@ -12,8 +12,11 @@ import {
   Node,
   BackgroundVariant,
   MarkerType,
+  Handle,
+  Position,
 } from "@xyflow/react";
 import ELK from "elkjs";
+import { Dialog } from "./ui/dialog";
 
 // Define types for the data structures
 interface NodeAttribute {
@@ -42,10 +45,10 @@ interface RelocatingQueryData {
 }
 
 const colorScheme = {
-  neon: [ "#FFFF80", "#FFAA80", "#FF5580", "#FF0080" ],
-  pastel: [ "#FFB6C1", "#FFD700", "#FFA07A", "#FF69B4", "#FF6347", "#FF4500" ],
-  dark: [ "#8B0000", "#006400", "#00008B", "#8B008B", "#008B8B", "#8B8B00" ],
-}
+  neon: ["#FFFF80", "#FFAA80", "#FF5580", "#FF0080"],
+  pastel: ["#FFB6C1", "#FFD700", "#FFA07A", "#FF69B4", "#FF6347", "#FF4500"],
+  dark: ["#8B0000", "#006400", "#00008B", "#8B008B", "#008B8B", "#8B8B00"],
+};
 
 const GET_RELOCATING = gql`
   query relocating {
@@ -79,11 +82,15 @@ const GET_CONFIG = gql`
   }
 `;
 
-function generateColors(nodesData: NodesQueryData, attrName: string, colorSchemeName: keyof typeof colorScheme) {
+function generateColors(
+  nodesData: NodesQueryData,
+  attrName: string,
+  colorSchemeName: keyof typeof colorScheme,
+) {
   const attributeTypes = new Set<string>();
   nodesData.nodes.nodes.forEach((node) => {
-    const attribute : NodeAttribute | undefined = node.attributes.find(
-      (attr) => { 
+    const attribute: NodeAttribute | undefined = node.attributes.find(
+      (attr) => {
         return attr.key === attrName;
       },
     );
@@ -127,17 +134,18 @@ function transformData(
     }
     const sourceId = source.trim();
     const targetId = target.split(" ").reverse()[0].trim();
-    const sourceAttributeType = nodesData.nodes.nodes.find(
-      (node) => node.name === sourceId,
-    )?.attributes.find((attr) => attr.key === attribute)?.value;
-    const targetAttributeType = nodesData.nodes.nodes.find(
-      (node) => node.name === targetId,
-    )?.attributes.find((attr) => attr.key === attribute)?.value;
+    const sourceAttributeType = nodesData.nodes.nodes
+      .find((node) => node.name === sourceId)
+      ?.attributes.find((attr) => attr.key === attribute)?.value;
+    const targetAttributeType = nodesData.nodes.nodes
+      .find((node) => node.name === targetId)
+      ?.attributes.find((attr) => attr.key === attribute)?.value;
 
     if (!nodeMap.has(sourceId)) {
       nodeMap.set(sourceId, `Node ${sourceId}`);
       nodes.push({
         id: sourceId,
+        type: "machine",
         position: { x: 0, y: nodes.length * 100 },
         data: { label: sourceId },
         style: {
@@ -150,6 +158,7 @@ function transformData(
       nodeMap.set(targetId, `Node ${targetId}`);
       nodes.push({
         id: targetId,
+        type: "machine",
         position: { x: 100, y: nodes.length * 100 },
         data: { label: targetId },
         style: {
@@ -205,6 +214,26 @@ const layoutGraph = async (nodes: any, edges: Edge[]) => {
   return nodes;
 };
 
+const MachineNode: React.FC<{ data: any }> = ({ data }) => {
+  return (
+    <div
+      className="flex flex-col items-center justify-center p-2 shadow-md"
+    >
+      {data.label}
+      <Handle
+        style={{ opacity: 0 }}
+        type="source"
+        position={Position.Bottom}
+      />
+      <Handle
+        style={{ opacity: 0 }}
+        type="target"
+        position={Position.Top}
+      />
+    </div>
+  );
+};
+
 interface FlowChartProps {
   nodes: Node[];
   edges: Edge[];
@@ -227,6 +256,13 @@ const FlowChart: React.FC<FlowChartProps> = ({
 
   const onConnect = (params: any) => setEdges((eds) => [...eds, params]);
 
+  const nodeTypes = useMemo(
+    () => ({
+      machine: MachineNode,
+    }),
+    [],
+  );
+
   return (
     <ReactFlow
       nodes={nodes}
@@ -235,6 +271,7 @@ const FlowChart: React.FC<FlowChartProps> = ({
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
       fitView
+      nodeTypes={nodeTypes}
     >
       <MiniMap />
       <Controls />
@@ -248,8 +285,7 @@ export function RelocationFlow() {
     useQuery<RelocatingQueryData>(GET_RELOCATING);
   const { data: nodesData, loading: nodesLoading } =
     useQuery<NodesQueryData>(GET_NODES);
-  const { data: config, loading: configLoading } = 
-    useQuery(GET_CONFIG);
+  const { data: config, loading: configLoading } = useQuery(GET_CONFIG);
 
   if (relocationLoading || nodesLoading || configLoading) {
     return <>Loading...</>;
