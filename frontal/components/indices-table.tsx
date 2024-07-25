@@ -41,7 +41,7 @@ interface Index {
   index: string;
   status: string;
   health: string;
-  docsCount: number;
+  docsCount: number | undefined;
   storeSize: string;
 }
 
