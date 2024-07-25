@@ -1,6 +1,6 @@
-"use client"
- 
-import * as React from "react"
+"use client";
+
+import * as React from "react";
 import {
   ColumnDef,
   SortingState,
@@ -9,8 +9,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
- 
+} from "@tanstack/react-table";
 import {
   Table,
   TableBody,
@@ -18,15 +17,16 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-
+} from "@/components/ui/table";
 import { ArrowUpDown } from "lucide-react";
-import { Button } from "@/components/ui/button"
- 
+import { Button } from "@/components/ui/button";
+import TableFilter from "./filter-view";
+import { useEffect, useRef, useState } from "react";
+
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
-  onRowClick?: (row: any) => void
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+  onRowClick?: (row: any) => void;
 }
 
 export function wrapSortable(cell: React.ReactNode | string, { column }: any) {
@@ -41,16 +41,41 @@ export function wrapSortable(cell: React.ReactNode | string, { column }: any) {
     </Button>
   );
 }
- 
+
 export function DataTable<TData, TValue>({
   columns,
   data,
   onRowClick,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [filterViewOpen, setFilterViewOpen] = useState(false);
+  const [filterMethod, setFilterMethod] = useState<any>(null);
+  const [filteredData, setFilteredData] = useState(data);
+
+  const filterRef = useRef<any>(null);
+
+  // Update filteredData whenever data or filterMethod changes
+  useEffect(() => {
+    const applyFilter = async () => {
+      if (!filterMethod) {
+        setFilteredData(data);
+        return;
+      }
+
+      try {
+        console.log(filterMethod)
+        const result = await filterMethod(data);
+        setFilteredData(result);
+      } catch (error) {
+        console.error("Error applying filter:", error);
+        return;
+      }
+    };
+    applyFilter();
+  }, [data, filterMethod]);
 
   const table = useReactTable({
-    data,
+    data: filteredData,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -59,8 +84,15 @@ export function DataTable<TData, TValue>({
     state: {
       sorting,
     },
-  })
- 
+  });
+
+  function onFilterViewClose(): void {
+    setFilterViewOpen(false);
+    if (filterRef.current) {
+      setFilterMethod(() => filterRef.current.getValue());
+    }
+  }
+
   return (
     <div className="rounded-md border">
       <Table>
@@ -74,10 +106,10 @@ export function DataTable<TData, TValue>({
                       ? null
                       : flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )}
                   </TableHead>
-                )
+                );
               })}
             </TableRow>
           ))}
@@ -88,7 +120,7 @@ export function DataTable<TData, TValue>({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
-                onClick={() => onRowClick?.(row) }
+                onClick={() => onRowClick?.(row)}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
@@ -106,7 +138,19 @@ export function DataTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
+      <TableFilter
+        ref={filterRef}
+        open={filterViewOpen}
+        onClose={onFilterViewClose}
+      />
       <div className="flex items-center justify-end space-x-2 py-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setFilterViewOpen(true)}
+        >
+          Filter...
+        </Button>
         <Button
           variant="outline"
           size="sm"
@@ -125,5 +169,5 @@ export function DataTable<TData, TValue>({
         </Button>
       </div>
     </div>
-  )
+  );
 }
