@@ -117,6 +117,14 @@ export function IndicesTable() {
     return <div>Error loading indices</div>;
   }
 
+  const transformedData = data.indices.map((index: any) => {
+    return {
+      ...index,
+      docsCount: parseInt(index.docsCount),
+      storeSize: parseInt(index.storeSize),
+    };
+  });
+
   return (
     <div className="overflow-auto border rounded-lg">
       <Dialog open={shardViewOpen} onOpenChange={() => setShardViewOpen(false)}>
@@ -128,7 +136,7 @@ export function IndicesTable() {
         <ShardTable index={selectedIndex} />
       </DialogContent>
       </Dialog>
-      <DataTable columns={columns} data={data.indices} onRowClick={onRowClick}/>
+      <DataTable columns={columns} data={transformedData} onRowClick={onRowClick}/>
     </div>
   );
 }
