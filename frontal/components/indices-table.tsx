@@ -121,7 +121,6 @@ export function IndicesTable() {
     return {
       ...index,
       docsCount: parseInt(index.docsCount),
-      storeSize: parseInt(index.storeSize),
     };
   });
 
