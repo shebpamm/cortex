@@ -6,6 +6,9 @@ import React, {
 } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "./dialog";
 import Editor, { useMonaco } from "@monaco-editor/react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
+
+import { CodeBlock } from "react-code-blocks";
 
 type FilterFunction = (data: any[]) => Promise<any[]>;
 
@@ -74,12 +77,23 @@ const TableFilter = forwardRef(
         <DialogTrigger></DialogTrigger>
         <DialogContent className="lg:max-w-screen-lg overflow-y-scroll max-h-screen-80">
           <DialogHeader>Filter Editor</DialogHeader>
-          <Editor
-            onMount={handleEditorDidMount}
-            height="70vh"
-            defaultLanguage="javascript"
-            defaultValue="return data"
-          />
+          <Tabs defaultValue="node">
+            <TabsList>
+              <TabsTrigger value="editor">Editor</TabsTrigger>
+              <TabsTrigger value="data">Data</TabsTrigger>
+            </TabsList>
+            <TabsContent value="editor">
+              <Editor
+                onMount={handleEditorDidMount}
+                height="70vh"
+                defaultLanguage="javascript"
+                defaultValue="return data"
+              />
+            </TabsContent>
+            <TabsContent value="data">
+              <CodeBlock text={JSON.stringify(sample, null, 2)} language="json" showLineNumbers={false}/>
+            </TabsContent>
+          </Tabs>
         </DialogContent>
       </Dialog>
     );
