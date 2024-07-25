@@ -63,7 +63,6 @@ export function DataTable<TData, TValue>({
       }
 
       try {
-        console.log(filterMethod);
         const result = await filterMethod(data);
         setFilteredData(result);
       } catch (error) {
