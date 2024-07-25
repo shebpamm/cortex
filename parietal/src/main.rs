@@ -25,6 +25,7 @@ async fn main() {
 
     #[cfg(debug_assertions)]
     {
+        #[allow(dead_code)]
         struct App;
     }
 
