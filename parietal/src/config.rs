@@ -8,6 +8,7 @@ const DEFAULT_CONFIG: &str = include_str!("../.config/config.toml");
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Config {
     pub port: u16,
+    pub demo: bool,
     pub elastic: ElasticConfig,
     pub ui: UiConfig,
 }

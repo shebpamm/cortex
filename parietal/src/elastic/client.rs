@@ -1,5 +1,6 @@
 use crate::elastic::data::{ClusterInfo, IndexInfo, Recovery, ShallowShard, NodeOutput};
 use crate::elastic::demo::DEMO_DATA;
+use crate::data::CONFIG;
 
 use anyhow::Result;
 use serde::de::DeserializeOwned;
@@ -8,15 +9,17 @@ use serde::de::DeserializeOwned;
 pub struct ElasticsearchClient {
     client: reqwest::Client,
     base_url: String,
-    demo_mode: bool,
+    demo: bool,
 }
 
 impl ElasticsearchClient {
     pub fn new(base_url: &str) -> Self {
+        let config = CONFIG.get().unwrap();
+
         ElasticsearchClient {
             client: reqwest::Client::new(),
             base_url: base_url.to_string(),
-            demo_mode: false,
+            demo: config.demo,
         }
     }
 
@@ -25,7 +28,7 @@ impl ElasticsearchClient {
         endpoint: &str,
     ) -> Result<T> {
         let url = format!("{}/{}", self.base_url, endpoint);
-        let response = match self.demo_mode {
+        let response = match self.demo {
             true => DEMO_DATA.iter().find(|(k, _)| k == &endpoint).unwrap().1.to_string(),
             false => self.client.get(&url).send().await?.text().await?, 
         };
