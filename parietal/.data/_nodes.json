@@ -1,0 +1,2477 @@
+{
+    "_nodes": {
+        "total": 24,
+        "successful": 24,
+        "failed": 0
+    },
+    "cluster_name": "Demo Cluster",
+    "nodes": {
+        "uazljAcoTxmEFOEiJulvjg": {
+            "timestamp": 1721898108394,
+            "name": "node17",
+            "transport_address": "127.0.0.1:9300",
+            "host": "node17",
+            "ip": "127.0.0.1:9300",
+            "roles": [
+                "data",
+                "data_cold",
+                "data_content",
+                "data_frozen",
+                "data_hot",
+                "data_warm",
+                "ingest",
+                "ml",
+                "remote_cluster_client",
+                "transform"
+            ],
+            "attributes": {
+                "storage_type": "warm",
+                "availability_zone": "warm-2",
+                "ml.machine_memory": "67149000704",
+                "xpack.installed": "true",
+                "transform.node": "true",
+                "host": "node17",
+                "datacenter": "us-west",
+                "ml.max_open_jobs": "512",
+                "ml.max_jvm_size": "33822867456"
+            },
+            "os": {
+                "timestamp": 1721898108394,
+                "cpu": {
+                    "percent": 0,
+                    "load_average": {
+                        "1m": 0.06,
+                        "5m": 0.16,
+                        "15m": 0.17
+                    }
+                },
+                "mem": {
+                    "total_in_bytes": 67149000704,
+                    "free_in_bytes": 10046676992,
+                    "used_in_bytes": 57102323712,
+                    "free_percent": 15,
+                    "used_percent": 85
+                },
+                "swap": {
+                    "total_in_bytes": 0,
+                    "free_in_bytes": 0,
+                    "used_in_bytes": 0
+                }
+            },
+            "process": {
+                "timestamp": 1721898108394,
+                "open_file_descriptors": 1897,
+                "max_file_descriptors": 262144,
+                "cpu": {
+                    "percent": 0,
+                    "total_in_millis": 2899794770
+                },
+                "mem": {
+                    "total_virtual_in_bytes": 440173461504
+                }
+            },
+            "fs": {
+                "timestamp": 1721898108395,
+                "total": {
+                    "total_in_bytes": 1841296084992,
+                    "free_in_bytes": 745798107136,
+                    "available_in_bytes": 727063035904
+                },
+                "data": [
+                    {
+                        "path": "/var/lib/elasticsearch/nodes/0",
+                        "mount": "/var/lib/elasticsearch (/dev/mapper/vg0-data)",
+                        "type": "ext4",
+                        "total_in_bytes": 1841296084992,
+                        "free_in_bytes": 745798107136,
+                        "available_in_bytes": 727063035904
+                    }
+                ],
+                "io_stats": {
+                    "devices": [
+                        {
+                            "device_name": "dm-3",
+                            "operations": 9940565903,
+                            "read_operations": 101158471,
+                            "write_operations": 9839407432,
+                            "read_kilobytes": 23997253416,
+                            "write_kilobytes": 101201656628,
+                            "io_time_in_millis": 3409433564
+                        }
+                    ],
+                    "total": {
+                        "operations": 9940565903,
+                        "read_operations": 101158471,
+                        "write_operations": 9839407432,
+                        "read_kilobytes": 23997253416,
+                        "write_kilobytes": 101201656628,
+                        "io_time_in_millis": 3409433564
+                    }
+                }
+            }
+        },
+        "otxNOBhNS8CIT18GG237Rw": {
+            "timestamp": 1721898108394,
+            "name": "node27",
+            "transport_address": "127.0.0.1:9300",
+            "host": "node27",
+            "ip": "127.0.0.1:9300",
+            "roles": [
+                "data",
+                "data_cold",
+                "data_content",
+                "data_frozen",
+                "data_hot",
+                "data_warm",
+                "ingest",
+                "ml",
+                "remote_cluster_client",
+                "transform"
+            ],
+            "attributes": {
+                "storage_type": "warm",
+                "availability_zone": "warm-1",
+                "ml.machine_memory": "67148857344",
+                "xpack.installed": "true",
+                "transform.node": "true",
+                "host": "node27",
+                "ml.max_open_jobs": "512",
+                "datacenter": "us-west",
+                "ml.max_jvm_size": "33822867456"
+            },
+            "os": {
+                "timestamp": 1721898108394,
+                "cpu": {
+                    "percent": 0,
+                    "load_average": {
+                        "1m": 0.41,
+                        "5m": 0.26,
+                        "15m": 0.22
+                    }
+                },
+                "mem": {
+                    "total_in_bytes": 67148857344,
+                    "free_in_bytes": 3964882944,
+                    "used_in_bytes": 63183974400,
+                    "free_percent": 6,
+                    "used_percent": 94
+                },
+                "swap": {
+                    "total_in_bytes": 0,
+                    "free_in_bytes": 0,
+                    "used_in_bytes": 0
+                }
+            },
+            "process": {
+                "timestamp": 1721898108394,
+                "open_file_descriptors": 1829,
+                "max_file_descriptors": 262144,
+                "cpu": {
+                    "percent": 0,
+                    "total_in_millis": 77639240
+                },
+                "mem": {
+                    "total_virtual_in_bytes": 534448689152
+                }
+            },
+            "fs": {
+                "timestamp": 1721898108395,
+                "total": {
+                    "total_in_bytes": 1841296084992,
+                    "free_in_bytes": 475498086400,
+                    "available_in_bytes": 456763015168
+                },
+                "data": [
+                    {
+                        "path": "/var/lib/elasticsearch/nodes/0",
+                        "mount": "/var/lib/elasticsearch (/dev/mapper/vg0-data)",
+                        "type": "ext4",
+                        "total_in_bytes": 1841296084992,
+                        "free_in_bytes": 475498086400,
+                        "available_in_bytes": 456763015168
+                    }
+                ],
+                "io_stats": {
+                    "devices": [
+                        {
+                            "device_name": "dm-3",
+                            "operations": 326240670,
+                            "read_operations": 2693915,
+                            "write_operations": 323546755,
+                            "read_kilobytes": 653856028,
+                            "write_kilobytes": 4600091892,
+                            "io_time_in_millis": 124383868
+                        }
+                    ],
+                    "total": {
+                        "operations": 326240670,
+                        "read_operations": 2693915,
+                        "write_operations": 323546755,
+                        "read_kilobytes": 653856028,
+                        "write_kilobytes": 4600091892,
+                        "io_time_in_millis": 124383868
+                    }
+                }
+            }
+        },
+        "_Y4cmf2fTr6Di5wvXJ0SLw": {
+            "timestamp": 1721898108394,
+            "name": "node13",
+            "transport_address": "127.0.0.1:9300",
+            "host": "node13",
+            "ip": "127.0.0.1:9300",
+            "roles": [
+                "data",
+                "data_cold",
+                "data_content",
+                "data_frozen",
+                "data_hot",
+                "data_warm",
+                "ingest",
+                "ml",
+                "remote_cluster_client",
+                "transform"
+            ],
+            "attributes": {
+                "storage_type": "warm",
+                "availability_zone": "warm-1",
+                "ml.machine_memory": "67148808192",
+                "xpack.installed": "true",
+                "transform.node": "true",
+                "host": "node13",
+                "ml.max_open_jobs": "512",
+                "datacenter": "us-west",
+                "ml.max_jvm_size": "33822867456"
+            },
+            "os": {
+                "timestamp": 1721898108394,
+                "cpu": {
+                    "percent": 1,
+                    "load_average": {
+                        "1m": 0.39,
+                        "5m": 0.32,
+                        "15m": 0.34
+                    }
+                },
+                "mem": {
+                    "total_in_bytes": 67148808192,
+                    "free_in_bytes": 5865734144,
+                    "used_in_bytes": 61283074048,
+                    "free_percent": 9,
+                    "used_percent": 91
+                },
+                "swap": {
+                    "total_in_bytes": 0,
+                    "free_in_bytes": 0,
+                    "used_in_bytes": 0
+                }
+            },
+            "process": {
+                "timestamp": 1721898108395,
+                "open_file_descriptors": 1975,
+                "max_file_descriptors": 262144,
+                "cpu": {
+                    "percent": 1,
+                    "total_in_millis": 862371940
+                },
+                "mem": {
+                    "total_virtual_in_bytes": 540723425280
+                }
+            },
+            "fs": {
+                "timestamp": 1721898108396,
+                "total": {
+                    "total_in_bytes": 1841296084992,
+                    "free_in_bytes": 439302172672,
+                    "available_in_bytes": 420567101440
+                },
+                "data": [
+                    {
+                        "path": "/var/lib/elasticsearch/nodes/0",
+                        "mount": "/var/lib/elasticsearch (/dev/mapper/vg0-data)",
+                        "type": "ext4",
+                        "total_in_bytes": 1841296084992,
+                        "free_in_bytes": 439302172672,
+                        "available_in_bytes": 420567101440
+                    }
+                ],
+                "io_stats": {
+                    "devices": [
+                        {
+                            "device_name": "dm-3",
+                            "operations": 3310065629,
+                            "read_operations": 39201088,
+                            "write_operations": 3270864541,
+                            "read_kilobytes": 9506004116,
+                            "write_kilobytes": 36273564612,
+                            "io_time_in_millis": 1160161888
+                        }
+                    ],
+                    "total": {
+                        "operations": 3310065629,
+                        "read_operations": 39201088,
+                        "write_operations": 3270864541,
+                        "read_kilobytes": 9506004116,
+                        "write_kilobytes": 36273564612,
+                        "io_time_in_millis": 1160161888
+                    }
+                }
+            }
+        },
+        "M5C6sWNfSFSqKL-V4YFoJg": {
+            "timestamp": 1721898108394,
+            "name": "node29",
+            "transport_address": "127.0.0.1:9300",
+            "host": "node29",
+            "ip": "127.0.0.1:9300",
+            "roles": [
+                "data",
+                "data_cold",
+                "data_content",
+                "data_frozen",
+                "data_hot",
+                "data_warm",
+                "ingest",
+                "ml",
+                "remote_cluster_client",
+                "transform"
+            ],
+            "attributes": {
+                "storage_type": "warm",
+                "availability_zone": "warm-2",
+                "ml.machine_memory": "67149078528",
+                "xpack.installed": "true",
+                "transform.node": "true",
+                "host": "node29",
+                "datacenter": "us-west",
+                "ml.max_open_jobs": "512",
+                "ml.max_jvm_size": "33822867456"
+            },
+            "os": {
+                "timestamp": 1721898108394,
+                "cpu": {
+                    "percent": 1,
+                    "load_average": {
+                        "1m": 0.22,
+                        "5m": 0.29,
+                        "15m": 0.32
+                    }
+                },
+                "mem": {
+                    "total_in_bytes": 67149078528,
+                    "free_in_bytes": 1715712000,
+                    "used_in_bytes": 65433366528,
+                    "free_percent": 3,
+                    "used_percent": 97
+                },
+                "swap": {
+                    "total_in_bytes": 0,
+                    "free_in_bytes": 0,
+                    "used_in_bytes": 0
+                }
+            },
+            "process": {
+                "timestamp": 1721898108394,
+                "open_file_descriptors": 1855,
+                "max_file_descriptors": 262144,
+                "cpu": {
+                    "percent": 0,
+                    "total_in_millis": 1826919150
+                },
+                "mem": {
+                    "total_virtual_in_bytes": 453084577792
+                }
+            },
+            "fs": {
+                "timestamp": 1721898108395,
+                "total": {
+                    "total_in_bytes": 1841296084992,
+                    "free_in_bytes": 704667602944,
+                    "available_in_bytes": 685932531712
+                },
+                "data": [
+                    {
+                        "path": "/var/lib/elasticsearch/nodes/0",
+                        "mount": "/var/lib/elasticsearch (/dev/mapper/vg0-data)",
+                        "type": "ext4",
+                        "total_in_bytes": 1841296084992,
+                        "free_in_bytes": 704667602944,
+                        "available_in_bytes": 685932531712
+                    }
+                ],
+                "io_stats": {
+                    "devices": [
+                        {
+                            "device_name": "dm-3",
+                            "operations": 6818519811,
+                            "read_operations": 66468734,
+                            "write_operations": 6752051077,
+                            "read_kilobytes": 15967022320,
+                            "write_kilobytes": 65070453660,
+                            "io_time_in_millis": 2375869488
+                        }
+                    ],
+                    "total": {
+                        "operations": 6818519811,
+                        "read_operations": 66468734,
+                        "write_operations": 6752051077,
+                        "read_kilobytes": 15967022320,
+                        "write_kilobytes": 65070453660,
+                        "io_time_in_millis": 2375869488
+                    }
+                }
+            }
+        },
+        "cJ9xtJzpQVepI6zB3kfx8A": {
+            "timestamp": 1721898108394,
+            "name": "node01",
+            "transport_address": "127.0.0.1:9300",
+            "host": "node01",
+            "ip": "127.0.0.1:9300",
+            "roles": [
+                "ingest",
+                "ml",
+                "remote_cluster_client"
+            ],
+            "attributes": {
+                "ml.machine_memory": "67326681088",
+                "xpack.installed": "true",
+                "transform.node": "false",
+                "host": "node01",
+                "datacenter": "us-west",
+                "ml.max_open_jobs": "512",
+                "ml.max_jvm_size": "8589934592"
+            },
+            "os": {
+                "timestamp": 1721898108394,
+                "cpu": {
+                    "percent": 10,
+                    "load_average": {
+                        "1m": 2.82,
+                        "5m": 3.06,
+                        "15m": 3.19
+                    }
+                },
+                "mem": {
+                    "total_in_bytes": 67326681088,
+                    "free_in_bytes": 2406756352,
+                    "used_in_bytes": 64919924736,
+                    "free_percent": 4,
+                    "used_percent": 96
+                },
+                "swap": {
+                    "total_in_bytes": 16777211904,
+                    "free_in_bytes": 16774590464,
+                    "used_in_bytes": 2621440
+                }
+            },
+            "process": {
+                "timestamp": 1721898108395,
+                "open_file_descriptors": 897,
+                "max_file_descriptors": 262144,
+                "cpu": {
+                    "percent": 3,
+                    "total_in_millis": 2188802980
+                },
+                "mem": {
+                    "total_virtual_in_bytes": 19225927680
+                }
+            },
+            "fs": {
+                "timestamp": 1721898108395,
+                "total": {
+                    "total_in_bytes": 948096622592,
+                    "free_in_bytes": 938655887360,
+                    "available_in_bytes": 890419716096
+                },
+                "data": [
+                    {
+                        "path": "/var/lib/elasticsearch/nodes/0",
+                        "mount": "/ (/dev/mapper/vg0-root)",
+                        "type": "ext4",
+                        "total_in_bytes": 948096622592,
+                        "free_in_bytes": 938655887360,
+                        "available_in_bytes": 890419716096
+                    }
+                ],
+                "io_stats": {
+                    "devices": [
+                        {
+                            "device_name": "dm-3",
+                            "operations": 3796311718,
+                            "read_operations": 90284,
+                            "write_operations": 3796221434,
+                            "read_kilobytes": 2136512,
+                            "write_kilobytes": 80696805540,
+                            "io_time_in_millis": 2966867272
+                        }
+                    ],
+                    "total": {
+                        "operations": 3796311718,
+                        "read_operations": 90284,
+                        "write_operations": 3796221434,
+                        "read_kilobytes": 2136512,
+                        "write_kilobytes": 80696805540,
+                        "io_time_in_millis": 2966867272
+                    }
+                }
+            }
+        },
+        "6nG7jn4zTFOYYhqQ5gpoDg": {
+            "timestamp": 1721898108394,
+            "name": "node15",
+            "transport_address": "127.0.0.1:9300",
+            "host": "node15",
+            "ip": "127.0.0.1:9300",
+            "roles": [
+                "data",
+                "data_cold",
+                "data_content",
+                "data_frozen",
+                "data_hot",
+                "data_warm",
+                "ingest",
+                "ml",
+                "remote_cluster_client",
+                "transform"
+            ],
+            "attributes": {
+                "storage_type": "warm",
+                "availability_zone": "warm-1",
+                "ml.machine_memory": "67148996608",
+                "xpack.installed": "true",
+                "transform.node": "true",
+                "host": "node15",
+                "ml.max_open_jobs": "512",
+                "datacenter": "us-west",
+                "ml.max_jvm_size": "33822867456"
+            },
+            "os": {
+                "timestamp": 1721898108394,
+                "cpu": {
+                    "percent": 1,
+                    "load_average": {
+                        "1m": 0.51,
+                        "5m": 0.57,
+                        "15m": 0.53
+                    }
+                },
+                "mem": {
+                    "total_in_bytes": 67148996608,
+                    "free_in_bytes": 501051392,
+                    "used_in_bytes": 66647945216,
+                    "free_percent": 1,
+                    "used_percent": 99
+                },
+                "swap": {
+                    "total_in_bytes": 0,
+                    "free_in_bytes": 0,
+                    "used_in_bytes": 0
+                }
+            },
+            "process": {
+                "timestamp": 1721898108395,
+                "open_file_descriptors": 1882,
+                "max_file_descriptors": 262144,
+                "cpu": {
+                    "percent": 0,
+                    "total_in_millis": 2840284920
+                },
+                "mem": {
+                    "total_virtual_in_bytes": 381299150848
+                }
+            },
+            "fs": {
+                "timestamp": 1721898108396,
+                "total": {
+                    "total_in_bytes": 1841296084992,
+                    "free_in_bytes": 953168211968,
+                    "available_in_bytes": 934433140736
+                },
+                "data": [
+                    {
+                        "path": "/var/lib/elasticsearch/nodes/0",
+                        "mount": "/var/lib/elasticsearch (/dev/mapper/vg0-data)",
+                        "type": "ext4",
+                        "total_in_bytes": 1841296084992,
+                        "free_in_bytes": 953168211968,
+                        "available_in_bytes": 934433140736
+                    }
+                ],
+                "io_stats": {
+                    "devices": [
+                        {
+                            "device_name": "dm-3",
+                            "operations": 10470292907,
+                            "read_operations": 96672966,
+                            "write_operations": 10373619941,
+                            "read_kilobytes": 22913360832,
+                            "write_kilobytes": 107067456936,
+                            "io_time_in_millis": 3436359536
+                        }
+                    ],
+                    "total": {
+                        "operations": 10470292907,
+                        "read_operations": 96672966,
+                        "write_operations": 10373619941,
+                        "read_kilobytes": 22913360832,
+                        "write_kilobytes": 107067456936,
+                        "io_time_in_millis": 3436359536
+                    }
+                }
+            }
+        },
+        "xjU1MA_2SZaaUHpBUQ7qeA": {
+            "timestamp": 1721898108393,
+            "name": "node18",
+            "transport_address": "127.0.0.1:9300",
+            "host": "node18",
+            "ip": "127.0.0.1:9300",
+            "roles": [
+                "data",
+                "data_cold",
+                "data_content",
+                "data_frozen",
+                "data_hot",
+                "data_warm",
+                "ingest",
+                "ml",
+                "remote_cluster_client",
+                "transform"
+            ],
+            "attributes": {
+                "storage_type": "warm",
+                "availability_zone": "warm-2",
+                "ml.machine_memory": "67200638976",
+                "xpack.installed": "true",
+                "transform.node": "true",
+                "host": "node18",
+                "datacenter": "us-west",
+                "ml.max_open_jobs": "512",
+                "ml.max_jvm_size": "33822867456"
+            },
+            "os": {
+                "timestamp": 1721898108394,
+                "cpu": {
+                    "percent": 0,
+                    "load_average": {
+                        "1m": 0.07,
+                        "5m": 0.1,
+                        "15m": 0.09
+                    }
+                },
+                "mem": {
+                    "total_in_bytes": 67200638976,
+                    "free_in_bytes": 1228099584,
+                    "used_in_bytes": 65972539392,
+                    "free_percent": 2,
+                    "used_percent": 98
+                },
+                "swap": {
+                    "total_in_bytes": 0,
+                    "free_in_bytes": 0,
+                    "used_in_bytes": 0
+                }
+            },
+            "process": {
+                "timestamp": 1721898108394,
+                "open_file_descriptors": 1749,
+                "max_file_descriptors": 262144,
+                "cpu": {
+                    "percent": 0,
+                    "total_in_millis": 1900829420
+                },
+                "mem": {
+                    "total_virtual_in_bytes": 334337093632
+                }
+            },
+            "fs": {
+                "timestamp": 1721898108395,
+                "total": {
+                    "total_in_bytes": 1841296084992,
+                    "free_in_bytes": 1048046002176,
+                    "available_in_bytes": 1029310930944
+                },
+                "data": [
+                    {
+                        "path": "/var/lib/elasticsearch/nodes/0",
+                        "mount": "/var/lib/elasticsearch (/dev/mapper/vg0-data)",
+                        "type": "ext4",
+                        "total_in_bytes": 1841296084992,
+                        "free_in_bytes": 1048046002176,
+                        "available_in_bytes": 1029310930944
+                    }
+                ],
+                "io_stats": {
+                    "devices": [
+                        {
+                            "device_name": "dm-3",
+                            "operations": 7352086788,
+                            "read_operations": 74897887,
+                            "write_operations": 7277188901,
+                            "read_kilobytes": 17930873852,
+                            "write_kilobytes": 69805399652,
+                            "io_time_in_millis": 2578784656
+                        }
+                    ],
+                    "total": {
+                        "operations": 7352086788,
+                        "read_operations": 74897887,
+                        "write_operations": 7277188901,
+                        "read_kilobytes": 17930873852,
+                        "write_kilobytes": 69805399652,
+                        "io_time_in_millis": 2578784656
+                    }
+                }
+            }
+        },
+        "_8zsLVYTQ76wkv5Ozb2GEg": {
+            "timestamp": 1721898108394,
+            "name": "node28",
+            "transport_address": "127.0.0.1:9300",
+            "host": "node28",
+            "ip": "127.0.0.1:9300",
+            "roles": [
+                "data",
+                "data_cold",
+                "data_content",
+                "data_frozen",
+                "data_hot",
+                "data_warm",
+                "ingest",
+                "ml",
+                "remote_cluster_client",
+                "transform"
+            ],
+            "attributes": {
+                "storage_type": "warm",
+                "availability_zone": "warm-2",
+                "ml.machine_memory": "67209175040",
+                "xpack.installed": "true",
+                "transform.node": "true",
+                "host": "node28",
+                "datacenter": "us-west",
+                "ml.max_open_jobs": "512",
+                "ml.max_jvm_size": "33822867456"
+            },
+            "os": {
+                "timestamp": 1721898108395,
+                "cpu": {
+                    "percent": 0,
+                    "load_average": {
+                        "1m": 0.6,
+                        "5m": 0.69,
+                        "15m": 0.65
+                    }
+                },
+                "mem": {
+                    "total_in_bytes": 67209175040,
+                    "free_in_bytes": 4571283456,
+                    "used_in_bytes": 62637891584,
+                    "free_percent": 7,
+                    "used_percent": 93
+                },
+                "swap": {
+                    "total_in_bytes": 0,
+                    "free_in_bytes": 0,
+                    "used_in_bytes": 0
+                }
+            },
+            "process": {
+                "timestamp": 1721898108395,
+                "open_file_descriptors": 1893,
+                "max_file_descriptors": 262144,
+                "cpu": {
+                    "percent": 0,
+                    "total_in_millis": 1488323380
+                },
+                "mem": {
+                    "total_virtual_in_bytes": 438371831808
+                }
+            },
+            "fs": {
+                "timestamp": 1721898108396,
+                "total": {
+                    "total_in_bytes": 1841296084992,
+                    "free_in_bytes": 742878023680,
+                    "available_in_bytes": 724142952448
+                },
+                "data": [
+                    {
+                        "path": "/var/lib/elasticsearch/nodes/0",
+                        "mount": "/var/lib/elasticsearch (/dev/mapper/vg0-data)",
+                        "type": "ext4",
+                        "total_in_bytes": 1841296084992,
+                        "free_in_bytes": 742878023680,
+                        "available_in_bytes": 724142952448
+                    }
+                ],
+                "io_stats": {
+                    "devices": [
+                        {
+                            "device_name": "dm-3",
+                            "operations": 5771020303,
+                            "read_operations": 55383558,
+                            "write_operations": 5715636745,
+                            "read_kilobytes": 13272462816,
+                            "write_kilobytes": 55771704212,
+                            "io_time_in_millis": 2062518588
+                        }
+                    ],
+                    "total": {
+                        "operations": 5771020303,
+                        "read_operations": 55383558,
+                        "write_operations": 5715636745,
+                        "read_kilobytes": 13272462816,
+                        "write_kilobytes": 55771704212,
+                        "io_time_in_millis": 2062518588
+                    }
+                }
+            }
+        },
+        "ZXQE7ZmCS7OPfHO06wgXNw": {
+            "timestamp": 1721898108395,
+            "name": "node25",
+            "transport_address": "127.0.0.1:9300",
+            "host": "node25",
+            "ip": "127.0.0.1:9300",
+            "roles": [
+                "data",
+                "data_cold",
+                "data_content",
+                "data_frozen",
+                "data_hot",
+                "data_warm",
+                "ingest",
+                "ml",
+                "remote_cluster_client",
+                "transform"
+            ],
+            "attributes": {
+                "storage_type": "warm",
+                "availability_zone": "warm-1",
+                "ml.machine_memory": "67148988416",
+                "xpack.installed": "true",
+                "transform.node": "true",
+                "host": "node25",
+                "ml.max_open_jobs": "512",
+                "datacenter": "us-west",
+                "ml.max_jvm_size": "33822867456"
+            },
+            "os": {
+                "timestamp": 1721898108395,
+                "cpu": {
+                    "percent": 0,
+                    "load_average": {
+                        "1m": 0.06,
+                        "5m": 0.05,
+                        "15m": 0.07
+                    }
+                },
+                "mem": {
+                    "total_in_bytes": 67148988416,
+                    "free_in_bytes": 14165950464,
+                    "used_in_bytes": 52983037952,
+                    "free_percent": 21,
+                    "used_percent": 79
+                },
+                "swap": {
+                    "total_in_bytes": 0,
+                    "free_in_bytes": 0,
+                    "used_in_bytes": 0
+                }
+            },
+            "process": {
+                "timestamp": 1721898108395,
+                "open_file_descriptors": 1831,
+                "max_file_descriptors": 262144,
+                "cpu": {
+                    "percent": 0,
+                    "total_in_millis": 1922533190
+                },
+                "mem": {
+                    "total_virtual_in_bytes": 468229693440
+                }
+            },
+            "fs": {
+                "timestamp": 1721898108396,
+                "total": {
+                    "total_in_bytes": 1841296084992,
+                    "free_in_bytes": 632164216832,
+                    "available_in_bytes": 613429145600
+                },
+                "data": [
+                    {
+                        "path": "/var/lib/elasticsearch/nodes/0",
+                        "mount": "/var/lib/elasticsearch (/dev/mapper/vg0-data)",
+                        "type": "ext4",
+                        "total_in_bytes": 1841296084992,
+                        "free_in_bytes": 632164216832,
+                        "available_in_bytes": 613429145600
+                    }
+                ],
+                "io_stats": {
+                    "devices": [
+                        {
+                            "device_name": "dm-3",
+                            "operations": 6898797285,
+                            "read_operations": 67259892,
+                            "write_operations": 6831537393,
+                            "read_kilobytes": 15949452652,
+                            "write_kilobytes": 67631421184,
+                            "io_time_in_millis": 2422984976
+                        }
+                    ],
+                    "total": {
+                        "operations": 6898797285,
+                        "read_operations": 67259892,
+                        "write_operations": 6831537393,
+                        "read_kilobytes": 15949452652,
+                        "write_kilobytes": 67631421184,
+                        "io_time_in_millis": 2422984976
+                    }
+                }
+            }
+        },
+        "P_aOaMdIQIqES67nWcqCLA": {
+            "timestamp": 1721898108395,
+            "name": "node14",
+            "transport_address": "127.0.0.1:9300",
+            "host": "node14",
+            "ip": "127.0.0.1:9300",
+            "roles": [
+                "data",
+                "data_cold",
+                "data_content",
+                "data_frozen",
+                "data_hot",
+                "data_warm",
+                "ingest",
+                "ml",
+                "remote_cluster_client",
+                "transform"
+            ],
+            "attributes": {
+                "storage_type": "warm",
+                "availability_zone": "warm-1",
+                "ml.machine_memory": "67148996608",
+                "xpack.installed": "true",
+                "transform.node": "true",
+                "host": "node14",
+                "ml.max_open_jobs": "512",
+                "datacenter": "us-west",
+                "ml.max_jvm_size": "33822867456"
+            },
+            "os": {
+                "timestamp": 1721898108395,
+                "cpu": {
+                    "percent": 0,
+                    "load_average": {
+                        "1m": 0.55,
+                        "5m": 0.42,
+                        "15m": 0.38
+                    }
+                },
+                "mem": {
+                    "total_in_bytes": 67148996608,
+                    "free_in_bytes": 1991397376,
+                    "used_in_bytes": 65157599232,
+                    "free_percent": 3,
+                    "used_percent": 97
+                },
+                "swap": {
+                    "total_in_bytes": 0,
+                    "free_in_bytes": 0,
+                    "used_in_bytes": 0
+                }
+            },
+            "process": {
+                "timestamp": 1721898108396,
+                "open_file_descriptors": 1933,
+                "max_file_descriptors": 262144,
+                "cpu": {
+                    "percent": 0,
+                    "total_in_millis": 2035128530
+                },
+                "mem": {
+                    "total_virtual_in_bytes": 257784324096
+                }
+            },
+            "fs": {
+                "timestamp": 1721898108397,
+                "total": {
+                    "total_in_bytes": 1841296084992,
+                    "free_in_bytes": 1305626529792,
+                    "available_in_bytes": 1286891458560
+                },
+                "data": [
+                    {
+                        "path": "/var/lib/elasticsearch/nodes/0",
+                        "mount": "/var/lib/elasticsearch (/dev/mapper/vg0-data)",
+                        "type": "ext4",
+                        "total_in_bytes": 1841296084992,
+                        "free_in_bytes": 1305626529792,
+                        "available_in_bytes": 1286891458560
+                    }
+                ],
+                "io_stats": {
+                    "devices": [
+                        {
+                            "device_name": "dm-3",
+                            "operations": 7795805495,
+                            "read_operations": 62655925,
+                            "write_operations": 7733149570,
+                            "read_kilobytes": 14802238804,
+                            "write_kilobytes": 74692097476,
+                            "io_time_in_millis": 2545081756
+                        }
+                    ],
+                    "total": {
+                        "operations": 7795805495,
+                        "read_operations": 62655925,
+                        "write_operations": 7733149570,
+                        "read_kilobytes": 14802238804,
+                        "write_kilobytes": 74692097476,
+                        "io_time_in_millis": 2545081756
+                    }
+                }
+            }
+        },
+        "5q7L_ioySPyfWcWkdWiVsw": {
+            "timestamp": 1721898108395,
+            "name": "node02",
+            "transport_address": "127.0.0.1:9300",
+            "host": "node02",
+            "ip": "127.0.0.1:9300",
+            "roles": [
+                "data",
+                "data_cold",
+                "data_content",
+                "data_frozen",
+                "data_hot",
+                "data_warm",
+                "ingest",
+                "ml",
+                "remote_cluster_client",
+                "transform"
+            ],
+            "attributes": {
+                "ml.machine_memory": "67401441280",
+                "xpack.installed": "true",
+                "transform.node": "true",
+                "host": "node02",
+                "ml.max_open_jobs": "512",
+                "datacenter": "us-west",
+                "ml.max_jvm_size": "17179869184"
+            },
+            "os": {
+                "timestamp": 1721898108396,
+                "cpu": {
+                    "percent": 0,
+                    "load_average": {
+                        "1m": 0.16,
+                        "5m": 0.16,
+                        "15m": 0.18
+                    }
+                },
+                "mem": {
+                    "total_in_bytes": 67401441280,
+                    "free_in_bytes": 12211269632,
+                    "used_in_bytes": 55190171648,
+                    "free_percent": 18,
+                    "used_percent": 82
+                },
+                "swap": {
+                    "total_in_bytes": 16777211904,
+                    "free_in_bytes": 16777211904,
+                    "used_in_bytes": 0
+                },
+                "cgroup": {
+                    "cpuacct": {
+                        "control_group": "/",
+                        "usage_nanos": 1539789813754081
+                    },
+                    "cpu": {
+                        "control_group": "/",
+                        "cfs_period_micros": 100000,
+                        "cfs_quota_micros": -1,
+                        "stat": {
+                            "number_of_elapsed_periods": 0,
+                            "number_of_times_throttled": 0,
+                            "time_throttled_nanos": 0
+                        }
+                    },
+                    "memory": {
+                        "control_group": "/system.slice/elasticsearch.service",
+                        "limit_in_bytes": "9223372036854771712",
+                        "usage_in_bytes": "21394976768"
+                    }
+                }
+            },
+            "process": {
+                "timestamp": 1721898108396,
+                "open_file_descriptors": 1197,
+                "max_file_descriptors": 262144,
+                "cpu": {
+                    "percent": 0,
+                    "total_in_millis": 244117180
+                },
+                "mem": {
+                    "total_virtual_in_bytes": 26188300288
+                }
+            },
+            "fs": {
+                "timestamp": 1721898108397,
+                "total": {
+                    "total_in_bytes": 444040347648,
+                    "free_in_bytes": 435859972096,
+                    "available_in_bytes": 413228769280
+                },
+                "data": [
+                    {
+                        "path": "/var/lib/elasticsearch/nodes/0",
+                        "mount": "/ (/dev/mapper/vg0-root)",
+                        "type": "ext4",
+                        "total_in_bytes": 444040347648,
+                        "free_in_bytes": 435859972096,
+                        "available_in_bytes": 413228769280
+                    }
+                ],
+                "io_stats": {
+                    "devices": [
+                        {
+                            "device_name": "dm-3",
+                            "operations": 564188869,
+                            "read_operations": 6516,
+                            "write_operations": 564182353,
+                            "read_kilobytes": 60236,
+                            "write_kilobytes": 3186485484,
+                            "io_time_in_millis": 273725924
+                        }
+                    ],
+                    "total": {
+                        "operations": 564188869,
+                        "read_operations": 6516,
+                        "write_operations": 564182353,
+                        "read_kilobytes": 60236,
+                        "write_kilobytes": 3186485484,
+                        "io_time_in_millis": 273725924
+                    }
+                }
+            }
+        },
+        "Q1vbzKquQEuZMams_LyZRg": {
+            "timestamp": 1721898108395,
+            "name": "node12",
+            "transport_address": "127.0.0.1:9300",
+            "host": "node12",
+            "ip": "127.0.0.1:9300",
+            "roles": [
+                "data",
+                "data_cold",
+                "data_content",
+                "data_frozen",
+                "data_hot",
+                "data_warm",
+                "ingest",
+                "ml",
+                "remote_cluster_client",
+                "transform"
+            ],
+            "attributes": {
+                "storage_type": "warm",
+                "availability_zone": "warm-2",
+                "ml.machine_memory": "67148787712",
+                "xpack.installed": "true",
+                "transform.node": "true",
+                "host": "node12",
+                "ml.max_open_jobs": "512",
+                "datacenter": "us-west",
+                "ml.max_jvm_size": "33822867456"
+            },
+            "os": {
+                "timestamp": 1721898108177,
+                "cpu": {
+                    "percent": 0,
+                    "load_average": {
+                        "1m": 0.06,
+                        "5m": 0.12,
+                        "15m": 0.17
+                    }
+                },
+                "mem": {
+                    "total_in_bytes": 67148787712,
+                    "free_in_bytes": 9531269120,
+                    "used_in_bytes": 57617518592,
+                    "free_percent": 14,
+                    "used_percent": 86
+                },
+                "swap": {
+                    "total_in_bytes": 0,
+                    "free_in_bytes": 0,
+                    "used_in_bytes": 0
+                }
+            },
+            "process": {
+                "timestamp": 1721898108177,
+                "open_file_descriptors": 1911,
+                "max_file_descriptors": 262144,
+                "cpu": {
+                    "percent": 0,
+                    "total_in_millis": 570309560
+                },
+                "mem": {
+                    "total_virtual_in_bytes": 504572862464
+                }
+            },
+            "fs": {
+                "timestamp": 1721898108178,
+                "total": {
+                    "total_in_bytes": 1841296084992,
+                    "free_in_bytes": 549113364480,
+                    "available_in_bytes": 530378293248
+                },
+                "data": [
+                    {
+                        "path": "/var/lib/elasticsearch/nodes/0",
+                        "mount": "/var/lib/elasticsearch (/dev/mapper/vg0-data)",
+                        "type": "ext4",
+                        "total_in_bytes": 1841296084992,
+                        "free_in_bytes": 549113364480,
+                        "available_in_bytes": 530378293248
+                    }
+                ],
+                "io_stats": {
+                    "devices": [
+                        {
+                            "device_name": "dm-3",
+                            "operations": 1774414111,
+                            "read_operations": 38463943,
+                            "write_operations": 1735950168,
+                            "read_kilobytes": 9562259376,
+                            "write_kilobytes": 19587553672,
+                            "io_time_in_millis": 656515180
+                        }
+                    ],
+                    "total": {
+                        "operations": 1774414111,
+                        "read_operations": 38463943,
+                        "write_operations": 1735950168,
+                        "read_kilobytes": 9562259376,
+                        "write_kilobytes": 19587553672,
+                        "io_time_in_millis": 656515180
+                    }
+                }
+            }
+        },
+        "fywhiwbwTHOFluzt4lJjyg": {
+            "timestamp": 1721898108395,
+            "name": "node21",
+            "transport_address": "127.0.0.1:9300",
+            "host": "node21",
+            "ip": "127.0.0.1:9300",
+            "roles": [
+                "data",
+                "data_cold",
+                "data_content",
+                "data_frozen",
+                "data_hot",
+                "data_warm",
+                "ingest",
+                "ml",
+                "remote_cluster_client",
+                "transform"
+            ],
+            "attributes": {
+                "storage_type": "warm",
+                "availability_zone": "warm-2",
+                "ml.machine_memory": "67145891840",
+                "xpack.installed": "true",
+                "transform.node": "true",
+                "host": "node21",
+                "datacenter": "us-west",
+                "ml.max_open_jobs": "512",
+                "ml.max_jvm_size": "33822867456"
+            },
+            "os": {
+                "timestamp": 1721898108396,
+                "cpu": {
+                    "percent": 1,
+                    "load_average": {
+                        "1m": 0.92,
+                        "5m": 0.84,
+                        "15m": 0.73
+                    }
+                },
+                "mem": {
+                    "total_in_bytes": 67145891840,
+                    "free_in_bytes": 425136128,
+                    "used_in_bytes": 66720755712,
+                    "free_percent": 1,
+                    "used_percent": 99
+                },
+                "swap": {
+                    "total_in_bytes": 0,
+                    "free_in_bytes": 0,
+                    "used_in_bytes": 0
+                }
+            },
+            "process": {
+                "timestamp": 1721898108396,
+                "open_file_descriptors": 1904,
+                "max_file_descriptors": 262144,
+                "cpu": {
+                    "percent": 1,
+                    "total_in_millis": 2364980340
+                },
+                "mem": {
+                    "total_virtual_in_bytes": 484462403584
+                }
+            },
+            "fs": {
+                "timestamp": 1721898108397,
+                "total": {
+                    "total_in_bytes": 1841296084992,
+                    "free_in_bytes": 602086215680,
+                    "available_in_bytes": 583351144448
+                },
+                "data": [
+                    {
+                        "path": "/var/lib/elasticsearch/nodes/0",
+                        "mount": "/var/lib/elasticsearch (/dev/mapper/vg0-data)",
+                        "type": "ext4",
+                        "total_in_bytes": 1841296084992,
+                        "free_in_bytes": 602086215680,
+                        "available_in_bytes": 583351144448
+                    }
+                ],
+                "io_stats": {
+                    "devices": [
+                        {
+                            "device_name": "dm-3",
+                            "operations": 8626682377,
+                            "read_operations": 173157075,
+                            "write_operations": 8453525302,
+                            "read_kilobytes": 21403392864,
+                            "write_kilobytes": 86260967556,
+                            "io_time_in_millis": 3028607132
+                        }
+                    ],
+                    "total": {
+                        "operations": 8626682377,
+                        "read_operations": 173157075,
+                        "write_operations": 8453525302,
+                        "read_kilobytes": 21403392864,
+                        "write_kilobytes": 86260967556,
+                        "io_time_in_millis": 3028607132
+                    }
+                }
+            }
+        },
+        "G6EXgA1OQa2_TNR7zVbpwg": {
+            "timestamp": 1721898108397,
+            "name": "node06",
+            "transport_address": "127.0.0.1:9300",
+            "host": "node06",
+            "ip": "127.0.0.1:9300",
+            "roles": [
+                "master",
+                "ml"
+            ],
+            "attributes": {
+                "ml.machine_memory": "67325456384",
+                "xpack.installed": "true",
+                "transform.node": "false",
+                "host": "node06",
+                "ml.max_open_jobs": "512",
+                "datacenter": "us-west",
+                "ml.max_jvm_size": "33822867456"
+            },
+            "os": {
+                "timestamp": 1721898108398,
+                "cpu": {
+                    "percent": 0,
+                    "load_average": {
+                        "1m": 0.26,
+                        "5m": 0.45,
+                        "15m": 0.61
+                    }
+                },
+                "mem": {
+                    "total_in_bytes": 67325456384,
+                    "free_in_bytes": 5723430912,
+                    "used_in_bytes": 61602025472,
+                    "free_percent": 9,
+                    "used_percent": 91
+                },
+                "swap": {
+                    "total_in_bytes": 16777211904,
+                    "free_in_bytes": 16777211904,
+                    "used_in_bytes": 0
+                }
+            },
+            "process": {
+                "timestamp": 1721898108398,
+                "open_file_descriptors": 978,
+                "max_file_descriptors": 262144,
+                "cpu": {
+                    "percent": 0,
+                    "total_in_millis": 625087200
+                },
+                "mem": {
+                    "total_virtual_in_bytes": 42796453888
+                }
+            },
+            "fs": {
+                "timestamp": 1721898108399,
+                "total": {
+                    "total_in_bytes": 444040347648,
+                    "free_in_bytes": 436032835584,
+                    "available_in_bytes": 413401632768
+                },
+                "data": [
+                    {
+                        "path": "/var/lib/elasticsearch/nodes/0",
+                        "mount": "/ (/dev/mapper/vg0-root)",
+                        "type": "ext4",
+                        "total_in_bytes": 444040347648,
+                        "free_in_bytes": 436032835584,
+                        "available_in_bytes": 413401632768
+                    }
+                ],
+                "io_stats": {
+                    "devices": [
+                        {
+                            "device_name": "dm-3",
+                            "operations": 604515294,
+                            "read_operations": 59403,
+                            "write_operations": 604455891,
+                            "read_kilobytes": 1423880,
+                            "write_kilobytes": 3378883728,
+                            "io_time_in_millis": 374388304
+                        }
+                    ],
+                    "total": {
+                        "operations": 604515294,
+                        "read_operations": 59403,
+                        "write_operations": 604455891,
+                        "read_kilobytes": 1423880,
+                        "write_kilobytes": 3378883728,
+                        "io_time_in_millis": 374388304
+                    }
+                }
+            }
+        },
+        "eY_wbnQXTa2AIlCPr7ABOg": {
+            "timestamp": 1721898108395,
+            "name": "node20",
+            "transport_address": "127.0.0.1:9300",
+            "host": "node20",
+            "ip": "127.0.0.1:9300",
+            "roles": [
+                "data",
+                "data_cold",
+                "data_content",
+                "data_frozen",
+                "data_hot",
+                "data_warm",
+                "ingest",
+                "ml",
+                "remote_cluster_client",
+                "transform"
+            ],
+            "attributes": {
+                "storage_type": "warm",
+                "availability_zone": "warm-2",
+                "ml.machine_memory": "67148795904",
+                "xpack.installed": "true",
+                "transform.node": "true",
+                "host": "node20",
+                "ml.max_open_jobs": "512",
+                "datacenter": "us-west",
+                "ml.max_jvm_size": "33822867456"
+            },
+            "os": {
+                "timestamp": 1721898108396,
+                "cpu": {
+                    "percent": 1,
+                    "load_average": {
+                        "1m": 0.42,
+                        "5m": 0.34,
+                        "15m": 0.35
+                    }
+                },
+                "mem": {
+                    "total_in_bytes": 67148795904,
+                    "free_in_bytes": 4657537024,
+                    "used_in_bytes": 62491258880,
+                    "free_percent": 7,
+                    "used_percent": 93
+                },
+                "swap": {
+                    "total_in_bytes": 0,
+                    "free_in_bytes": 0,
+                    "used_in_bytes": 0
+                }
+            },
+            "process": {
+                "timestamp": 1721898108396,
+                "open_file_descriptors": 2172,
+                "max_file_descriptors": 262144,
+                "cpu": {
+                    "percent": 0,
+                    "total_in_millis": 126164610
+                },
+                "mem": {
+                    "total_virtual_in_bytes": 583284363264
+                }
+            },
+            "fs": {
+                "timestamp": 1721898108398,
+                "total": {
+                    "total_in_bytes": 1841296084992,
+                    "free_in_bytes": 320836567040,
+                    "available_in_bytes": 302101495808
+                },
+                "data": [
+                    {
+                        "path": "/var/lib/elasticsearch/nodes/0",
+                        "mount": "/var/lib/elasticsearch (/dev/mapper/vg0-data)",
+                        "type": "ext4",
+                        "total_in_bytes": 1841296084992,
+                        "free_in_bytes": 320836567040,
+                        "available_in_bytes": 302101495808
+                    }
+                ],
+                "io_stats": {
+                    "devices": [
+                        {
+                            "device_name": "dm-3",
+                            "operations": 478600854,
+                            "read_operations": 3686709,
+                            "write_operations": 474914145,
+                            "read_kilobytes": 871194100,
+                            "write_kilobytes": 5266317656,
+                            "io_time_in_millis": 132522468
+                        }
+                    ],
+                    "total": {
+                        "operations": 478600854,
+                        "read_operations": 3686709,
+                        "write_operations": 474914145,
+                        "read_kilobytes": 871194100,
+                        "write_kilobytes": 5266317656,
+                        "io_time_in_millis": 132522468
+                    }
+                }
+            }
+        },
+        "DjWEoz42Qbe8d_kUJTJJ_A": {
+            "timestamp": 1721898108396,
+            "name": "node02",
+            "transport_address": "127.0.0.1:9300",
+            "host": "node02",
+            "ip": "127.0.0.1:9300",
+            "roles": [
+                "ingest",
+                "ml",
+                "remote_cluster_client"
+            ],
+            "attributes": {
+                "ml.machine_memory": "67326648320",
+                "xpack.installed": "true",
+                "transform.node": "false",
+                "host": "node02",
+                "datacenter": "us-west",
+                "ml.max_open_jobs": "512",
+                "ml.max_jvm_size": "8589934592"
+            },
+            "os": {
+                "timestamp": 1721898108396,
+                "cpu": {
+                    "percent": 15,
+                    "load_average": {
+                        "1m": 2.4,
+                        "5m": 2.16,
+                        "15m": 2.38
+                    }
+                },
+                "mem": {
+                    "total_in_bytes": 67326648320,
+                    "free_in_bytes": 9415413760,
+                    "used_in_bytes": 57911234560,
+                    "free_percent": 14,
+                    "used_percent": 86
+                },
+                "swap": {
+                    "total_in_bytes": 16777211904,
+                    "free_in_bytes": 16777211904,
+                    "used_in_bytes": 0
+                }
+            },
+            "process": {
+                "timestamp": 1721898108396,
+                "open_file_descriptors": 896,
+                "max_file_descriptors": 262144,
+                "cpu": {
+                    "percent": 1,
+                    "total_in_millis": 681480150
+                },
+                "mem": {
+                    "total_virtual_in_bytes": 19296075776
+                }
+            },
+            "fs": {
+                "timestamp": 1721898108397,
+                "total": {
+                    "total_in_bytes": 948096622592,
+                    "free_in_bytes": 938288001024,
+                    "available_in_bytes": 890051829760
+                },
+                "data": [
+                    {
+                        "path": "/var/lib/elasticsearch/nodes/0",
+                        "mount": "/ (/dev/mapper/vg0-root)",
+                        "type": "ext4",
+                        "total_in_bytes": 948096622592,
+                        "free_in_bytes": 938288001024,
+                        "available_in_bytes": 890051829760
+                    }
+                ],
+                "io_stats": {
+                    "devices": [
+                        {
+                            "device_name": "dm-3",
+                            "operations": 4072145592,
+                            "read_operations": 69779,
+                            "write_operations": 4072075813,
+                            "read_kilobytes": 1547772,
+                            "write_kilobytes": 83826571532,
+                            "io_time_in_millis": 2741396040
+                        }
+                    ],
+                    "total": {
+                        "operations": 4072145592,
+                        "read_operations": 69779,
+                        "write_operations": 4072075813,
+                        "read_kilobytes": 1547772,
+                        "write_kilobytes": 83826571532,
+                        "io_time_in_millis": 2741396040
+                    }
+                }
+            }
+        },
+        "Hwj9RoK1RdOJVFweIhLBgg": {
+            "timestamp": 1721898108395,
+            "name": "node19",
+            "transport_address": "127.0.0.1:9300",
+            "host": "node19",
+            "ip": "127.0.0.1:9300",
+            "roles": [
+                "data",
+                "data_cold",
+                "data_content",
+                "data_frozen",
+                "data_hot",
+                "data_warm",
+                "ingest",
+                "ml",
+                "remote_cluster_client",
+                "transform"
+            ],
+            "attributes": {
+                "storage_type": "warm",
+                "availability_zone": "warm-2",
+                "ml.machine_memory": "67149053952",
+                "xpack.installed": "true",
+                "transform.node": "true",
+                "host": "node19",
+                "ml.max_open_jobs": "512",
+                "datacenter": "us-west",
+                "ml.max_jvm_size": "33822867456"
+            },
+            "os": {
+                "timestamp": 1721898108396,
+                "cpu": {
+                    "percent": 0,
+                    "load_average": {
+                        "1m": 0.01,
+                        "5m": 0.13,
+                        "15m": 0.15
+                    }
+                },
+                "mem": {
+                    "total_in_bytes": 67149053952,
+                    "free_in_bytes": 21970546688,
+                    "used_in_bytes": 45178507264,
+                    "free_percent": 33,
+                    "used_percent": 67
+                },
+                "swap": {
+                    "total_in_bytes": 0,
+                    "free_in_bytes": 0,
+                    "used_in_bytes": 0
+                }
+            },
+            "process": {
+                "timestamp": 1721898108396,
+                "open_file_descriptors": 1803,
+                "max_file_descriptors": 262144,
+                "cpu": {
+                    "percent": 0,
+                    "total_in_millis": 1193019860
+                },
+                "mem": {
+                    "total_virtual_in_bytes": 380475723776
+                }
+            },
+            "fs": {
+                "timestamp": 1721898108397,
+                "total": {
+                    "total_in_bytes": 1841296084992,
+                    "free_in_bytes": 949589729280,
+                    "available_in_bytes": 930854658048
+                },
+                "data": [
+                    {
+                        "path": "/var/lib/elasticsearch/nodes/0",
+                        "mount": "/var/lib/elasticsearch (/dev/mapper/vg0-data)",
+                        "type": "ext4",
+                        "total_in_bytes": 1841296084992,
+                        "free_in_bytes": 949589729280,
+                        "available_in_bytes": 930854658048
+                    }
+                ],
+                "io_stats": {
+                    "devices": [
+                        {
+                            "device_name": "dm-3",
+                            "operations": 5187298027,
+                            "read_operations": 53981834,
+                            "write_operations": 5133316193,
+                            "read_kilobytes": 13104060124,
+                            "write_kilobytes": 44801037848,
+                            "io_time_in_millis": 1788079836
+                        }
+                    ],
+                    "total": {
+                        "operations": 5187298027,
+                        "read_operations": 53981834,
+                        "write_operations": 5133316193,
+                        "read_kilobytes": 13104060124,
+                        "write_kilobytes": 44801037848,
+                        "io_time_in_millis": 1788079836
+                    }
+                }
+            }
+        },
+        "mV09AKmvRbuIAsbdKQx0Sw": {
+            "timestamp": 1721898108396,
+            "name": "node04",
+            "transport_address": "127.0.0.1:9300",
+            "host": "node04",
+            "ip": "127.0.0.1:9300",
+            "roles": [
+                "master",
+                "ml"
+            ],
+            "attributes": {
+                "ml.machine_memory": "67339853824",
+                "xpack.installed": "true",
+                "transform.node": "false",
+                "host": "node04",
+                "datacenter": "us-west",
+                "ml.max_open_jobs": "512",
+                "ml.max_jvm_size": "33822867456"
+            },
+            "os": {
+                "timestamp": 1721898108396,
+                "cpu": {
+                    "percent": 0,
+                    "load_average": {
+                        "1m": 0.16,
+                        "5m": 0.21,
+                        "15m": 0.19
+                    }
+                },
+                "mem": {
+                    "total_in_bytes": 67339853824,
+                    "free_in_bytes": 22122954752,
+                    "used_in_bytes": 45216899072,
+                    "free_percent": 33,
+                    "used_percent": 67
+                },
+                "swap": {
+                    "total_in_bytes": 16777211904,
+                    "free_in_bytes": 16777211904,
+                    "used_in_bytes": 0
+                }
+            },
+            "process": {
+                "timestamp": 1721898108397,
+                "open_file_descriptors": 1012,
+                "max_file_descriptors": 262144,
+                "cpu": {
+                    "percent": 0,
+                    "total_in_millis": 31108340
+                },
+                "mem": {
+                    "total_virtual_in_bytes": 42823897088
+                }
+            },
+            "fs": {
+                "timestamp": 1721898108397,
+                "total": {
+                    "total_in_bytes": 444040347648,
+                    "free_in_bytes": 436066144256,
+                    "available_in_bytes": 413434941440
+                },
+                "data": [
+                    {
+                        "path": "/var/lib/elasticsearch/nodes/0",
+                        "mount": "/ (/dev/mapper/vg0-root)",
+                        "type": "ext4",
+                        "total_in_bytes": 444040347648,
+                        "free_in_bytes": 436066144256,
+                        "available_in_bytes": 413434941440
+                    }
+                ],
+                "io_stats": {
+                    "devices": [
+                        {
+                            "device_name": "dm-3",
+                            "operations": 14753389,
+                            "read_operations": 33928,
+                            "write_operations": 14719461,
+                            "read_kilobytes": 829628,
+                            "write_kilobytes": 120387692,
+                            "io_time_in_millis": 16214148
+                        }
+                    ],
+                    "total": {
+                        "operations": 14753389,
+                        "read_operations": 33928,
+                        "write_operations": 14719461,
+                        "read_kilobytes": 829628,
+                        "write_kilobytes": 120387692,
+                        "io_time_in_millis": 16214148
+                    }
+                }
+            }
+        },
+        "p-RSQKqOTEGwPfuxpmHlLw": {
+            "timestamp": 1721898108396,
+            "name": "node24",
+            "transport_address": "127.0.0.1:9300",
+            "host": "node24",
+            "ip": "127.0.0.1:9300",
+            "roles": [
+                "data",
+                "data_cold",
+                "data_content",
+                "data_frozen",
+                "data_hot",
+                "data_warm",
+                "ingest",
+                "ml",
+                "remote_cluster_client",
+                "transform"
+            ],
+            "attributes": {
+                "storage_type": "warm",
+                "availability_zone": "warm-1",
+                "ml.machine_memory": "67149012992",
+                "xpack.installed": "true",
+                "transform.node": "true",
+                "host": "node24",
+                "datacenter": "us-west",
+                "ml.max_open_jobs": "512",
+                "ml.max_jvm_size": "33822867456"
+            },
+            "os": {
+                "timestamp": 1721898108396,
+                "cpu": {
+                    "percent": 0,
+                    "load_average": {
+                        "1m": 0.24,
+                        "5m": 0.24,
+                        "15m": 0.33
+                    }
+                },
+                "mem": {
+                    "total_in_bytes": 67149012992,
+                    "free_in_bytes": 2936803328,
+                    "used_in_bytes": 64212209664,
+                    "free_percent": 4,
+                    "used_percent": 96
+                },
+                "swap": {
+                    "total_in_bytes": 0,
+                    "free_in_bytes": 0,
+                    "used_in_bytes": 0
+                }
+            },
+            "process": {
+                "timestamp": 1721898108396,
+                "open_file_descriptors": 1855,
+                "max_file_descriptors": 262144,
+                "cpu": {
+                    "percent": 0,
+                    "total_in_millis": 2325136820
+                },
+                "mem": {
+                    "total_virtual_in_bytes": 320812068864
+                }
+            },
+            "fs": {
+                "timestamp": 1721898108397,
+                "total": {
+                    "total_in_bytes": 1841296084992,
+                    "free_in_bytes": 1096611340288,
+                    "available_in_bytes": 1077876269056
+                },
+                "data": [
+                    {
+                        "path": "/var/lib/elasticsearch/nodes/0",
+                        "mount": "/var/lib/elasticsearch (/dev/mapper/vg0-data)",
+                        "type": "ext4",
+                        "total_in_bytes": 1841296084992,
+                        "free_in_bytes": 1096611340288,
+                        "available_in_bytes": 1077876269056
+                    }
+                ],
+                "io_stats": {
+                    "devices": [
+                        {
+                            "device_name": "dm-3",
+                            "operations": 8396951069,
+                            "read_operations": 92313021,
+                            "write_operations": 8304638048,
+                            "read_kilobytes": 22074150756,
+                            "write_kilobytes": 86259562536,
+                            "io_time_in_millis": 3063815352
+                        }
+                    ],
+                    "total": {
+                        "operations": 8396951069,
+                        "read_operations": 92313021,
+                        "write_operations": 8304638048,
+                        "read_kilobytes": 22074150756,
+                        "write_kilobytes": 86259562536,
+                        "io_time_in_millis": 3063815352
+                    }
+                }
+            }
+        },
+        "jceW-YhqRWCmm3dnIchgVw": {
+            "timestamp": 1721898108396,
+            "name": "node22",
+            "transport_address": "127.0.0.1:9300",
+            "host": "node22",
+            "ip": "127.0.0.1:9300",
+            "roles": [
+                "data",
+                "data_cold",
+                "data_content",
+                "data_frozen",
+                "data_hot",
+                "data_warm",
+                "ingest",
+                "ml",
+                "remote_cluster_client",
+                "transform"
+            ],
+            "attributes": {
+                "storage_type": "warm",
+                "availability_zone": "warm-2",
+                "ml.machine_memory": "67149012992",
+                "xpack.installed": "true",
+                "transform.node": "true",
+                "host": "node22",
+                "ml.max_open_jobs": "512",
+                "datacenter": "us-west",
+                "ml.max_jvm_size": "33822867456"
+            },
+            "os": {
+                "timestamp": 1721898108397,
+                "cpu": {
+                    "percent": 0,
+                    "load_average": {
+                        "1m": 1.16,
+                        "5m": 1.11,
+                        "15m": 1.09
+                    }
+                },
+                "mem": {
+                    "total_in_bytes": 67149012992,
+                    "free_in_bytes": 3810172928,
+                    "used_in_bytes": 63338840064,
+                    "free_percent": 6,
+                    "used_percent": 94
+                },
+                "swap": {
+                    "total_in_bytes": 0,
+                    "free_in_bytes": 0,
+                    "used_in_bytes": 0
+                }
+            },
+            "process": {
+                "timestamp": 1721898108397,
+                "open_file_descriptors": 1906,
+                "max_file_descriptors": 262144,
+                "cpu": {
+                    "percent": 0,
+                    "total_in_millis": 1739141490
+                },
+                "mem": {
+                    "total_virtual_in_bytes": 410320289792
+                }
+            },
+            "fs": {
+                "timestamp": 1721898108398,
+                "total": {
+                    "total_in_bytes": 1841296084992,
+                    "free_in_bytes": 816870866944,
+                    "available_in_bytes": 798135795712
+                },
+                "data": [
+                    {
+                        "path": "/var/lib/elasticsearch/nodes/0",
+                        "mount": "/var/lib/elasticsearch (/dev/mapper/vg0-data)",
+                        "type": "ext4",
+                        "total_in_bytes": 1841296084992,
+                        "free_in_bytes": 816870866944,
+                        "available_in_bytes": 798135795712
+                    }
+                ],
+                "io_stats": {
+                    "devices": [
+                        {
+                            "device_name": "dm-3",
+                            "operations": 6464630744,
+                            "read_operations": 68167741,
+                            "write_operations": 6396463003,
+                            "read_kilobytes": 15809628888,
+                            "write_kilobytes": 66251257856,
+                            "io_time_in_millis": 2334412752
+                        }
+                    ],
+                    "total": {
+                        "operations": 6464630744,
+                        "read_operations": 68167741,
+                        "write_operations": 6396463003,
+                        "read_kilobytes": 15809628888,
+                        "write_kilobytes": 66251257856,
+                        "io_time_in_millis": 2334412752
+                    }
+                }
+            }
+        },
+        "TRHUyc3oT7Sd9RoOSbCOCw": {
+            "timestamp": 1721898108396,
+            "name": "node23",
+            "transport_address": "127.0.0.1:9300",
+            "host": "node23",
+            "ip": "127.0.0.1:9300",
+            "roles": [
+                "data",
+                "data_cold",
+                "data_content",
+                "data_frozen",
+                "data_hot",
+                "data_warm",
+                "ingest",
+                "ml",
+                "remote_cluster_client",
+                "transform"
+            ],
+            "attributes": {
+                "storage_type": "warm",
+                "availability_zone": "warm-1",
+                "ml.machine_memory": "67148988416",
+                "xpack.installed": "true",
+                "transform.node": "true",
+                "host": "node23",
+                "ml.max_open_jobs": "512",
+                "datacenter": "us-west",
+                "ml.max_jvm_size": "33822867456"
+            },
+            "os": {
+                "timestamp": 1721898108397,
+                "cpu": {
+                    "percent": 0,
+                    "load_average": {
+                        "1m": 0.13,
+                        "5m": 0.15,
+                        "15m": 0.16
+                    }
+                },
+                "mem": {
+                    "total_in_bytes": 67148988416,
+                    "free_in_bytes": 4293398528,
+                    "used_in_bytes": 62855589888,
+                    "free_percent": 6,
+                    "used_percent": 94
+                },
+                "swap": {
+                    "total_in_bytes": 0,
+                    "free_in_bytes": 0,
+                    "used_in_bytes": 0
+                }
+            },
+            "process": {
+                "timestamp": 1721898108397,
+                "open_file_descriptors": 1852,
+                "max_file_descriptors": 262144,
+                "cpu": {
+                    "percent": 0,
+                    "total_in_millis": 2012052640
+                },
+                "mem": {
+                    "total_virtual_in_bytes": 472829956096
+                }
+            },
+            "fs": {
+                "timestamp": 1721898108398,
+                "total": {
+                    "total_in_bytes": 1841296084992,
+                    "free_in_bytes": 625788567552,
+                    "available_in_bytes": 607053496320
+                },
+                "data": [
+                    {
+                        "path": "/var/lib/elasticsearch/nodes/0",
+                        "mount": "/var/lib/elasticsearch (/dev/mapper/vg0-data)",
+                        "type": "ext4",
+                        "total_in_bytes": 1841296084992,
+                        "free_in_bytes": 625788567552,
+                        "available_in_bytes": 607053496320
+                    }
+                ],
+                "io_stats": {
+                    "devices": [
+                        {
+                            "device_name": "dm-3",
+                            "operations": 7676943647,
+                            "read_operations": 82652069,
+                            "write_operations": 7594291578,
+                            "read_kilobytes": 19728735176,
+                            "write_kilobytes": 75696892220,
+                            "io_time_in_millis": 2763577200
+                        }
+                    ],
+                    "total": {
+                        "operations": 7676943647,
+                        "read_operations": 82652069,
+                        "write_operations": 7594291578,
+                        "read_kilobytes": 19728735176,
+                        "write_kilobytes": 75696892220,
+                        "io_time_in_millis": 2763577200
+                    }
+                }
+            }
+        },
+        "STY4jCfWR6ipJEHvPNQXEA": {
+            "timestamp": 1721898108395,
+            "name": "node05",
+            "transport_address": "127.0.0.1:9300",
+            "host": "node05",
+            "ip": "127.0.0.1:9300",
+            "roles": [
+                "master",
+                "ml"
+            ],
+            "attributes": {
+                "ml.machine_memory": "67340062720",
+                "xpack.installed": "true",
+                "transform.node": "false",
+                "host": "node05",
+                "datacenter": "us-west",
+                "ml.max_open_jobs": "512",
+                "ml.max_jvm_size": "33822867456"
+            },
+            "os": {
+                "timestamp": 1721898108396,
+                "cpu": {
+                    "percent": 0,
+                    "load_average": {
+                        "1m": 0.16,
+                        "5m": 0.21,
+                        "15m": 0.22
+                    }
+                },
+                "mem": {
+                    "total_in_bytes": 67340062720,
+                    "free_in_bytes": 5630623744,
+                    "used_in_bytes": 61709438976,
+                    "free_percent": 8,
+                    "used_percent": 92
+                },
+                "swap": {
+                    "total_in_bytes": 16777211904,
+                    "free_in_bytes": 16777211904,
+                    "used_in_bytes": 0
+                }
+            },
+            "process": {
+                "timestamp": 1721898108396,
+                "open_file_descriptors": 1012,
+                "max_file_descriptors": 262144,
+                "cpu": {
+                    "percent": 0,
+                    "total_in_millis": 1276524330
+                },
+                "mem": {
+                    "total_virtual_in_bytes": 42813267968
+                }
+            },
+            "fs": {
+                "timestamp": 1721898108397,
+                "total": {
+                    "total_in_bytes": 444040347648,
+                    "free_in_bytes": 436037148672,
+                    "available_in_bytes": 413405945856
+                },
+                "data": [
+                    {
+                        "path": "/var/lib/elasticsearch/nodes/0",
+                        "mount": "/ (/dev/mapper/vg0-root)",
+                        "type": "ext4",
+                        "total_in_bytes": 444040347648,
+                        "free_in_bytes": 436037148672,
+                        "available_in_bytes": 413405945856
+                    }
+                ],
+                "io_stats": {
+                    "devices": [
+                        {
+                            "device_name": "dm-3",
+                            "operations": 582127718,
+                            "read_operations": 59449,
+                            "write_operations": 582068269,
+                            "read_kilobytes": 1429164,
+                            "write_kilobytes": 3367739988,
+                            "io_time_in_millis": 364900216
+                        }
+                    ],
+                    "total": {
+                        "operations": 582127718,
+                        "read_operations": 59449,
+                        "write_operations": 582068269,
+                        "read_kilobytes": 1429164,
+                        "write_kilobytes": 3367739988,
+                        "io_time_in_millis": 364900216
+                    }
+                }
+            }
+        },
+        "vHqzcD7uS622uhALUcw9cw": {
+            "timestamp": 1721898108396,
+            "name": "node26",
+            "transport_address": "127.0.0.1:9300",
+            "host": "node26",
+            "ip": "127.0.0.1:9300",
+            "roles": [
+                "data",
+                "data_cold",
+                "data_content",
+                "data_frozen",
+                "data_hot",
+                "data_warm",
+                "ingest",
+                "ml",
+                "remote_cluster_client",
+                "transform"
+            ],
+            "attributes": {
+                "storage_type": "warm",
+                "availability_zone": "warm-1",
+                "ml.machine_memory": "67148869632",
+                "xpack.installed": "true",
+                "transform.node": "true",
+                "host": "node26",
+                "ml.max_open_jobs": "512",
+                "datacenter": "us-west",
+                "ml.max_jvm_size": "33822867456"
+            },
+            "os": {
+                "timestamp": 1721898108397,
+                "cpu": {
+                    "percent": 0,
+                    "load_average": {
+                        "1m": 0.4,
+                        "5m": 0.39,
+                        "15m": 0.35
+                    }
+                },
+                "mem": {
+                    "total_in_bytes": 67148869632,
+                    "free_in_bytes": 2340397056,
+                    "used_in_bytes": 64808472576,
+                    "free_percent": 3,
+                    "used_percent": 97
+                },
+                "swap": {
+                    "total_in_bytes": 0,
+                    "free_in_bytes": 0,
+                    "used_in_bytes": 0
+                }
+            },
+            "process": {
+                "timestamp": 1721898108397,
+                "open_file_descriptors": 1949,
+                "max_file_descriptors": 262144,
+                "cpu": {
+                    "percent": 0,
+                    "total_in_millis": 52065200
+                },
+                "mem": {
+                    "total_virtual_in_bytes": 591847239680
+                }
+            },
+            "fs": {
+                "timestamp": 1721898108398,
+                "total": {
+                    "total_in_bytes": 1841296084992,
+                    "free_in_bytes": 294575726592,
+                    "available_in_bytes": 275840655360
+                },
+                "data": [
+                    {
+                        "path": "/var/lib/elasticsearch/nodes/0",
+                        "mount": "/var/lib/elasticsearch (/dev/mapper/vg0-data)",
+                        "type": "ext4",
+                        "total_in_bytes": 1841296084992,
+                        "free_in_bytes": 294575726592,
+                        "available_in_bytes": 275840655360
+                    }
+                ],
+                "io_stats": {
+                    "devices": [
+                        {
+                            "device_name": "dm-3",
+                            "operations": 209001094,
+                            "read_operations": 1284879,
+                            "write_operations": 207716215,
+                            "read_kilobytes": 312769580,
+                            "write_kilobytes": 2308674036,
+                            "io_time_in_millis": 83278836
+                        }
+                    ],
+                    "total": {
+                        "operations": 209001094,
+                        "read_operations": 1284879,
+                        "write_operations": 207716215,
+                        "read_kilobytes": 312769580,
+                        "write_kilobytes": 2308674036,
+                        "io_time_in_millis": 83278836
+                    }
+                }
+            }
+        },
+        "p_WnxX7GQO-d7-otmRylxA": {
+            "timestamp": 1721898108396,
+            "name": "node16",
+            "transport_address": "127.0.0.1:9300",
+            "host": "node16",
+            "ip": "127.0.0.1:9300",
+            "roles": [
+                "data",
+                "data_cold",
+                "data_content",
+                "data_frozen",
+                "data_hot",
+                "data_warm",
+                "ingest",
+                "ml",
+                "remote_cluster_client",
+                "transform"
+            ],
+            "attributes": {
+                "storage_type": "warm",
+                "availability_zone": "warm-1",
+                "ml.machine_memory": "67149012992",
+                "xpack.installed": "true",
+                "transform.node": "true",
+                "host": "node16",
+                "datacenter": "us-west",
+                "ml.max_open_jobs": "512",
+                "ml.max_jvm_size": "33822867456"
+            },
+            "os": {
+                "timestamp": 1721898108396,
+                "cpu": {
+                    "percent": 0,
+                    "load_average": {
+                        "1m": 0.2,
+                        "5m": 0.16,
+                        "15m": 0.11
+                    }
+                },
+                "mem": {
+                    "total_in_bytes": 67149012992,
+                    "free_in_bytes": 2143195136,
+                    "used_in_bytes": 65005817856,
+                    "free_percent": 3,
+                    "used_percent": 97
+                },
+                "swap": {
+                    "total_in_bytes": 0,
+                    "free_in_bytes": 0,
+                    "used_in_bytes": 0
+                }
+            },
+            "process": {
+                "timestamp": 1721898108396,
+                "open_file_descriptors": 1844,
+                "max_file_descriptors": 262144,
+                "cpu": {
+                    "percent": 0,
+                    "total_in_millis": 1986857010
+                },
+                "mem": {
+                    "total_virtual_in_bytes": 466769436672
+                }
+            },
+            "fs": {
+                "timestamp": 1721898108397,
+                "total": {
+                    "total_in_bytes": 1841296084992,
+                    "free_in_bytes": 659629268992,
+                    "available_in_bytes": 640894197760
+                },
+                "data": [
+                    {
+                        "path": "/var/lib/elasticsearch/nodes/0",
+                        "mount": "/var/lib/elasticsearch (/dev/mapper/vg0-data)",
+                        "type": "ext4",
+                        "total_in_bytes": 1841296084992,
+                        "free_in_bytes": 659629268992,
+                        "available_in_bytes": 640894197760
+                    }
+                ],
+                "io_stats": {
+                    "devices": [
+                        {
+                            "device_name": "dm-3",
+                            "operations": 6707116385,
+                            "read_operations": 84928156,
+                            "write_operations": 6622188229,
+                            "read_kilobytes": 20467060780,
+                            "write_kilobytes": 70981447848,
+                            "io_time_in_millis": 2435719852
+                        }
+                    ],
+                    "total": {
+                        "operations": 6707116385,
+                        "read_operations": 84928156,
+                        "write_operations": 6622188229,
+                        "read_kilobytes": 20467060780,
+                        "write_kilobytes": 70981447848,
+                        "io_time_in_millis": 2435719852
+                    }
+                }
+            }
+        }
+    }
+}
