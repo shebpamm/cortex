@@ -63,7 +63,7 @@ export function DataTable<TData, TValue>({
       }
 
       try {
-        console.log(filterMethod)
+        console.log(filterMethod);
         const result = await filterMethod(data);
         setFilteredData(result);
       } catch (error) {
@@ -142,6 +142,7 @@ export function DataTable<TData, TValue>({
         ref={filterRef}
         open={filterViewOpen}
         onClose={onFilterViewClose}
+        sample={data.length ? data[0] : null}
       />
       <div className="flex items-center justify-end space-x-2 py-4">
         <Button
