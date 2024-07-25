@@ -6,6 +6,7 @@ use std::sync::Arc;
 use tokio::sync::RwLock;
 
 use crate::config;
+use crate::elastic::data::{ClusterInfo, IndexInfo, NodeOutput, Recovery, ShallowShard};
 
 pub struct Context {
     warehouse: Arc<RwLock<crate::data::Warehouse>>,
@@ -35,25 +36,25 @@ impl Query {
 
     async fn health(
         context: &Context,
-    ) -> FieldResult<crate::elastic::ClusterInfo> {
+    ) -> FieldResult<ClusterInfo> {
         Ok(context.warehouse.read().await.cluster.read().await.clone())
     }
 
     async fn indices(
         context: &Context,
-    ) -> FieldResult<Vec<crate::elastic::IndexInfo>> {
+    ) -> FieldResult<Vec<IndexInfo>> {
         Ok(context.warehouse.read().await.indices.read().await.clone())
     }
 
     async fn recovery(
         context: &Context,
-    ) -> FieldResult<crate::elastic::Recovery> {
+    ) -> FieldResult<Recovery> {
         Ok(context.warehouse.read().await.recovery.read().await.clone())
     }
 
     async fn relocating(
         context: &Context,
-    ) -> FieldResult<Vec<crate::elastic::ShallowShard>> {
+    ) -> FieldResult<Vec<ShallowShard>> {
         let shards = context.warehouse.read().await.shards.read().await.clone();
         let unassigned = shards.into_iter().filter(|s| s.state != "STARTED").collect();
         Ok(unassigned)
@@ -61,15 +62,15 @@ impl Query {
 
     async fn nodes(
         context: &Context,
-    ) -> FieldResult<crate::elastic::NodeOutput> {
+    ) -> FieldResult<NodeOutput> {
         Ok(context.warehouse.read().await.nodes.read().await.clone())
     }
 
     async fn shards(
         index: Option<String>,
         context: &Context,
-    ) -> FieldResult<Vec<crate::elastic::ShallowShard>> {
-        let collected: Vec<crate::elastic::ShallowShard>;
+    ) -> FieldResult<Vec<ShallowShard>> {
+        let collected: Vec<ShallowShard>;
 
         match index {
             Some(index) => {

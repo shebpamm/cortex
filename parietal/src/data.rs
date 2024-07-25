@@ -1,4 +1,6 @@
-use crate::{config, elastic::{ClusterInfo, ElasticsearchClient, IndexInfo, NodeOutput, Recovery, ShallowShard}};
+use crate::elastic::data::{ClusterInfo, NodeOutput, Recovery, ShallowShard, IndexInfo};
+use crate::elastic::client::ElasticsearchClient;
+use crate::config;
 use anyhow::Result;
 use log::debug;
 use tokio::sync::RwLock;
