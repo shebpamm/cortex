@@ -100,4 +100,6 @@ const TableFilter = forwardRef(
   },
 );
 
+TableFilter.displayName = "TableFilter";
+
 export default TableFilter;
