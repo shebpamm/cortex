@@ -58,7 +58,7 @@ export function ShardTable(props: { index: string }) {
 
   return (
     <div className="overflow-auto border rounded-lg">
-      <DataTable columns={columns} data={data.shards} />
+      <DataTable id="shards" columns={columns} data={data.shards} />
     </div>
   );
 }

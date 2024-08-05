@@ -178,7 +178,7 @@ export function NodesTable() {
         <NodeInfo node={selectedNode} />
       </DialogContent>
       </Dialog>
-      <DataTable columns={columns} data={data.nodes.nodes} onRowClick={onRowClick}/>
+      <DataTable id="nodes" columns={columns} data={data.nodes.nodes} onRowClick={onRowClick}/>
     </div>
   );
 }

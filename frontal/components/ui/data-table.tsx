@@ -27,6 +27,7 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   onRowClick?: (row: any) => void;
+  id: string,
 }
 
 export function wrapSortable(cell: React.ReactNode | string, { column }: any) {
@@ -46,6 +47,7 @@ export function DataTable<TData, TValue>({
   columns,
   data,
   onRowClick,
+  id,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [filterViewOpen, setFilterViewOpen] = useState(false);
@@ -142,6 +144,7 @@ export function DataTable<TData, TValue>({
         open={filterViewOpen}
         onClose={onFilterViewClose}
         sample={data.length ? data[0] : null}
+        id={id}
       />
       <div className="flex items-center justify-end space-x-2 py-4">
         <Button

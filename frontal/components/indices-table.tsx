@@ -135,7 +135,7 @@ export function IndicesTable() {
         <ShardTable index={selectedIndex} />
       </DialogContent>
       </Dialog>
-      <DataTable columns={columns} data={transformedData} onRowClick={onRowClick}/>
+      <DataTable id="indices" columns={columns} data={transformedData} onRowClick={onRowClick}/>
     </div>
   );
 }

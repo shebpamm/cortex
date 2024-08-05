@@ -118,7 +118,7 @@ export function RecoveryTable() {
 
   return (
     <div className="overflow-auto border rounded-lg">
-      <DataTable columns={columns} data={tableData} />
+      <DataTable id="recovery" columns={columns} data={tableData} />
     </div>
   );
 }

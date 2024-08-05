@@ -9,6 +9,7 @@ import Editor, { useMonaco } from "@monaco-editor/react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./tabs";
 
 import { CodeBlock } from "react-code-blocks";
+import { useLocalStorage } from "@uidotdev/usehooks";
 
 type FilterFunction = (data: any[]) => Promise<any[]>;
 
@@ -18,12 +19,18 @@ const TableFilter = forwardRef(
       open,
       onClose,
       sample,
-    }: { open: boolean; onClose: () => void; sample: any },
+      id,
+    }: { open: boolean; onClose: () => void; sample: any, id: string },
     ref,
   ) => {
     const editorRef = useRef<any>(null);
     const workerRef = useRef<Worker | null>(null);
     const monaco = useMonaco();
+
+    const [filterCode, setFilterCode] = useLocalStorage(
+      `filterCode-${id}`,
+      "return data",
+    );
 
     useEffect(() => {
       const workerScript = `
@@ -72,6 +79,12 @@ const TableFilter = forwardRef(
       editorRef.current = editor;
     };
 
+    const onCodeChange = (value: string | undefined) => {
+      if (value) {
+        setFilterCode(value);
+      }
+    };
+
     return (
       <Dialog open={open} onOpenChange={(state) => !state && onClose()}>
         <DialogTrigger></DialogTrigger>
@@ -87,11 +100,16 @@ const TableFilter = forwardRef(
                 onMount={handleEditorDidMount}
                 height="70vh"
                 defaultLanguage="javascript"
-                defaultValue="return data"
+                defaultValue={filterCode}
+                onChange={(value) => onCodeChange(value)}
               />
             </TabsContent>
             <TabsContent value="data">
-              <CodeBlock text={JSON.stringify(sample, null, 2)} language="json" showLineNumbers={false}/>
+              <CodeBlock
+                text={JSON.stringify(sample, null, 2)}
+                language="json"
+                showLineNumbers={false}
+              />
             </TabsContent>
           </Tabs>
         </DialogContent>

@@ -156,7 +156,7 @@ export function RelocatingTable(props: { filter?: string }) {
       <ContextMenu>
         <ContextMenuTrigger>
           <div className="overflow-auto border rounded-lg">
-            <DataTable columns={columns} data={data.relocating} />
+            <DataTable id="relocating" columns={columns} data={data.relocating} />
           </div>
         </ContextMenuTrigger>
         <ContextMenuContent className="w-64">
