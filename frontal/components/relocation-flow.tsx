@@ -387,7 +387,7 @@ const FlowChart: React.FC<FlowChartProps> = ({
       setNodes(laidOutNodes);
     };
     layout();
-  }, [initialNodes, initialEdges]);
+  }, [initialNodes, initialEdges, config, setNodes]);
 
   const onConnect = (params: any) => setEdges((eds) => [...eds, params]);
 
