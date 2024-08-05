@@ -43,7 +43,7 @@ pub struct IndexInfo {
     #[serde(alias = "store.size")]
     store_size: String,
     #[serde(alias = "pri.store.size")]
-    pri_store_size: String,
+    pri_store_size: Option<String>,
 }
 
 #[derive(GraphQLObject, Serialize, Debug, Clone)]
