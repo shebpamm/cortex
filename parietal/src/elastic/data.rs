@@ -41,7 +41,7 @@ pub struct IndexInfo {
     #[serde(alias = "docs.deleted")]
     docs_deleted: Option<String>,
     #[serde(alias = "store.size")]
-    store_size: String,
+    store_size: Option<String>,
     #[serde(alias = "pri.store.size")]
     pri_store_size: Option<String>,
 }
