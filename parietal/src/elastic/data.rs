@@ -297,7 +297,7 @@ pub struct NodeFSTotal {
 #[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
 #[ts(export)]
 pub struct NodeFSStats {
-    total: NodeFSStatsTotal,
+    total: Option<NodeFSStatsTotal>,
 }
 
 #[derive(GraphQLObject, Serialize, Deserialize, Debug, Clone, TS)]
