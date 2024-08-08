@@ -39,6 +39,10 @@ export function ShardTable(props: { index: string }) {
       accessorKey: "store",
       header: wrapSortable.bind(null, "Size"),
       cell: ({ row }) => {
+        if (row.original.store === null) {
+          return null;
+        }
+
         return prettyBytes(parseSize(row.original.store));
       },
     },
