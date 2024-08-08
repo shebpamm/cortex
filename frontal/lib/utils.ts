@@ -17,6 +17,10 @@ export function toTitleCase(str: string): string {
 }
 
 export function parseSize(size: string): number {
+    if (!size) {
+        throw new Error("Size is required");
+    }
+
     // Regular expression to extract the number and the unit
     const regex = /^(\d+(?:\.\d+)?)([a-zA-Z]+)$/;
     const match = size.match(regex);
