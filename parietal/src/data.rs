@@ -82,7 +82,7 @@ impl Warehouse {
             debug!("Refreshing data...");
             let warehouse = warehouse.read().await;
             if let Err(e) = warehouse.refresh().await {
-                panic!("Failed to refresh data: {:?}", e);
+                log::error!("Failed to refresh data: {:?}", e);
             }
             debug!("Data refreshed!");
         }
