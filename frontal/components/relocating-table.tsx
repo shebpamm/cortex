@@ -101,6 +101,9 @@ export function RelocatingTable(props: { filter?: string }) {
       header: wrapSortable.bind(null, "Source"),
       cell: ({ row }) => {
         console.log(row.original);
+
+        if (!row.original.node) return "N/A";
+
         return (row.original.node.split("->")[0] || "").trim();
       },
       sortingFn: (a, b, direction) => {
@@ -118,6 +121,7 @@ export function RelocatingTable(props: { filter?: string }) {
       accessorKey: "node",
       header: wrapSortable.bind(null, "Destination"),
       cell: ({ row }) => {
+        if (!row.original.node) return "N/A";
         return row.original.node.split(" ").reverse()[0];
       },
       sortingFn: (a, b, direction) => {
